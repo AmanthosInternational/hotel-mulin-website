@@ -40,11 +40,7 @@
     var stored = localStorage.getItem(STORAGE_KEY);
     if (stored && SUPPORTED_LANGS[stored]) return stored;
 
-    // Browser language
-    var browserLang = (navigator.language || navigator.userLanguage || '').toLowerCase();
-    var shortLang = browserLang.split('-')[0];
-    if (SUPPORTED_LANGS[shortLang]) return shortLang;
-
+    // Default is German; guests switch manually via the language selector.
     return DEFAULT_LANG;
   }
 

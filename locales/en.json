@@ -166,13 +166,12 @@
     "lounge_text": "After a day in the mountains, the Mulinera lounge welcomes you with a crackling fireplace, trendy cocktails and a fine selection of wines. Cigar lovers enjoy the «La Pipa» smoking corner.",
     "lounge_highlight1": "Fireplace lounge with cocktails & wines",
     "lounge_highlight2": "«La Pipa» smoking lounge for cigars & rum",
-    "lounge_highlight3": "Open Thu–Sat 4–11 pm",
-    "lounge_highlight4": "Kaito's tip: Amaretto Sour, with or without alcohol"
+    "lounge_highlight3": "Open Thu–Sat 4–11 pm"
   },
   "wellness": {
     "label": "Activities",
     "title": "Adventure Right on the Doorstep",
-    "text": "Brigels is a paradise for active guests all year round: in winter 50 km of wide, sunny slopes in the Brigels-Waltensburg-Andiast ski area, cross-country trails 30 m from the hotel, sledge runs of 5 and 7 km, snowshoe and ski tours up to 3,100 m. In summer golf at 1,300 m above sea level, hundreds of kilometres of bike and hiking trails at the foot of Piz Tumpiv, river rafting and mountaineering up to 3,400 m with mountain guides. Rent all the equipment you need right in the village; our team is happy to put together your personal weekly programme.",
+    "text": "Brigels is a paradise for active guests all year round: in winter 50 km of wide, sunny slopes in the Brigels-Waltensburg-Andiast ski area, cross-country trails 30 m from the hotel, sledge runs of 5 and 7 km, snowshoe and ski tours up to 3,100 m. In summer golf at 1,300 m above sea level, hundreds of kilometres of bike and hiking trails at the foot of Piz Tumpiv, river rafting and mountaineering up to 3,400 m with mountain guides. Our team is happy to put together your personal weekly programme.",
     "highlight1": "Biking, hiking & golf in summer",
     "highlight2": "Brigels-Waltensburg-Andiast ski area in winter",
     "quote": "«Once Brigels, always Brigels» — says a regular guest who has been visiting the sunny plateau for over 60 years."
@@ -375,5 +374,13 @@
   },
   "partners": {
     "label": "Our Partners in Brigels"
+  },
+  "tips": {
+    "kaito_lounge_title": "Kaito's Tip",
+    "kaito_lounge_text": "Try our cocktails and mocktails. My personal recommendation: the Amaretto Sour, with or without alcohol.",
+    "bogdan_deals_title": "Bogdan's Tip",
+    "bogdan_deals_text": "If you are flexible, arrive Sunday to Thursday: best rates on the ski pass deal and the slopes are almost yours alone. The Mulin winter deal is cheapest in January.",
+    "kaito_activities_title": "Kaito's Tip",
+    "kaito_activities_text": "You can rent all the equipment for your summer and winter adventures right in Brigels, from our partners in the village."
   }
 }

@@ -2507,3 +2507,7 @@ body.hero-light .nav.scrolled .lang-toggle { color: rgba(44,44,44,.85); }
 }
 
 .deal-card-title { font-size: 1.05rem; margin-bottom: .35rem; }
+
+.tip-box { margin-top: 1.2rem; }
+.tip-box h3 { color: var(--color-primary); }
+.tip-box p { margin: 0; }
