@@ -17,7 +17,8 @@
     "wellness": "Aktivitäten",
     "location": "Lage",
     "gallery": "Galerie",
-    "book_now": "Jetzt Buchen"
+    "book_now": "Jetzt Buchen",
+    "deals": "Deals"
   },
   "hero": {
     "badge": "Brigels, Berner Oberland",
@@ -164,14 +165,17 @@
     "lounge_title": "Ausklingen am Cheminée",
     "lounge_text": "Nach einem Tag in den Bergen empfängt Sie die Lounge Mulinera mit knisterndem Cheminée-Feuer, trendigen Cocktails und einer feinen Auswahl an Weinen. Zigarrenliebhaber geniessen in der Fumoir-Ecke «La Pipa».",
     "lounge_highlight1": "Cheminée-Lounge mit Cocktails & Weinen",
-    "lounge_highlight2": "Fumoir «La Pipa» für Zigarren"
+    "lounge_highlight2": "Fumoir «La Pipa» für Zigarren & Rum",
+    "lounge_highlight3": "Geöffnet Do.–Sa. 16–23 Uhr",
+    "lounge_highlight4": "Kaitos Tipp: Amaretto Sour, mit oder ohne Alkohol"
   },
   "wellness": {
     "label": "Aktivitäten",
     "title": "Abenteuer direkt vor der Haustür",
-    "text": "Brigels ist das ganze Jahr ein Paradies für Aktive: Im Sommer locken Bike-Trails, Wanderwege und der Golfplatz, im Winter das Skigebiet Brigels-Waltensburg-Andiast direkt vor der Haustür. Unser Team stellt Ihnen gerne Ihr persönliches Wochenprogramm zusammen.",
+    "text": "Brigels ist das ganze Jahr ein Paradies für Aktive: Im Winter 50 km breite, sonnige Pisten im Skigebiet Brigels-Waltensburg-Andiast, Langlaufloipen 30 m vom Hotel, Schlittelwege von 5 und 7 km, Schneeschuh- und Skitouren bis auf 3'100 m. Im Sommer Golf auf 1'300 m ü. M., hunderte Kilometer Bike- und Wanderwege am Fuss des Piz Tumpiv, River Rafting und Bergsteigen bis 3'400 m mit Bergführern. Die nötige Ausrüstung mieten Sie direkt im Dorf; unser Team stellt Ihnen gerne Ihr persönliches Wochenprogramm zusammen.",
     "highlight1": "Biken, Wandern & Golf im Sommer",
-    "highlight2": "Skigebiet Brigels-Waltensburg-Andiast im Winter"
+    "highlight2": "Skigebiet Brigels-Waltensburg-Andiast im Winter",
+    "quote": "«Einmal Brigels, immer Brigels» — das sagt ein Stammgast, der das Sonnenplateau seit über 60 Jahren besucht."
   },
   "location": {
     "label": "Lage",
@@ -348,5 +352,28 @@
     "text": "Wir verwenden essentielle Cookies für die Funktionalität. Keine Tracking-Cookies.",
     "accept": "Verstanden",
     "learn_more": "Datenschutz"
+  },
+  "deals": {
+    "label": "Deals",
+    "title": "Unsere Packages",
+    "subtitle": "Übernachtung, Gourmet-Frühstück und Erlebnis in einem — direkt beim Hotel buchbar.",
+    "per_person": "pro Person",
+    "per_person_incl": "pro Person inkl. Übernachtung & Frühstück",
+    "skipass_title": "Hotel & Skipass",
+    "skipass_desc": "Ab 1 Nacht mit Gourmet-Frühstück, Welcome-Drink in der Lounge La Pipa, Hotel-Skipass für die Bergbahnen Brigels, Ortsbus gratis und 10% Rabatt in ausgewählten Sportgeschäften. Anreise Sonntag bis Donnerstag.",
+    "winter_title": "Mulin-Winter-Deal",
+    "winter_desc": "5 Nächte mit Gourmet-Frühstück, Begrüssungsapéro in der Lounge Mulinera, 5-Tages-Skipass für die Bergbahnen Brigels, Ortsbus gratis und 10% Rabatt in ausgewählten Sportgeschäften. Januar ab CHF 699, Februar ab CHF 799, März ab CHF 749.",
+    "golf_title": "Abschlag. Hole in one.",
+    "golf_desc": "Golf senza cun fins: Übernachtung mit Gourmet-Frühstück, Welcome-Drink in der Lounge La Pipa, Greenfee auf dem Golfplatz Brigels, Mietrucksack und Surselva-Gästekarte.",
+    "emtb_title": "Bergauf. Bergab. Mittendurch.",
+    "emtb_desc": "E-Mountainbike-Fun: 5 Nächte mit Gourmet-Frühstück, Welcome-Drink, 2 geführte E-MTB-Touren mit lokalem Guide, 3 Tage Miet-E-Hardtail, Energieriegel und isotonische Getränke, Mietrucksack und Surselva-Gästekarte.",
+    "bike_title": "Bike & E-Bike-Touren",
+    "bike_desc": "Wöchentliche Touren in verschiedenen Schwierigkeitsgraden mit professionellen Bike-Guides, Werkstatt- und Bikewash-Station im Hotel, Energieriegel und Getränke, Surselva-Gästekarte. E-Bike-Miete ab CHF 50/Tag. Buchung telefonisch, mind. 5 Tage im Voraus.",
+    "hike_title": "Geführte Wandertouren",
+    "hike_desc": "Geführte Touren mit professionellen Guides, Lunchpaket, Energieriegel und Getränken, Mietrucksack und Surselva-Gästekarte. Routenwahl auf Anfrage. Buchung telefonisch, mind. 5 Tage im Voraus.",
+    "note": "Alle Packages direkt beim Hotel buchbar: über die Buchungsmaske oben, telefonisch unter +41 41 562 76 62 oder per E-Mail an mulin@amanthos.com."
+  },
+  "partners": {
+    "label": "Unsere Partner in Brigels"
   }
 }

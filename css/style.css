@@ -2501,7 +2501,9 @@ body.hero-light .nav.scrolled .lang-toggle { color: rgba(44,44,44,.85); }
 
 
 /* ---------- Rendering performance ---------- */
-#welcome, #rooms, #pricing, #dining, #wellness, #location, #gallery, #trust, #final-cta, .footer {
+#welcome, #rooms, #pricing, #deals, #dining, #wellness, #location, #gallery, #trust, #partners, #final-cta, .footer {
   content-visibility: auto;
   contain-intrinsic-size: auto 900px;
 }
+
+.deal-card-title { font-size: 1.05rem; margin-bottom: .35rem; }
