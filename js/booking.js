@@ -684,7 +684,7 @@ function showValidation(el, msg) {
 
 // Wake backend on idle
 function wakeBackend() {
-  fetch(API_BASE + '/health', { mode: 'cors' }).catch(function () {});
+  fetch(API_BASE + '/health', { mode: 'no-cors' }).catch(function () {});
 }
 if ('requestIdleCallback' in window) {
   requestIdleCallback(wakeBackend);

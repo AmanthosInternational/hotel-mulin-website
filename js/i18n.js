@@ -139,7 +139,7 @@
     var container = document.getElementById('langSelector');
     if (!container) return;
 
-    var html = '<button class="lang-toggle" aria-label="Select language" aria-expanded="false">';
+    var html = '<button class="lang-toggle" aria-expanded="false">';
     html += '<span class="lang-current">' + SUPPORTED_LANGS[currentLang].native + '</span>';
     html += '<svg width="10" height="6" viewBox="0 0 10 6" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M1 1l4 4 4-4"/></svg>';
     html += '</button>';
