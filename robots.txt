@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://hotelmulin.ch/sitemap.xml

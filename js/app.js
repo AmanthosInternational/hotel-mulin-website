@@ -5,7 +5,9 @@
 if ('scrollRestoration' in history) {
   history.scrollRestoration = 'manual';
 }
-window.scrollTo(0, 0);
+// Defer the forced scroll until after first paint to avoid a synchronous
+// full-page layout during startup (TBT).
+requestAnimationFrame(function () { window.scrollTo(0, 0); });
 
 // ========== NAVIGATION ==========
 var nav = document.getElementById('nav');
@@ -22,7 +24,8 @@ function updateNav() {
 }
 
 window.addEventListener('scroll', updateNav, { passive: true });
-updateNav();
+// Initial nav state = top of page (default classes); check once after paint.
+requestAnimationFrame(updateNav);
 
 if (hamburger && navLinks) {
   hamburger.addEventListener('click', function () {

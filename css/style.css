@@ -4,6 +4,7 @@
    ========================================================================== */
 
 /* ---------- CSS Custom Properties ---------- */
+/* Below-fold sections skip initial layout work (content-visibility) — see section rule below */
 :root {
   /* Light palette */
   --color-primary: #2F4A3C;
@@ -14,7 +15,7 @@
   --color-bg-alt: #F2EDE6;
   --color-surface: #FFFFFF;
   --color-text: #2C2C2C;
-  --color-text-muted: #7A7A7A;
+  --color-text-muted: #5D5C58;
   --color-white: #FFFFFF;
   --color-border: rgba(0,0,0,.08);
   --color-success: #059669;
@@ -2199,26 +2200,26 @@ body.hero-light .nav.scrolled .lang-toggle { color: rgba(44,44,44,.85); }
    ANIMATIONS
    ========================================================================== */
 [data-animate] {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 1.6s cubic-bezier(.16,1,.3,1), transform 1.6s cubic-bezier(.16,1,.3,1);
+  transform: translateY(24px);
+  transition: transform .8s cubic-bezier(.16,1,.3,1);
 }
 
 [data-animate].animate-in {
-  opacity: 1;
   transform: translateY(0);
 }
 
 /* Stagger children */
 [data-animate-stagger] > * {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 1.2s cubic-bezier(.16,1,.3,1), transform 1.2s cubic-bezier(.16,1,.3,1);
+  transform: translateY(18px);
+  transition: transform .7s cubic-bezier(.16,1,.3,1);
 }
 
 [data-animate-stagger] > *.animate-in {
-  opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-animate], [data-animate-stagger] > * { transform: none; transition: none; }
 }
 
 [data-animate-stagger] > *:nth-child(1) { transition-delay: 0s; }
@@ -2496,4 +2497,11 @@ body.hero-light .nav.scrolled .lang-toggle { color: rgba(44,44,44,.85); }
 }
 @keyframes spin-inline {
   to { transform: rotate(360deg); }
+}
+
+
+/* ---------- Rendering performance ---------- */
+#welcome, #rooms, #pricing, #dining, #wellness, #location, #gallery, #trust, #final-cta, .footer {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 900px;
 }

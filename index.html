@@ -13,7 +13,7 @@
   <meta property="og:type" content="website">
   <meta property="og:title" content="Hotel Mulin Brigels — Der Hotspot für Genuss-Aktive">
   <meta property="og:description" content="Alpines Lifestyle-Hotel in Brigels, Surselva. Frühstück inklusive, Lounge & Bar. Direkt buchen für den besten Preis.">
-  <meta property="og:image" content="./assets/images/hero-berge.jpg">
+  <meta property="og:image" content="https://hotelmulin.ch/assets/images/hero-berge-1280.jpg">
   <meta property="og:url" content="https://hotelmulin.ch/">
   <meta property="og:locale" content="de_CH">
   <meta property="og:locale:alternate" content="en_US">
@@ -22,29 +22,31 @@
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Hotel Mulin Brigels">
   <meta name="twitter:description" content="Alpines Lifestyle-Hotel in Brigels, Surselva. Direkt buchen zum besten Preis.">
-  <meta name="twitter:image" content="./assets/images/hero-berge.jpg">
+  <meta name="twitter:image" content="https://hotelmulin.ch/assets/images/hero-berge-1280.jpg">
 
   <!-- Preload critical assets for speed -->
-  <link rel="preload" href="./assets/images/hero-berge.jpg" as="image" fetchpriority="high">
-  <link rel="preload" href="./css/style.css" as="style">
+  <link rel="preload" as="image" fetchpriority="high" imagesrcset="./assets/images/hero-berge-800.jpg 800w, ./assets/images/hero-berge-1280.jpg 1280w, ./assets/images/hero-berge-1920.jpg 1920w" imagesizes="100vw">
+  <link rel="preload" href="./css/style.min.css" as="style">
 
   <!-- Security headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
-  <meta http-equiv="X-Frame-Options" content="DENY">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api.onrender.com; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api.onrender.com; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
 
   <!-- DNS prefetch for API -->
   <link rel="dns-prefetch" href="https://amanthos-website-api.onrender.com">
   <link rel="preconnect" href="https://amanthos-website-api.onrender.com" crossorigin>
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts (self-hosted, variable) -->
+  <link rel="preload" href="./assets/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="./assets/fonts/PlayfairDisplay.woff2" as="font" type="font/woff2" crossorigin>
+  <style>
+    @font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(./assets/fonts/Inter.woff2) format('woff2')}
+    @font-face{font-family:'Playfair Display';font-style:normal;font-weight:400 700;font-display:swap;src:url(./assets/fonts/PlayfairDisplay.woff2) format('woff2')}
+  </style>
 
   <!-- Styles -->
-  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./css/style.min.css">
 
   <!-- Favicons -->
   <link rel="icon" type="image/png" href="./assets/images/logo-white.png">
@@ -84,10 +86,15 @@
     "priceRange": "CHF 98 - CHF 350",
     "currenciesAccepted": "CHF",
     "paymentAccepted": "Credit Card, Debit Card",
-    "image": "./assets/images/hero-berge.jpg"
+    "image": "https://hotelmulin.ch/assets/images/hero-berge-1280.jpg"
   }
   </script>
   <style>
+    .map-facade { display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.6rem;
+      width:100%; height:100%; min-height:320px; border:1px solid var(--color-border); border-radius:var(--radius-md);
+      background:var(--color-bg-alt); color:var(--color-text); cursor:pointer; font-family:var(--font-body); font-size:.95rem; padding:1.5rem; }
+    .map-facade:hover { background:#e9e2d7; }
+    .map-facade span { color:var(--color-primary); font-weight:600; text-decoration:underline; }
     /* Mulin logo: white asset, darkened via filter when nav is scrolled */
     .nav-logo img { height: 44px; width: auto; }
     #logoColor { filter: brightness(0); }
@@ -99,8 +106,8 @@
   <nav class="nav" id="nav">
     <div class="nav-inner">
       <a href="#" class="nav-logo">
-        <img src="./assets/images/logo-white.png" alt="Hotel Mulin by Amanthos" class="logo-white" id="logoWhite">
-        <img src="./assets/images/logo-white.png" alt="Hotel Mulin by Amanthos" class="logo-color" id="logoColor">
+        <img src="./assets/images/logo-white.png" alt="Hotel Mulin by Amanthos" class="logo-white" id="logoWhite" width="65" height="44">
+        <img src="./assets/images/logo-white.png" alt="Hotel Mulin by Amanthos" class="logo-color" id="logoColor" width="65" height="44">
       </a>
 
       <div class="nav-links" id="navLinks">
@@ -125,7 +132,7 @@
   <!-- ========== HERO ========== -->
   <section class="hero" id="hero">
     <div class="hero-bg">
-      <img src="./assets/images/hero-berge.jpg" alt="Bergwelt rund um Brigels" loading="eager">
+      <img src="./assets/images/hero-berge-1280.jpg" srcset="./assets/images/hero-berge-800.jpg 800w, ./assets/images/hero-berge-1280.jpg 1280w, ./assets/images/hero-berge-1920.jpg 1920w" sizes="100vw" width="1920" height="1265" alt="Bergwelt rund um Brigels" loading="eager" fetchpriority="high">
     </div>
     <div class="container">
       <div class="hero-content">
@@ -232,7 +239,7 @@
     <div class="container">
       <div class="welcome-grid">
         <div class="welcome-image" data-animate>
-          <img src="./assets/images/reception.jpg" alt="Hotel Mulin Brigels Empfang" loading="lazy">
+          <img src="./assets/images/reception.jpg" width="1200" height="900" alt="Hotel Mulin Brigels Empfang" loading="lazy">
         </div>
         <div class="welcome-text" data-animate>
           <p class="section-label" data-num="01" data-i18n="welcome.label">Willkommen</p>
@@ -355,8 +362,8 @@
       <!-- Breakfast Muliniala -->
       <div class="feature-split" data-animate>
         <div class="feature-images">
-          <img src="./assets/images/fruehstueck-buffet.jpg" alt="Frühstücksbuffet Muliniala" loading="lazy">
-          <img src="./assets/images/restaurant.jpg" alt="Restaurant Hotel Mulin" loading="lazy">
+          <img src="./assets/images/fruehstueck-buffet.jpg" width="1200" height="930" alt="Frühstücksbuffet Muliniala" loading="lazy">
+          <img src="./assets/images/restaurant.jpg" width="1200" height="900" alt="Restaurant Hotel Mulin" loading="lazy">
         </div>
         <div class="feature-text">
           <p class="section-label" data-num="03" data-i18n="dining.label">Frühstück Muliniala</p>
@@ -388,7 +395,7 @@
       <!-- Lounge & Bar Mulinera -->
       <div class="feature-split reverse" data-animate style="margin-top:4rem">
         <div class="feature-images">
-          <img src="./assets/images/lounge-bar.png" alt="Lounge & Bar Mulinera" loading="lazy">
+          <img src="./assets/images/lounge-bar.jpg" width="1200" height="785" alt="Lounge & Bar Mulinera" loading="lazy">
         </div>
         <div class="feature-text">
           <p class="section-label" data-num="04" data-i18n="dining.lounge_label">Lounge & Bar Mulinera</p>
@@ -418,8 +425,8 @@
     <div class="container">
       <div class="feature-split reverse" data-animate>
         <div class="feature-images">
-          <img src="./assets/images/aktivitaet-bike.jpg" alt="Biken in Brigels" loading="lazy">
-          <img src="./assets/images/hero-berge.jpg" alt="Bergpanorama Surselva" loading="lazy">
+          <img src="./assets/images/aktivitaet-bike.jpg" width="1200" height="917" alt="Biken in Brigels" loading="lazy">
+          <img src="./assets/images/hero-berge-1280.jpg" width="1280" height="843" alt="Bergpanorama Surselva" loading="lazy">
         </div>
         <div class="feature-text">
           <p class="section-label" data-num="05" data-i18n="wellness.label">Aktivitäten</p>
@@ -454,8 +461,12 @@
       </div>
 
       <div class="location-grid" data-animate>
-        <div class="location-map">
-          <iframe src="https://www.google.com/maps?q=Hotel+Mulin,+Via+Cuort+31,+7165+Breil/Brigels&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Hotel Mulin Brigels on map"></iframe>
+        <div class="location-map" id="mapWrap">
+          <button type="button" class="map-facade" id="loadMapBtn">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <strong>Hotel Mulin, Via Cuort 31, 7165 Breil/Brigels</strong>
+            <span data-i18n="location.load_map">Karte anzeigen (Google Maps)</span>
+          </button>
         </div>
         <div class="location-info">
           <h3 data-i18n="location.address_title">Hotel Mulin by Amanthos</h3>
@@ -507,28 +518,28 @@
 
       <div class="gallery-grid" data-animate-stagger>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/hero-berge.jpg" alt="Bergwelt Brigels" loading="lazy">
+          <img src="./assets/images/hero-berge-1280.jpg" width="1280" height="843" alt="Bergwelt Brigels" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/rooms/glrs/2.jpg" alt="Galerie Suite" loading="lazy">
+          <img src="./assets/images/rooms/glrs/2.jpg" width="1000" height="665" alt="Galerie Suite" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/fruehstueck-buffet.jpg" alt="Frühstücksbuffet Muliniala" loading="lazy">
+          <img src="./assets/images/fruehstueck-buffet.jpg" width="1200" height="930" alt="Frühstücksbuffet Muliniala" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/lounge-bar.png" alt="Lounge & Bar Mulinera" loading="lazy">
+          <img src="./assets/images/lounge-bar.jpg" width="1200" height="785" alt="Lounge & Bar Mulinera" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/rooms/dbrb/1.jpg" alt="Doppelzimmer mit Balkon" loading="lazy">
+          <img src="./assets/images/rooms/dbrb/1.jpg" width="1000" height="665" alt="Doppelzimmer mit Balkon" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/aktivitaet-bike.jpg" alt="Biken in Brigels" loading="lazy">
+          <img src="./assets/images/aktivitaet-bike.jpg" width="1200" height="917" alt="Biken in Brigels" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/reception.jpg" alt="Empfang Hotel Mulin" loading="lazy">
+          <img src="./assets/images/reception.jpg" width="1200" height="900" alt="Empfang Hotel Mulin" loading="lazy">
         </div>
         <div class="gallery-item" data-lightbox>
-          <img src="./assets/images/restaurant.jpg" alt="Restaurant Hotel Mulin" loading="lazy">
+          <img src="./assets/images/restaurant.jpg" width="1200" height="900" alt="Restaurant Hotel Mulin" loading="lazy">
         </div>
       </div>
     </div>
@@ -645,8 +656,16 @@
   </div>
 
   <!-- Scripts -->
-  <script src="./js/i18n.js" defer></script>
-  <script src="./js/app.js" defer></script>
-  <script src="./js/booking.js" defer></script>
+  <script>
+    document.addEventListener('click', function (e) {
+      var btn = e.target.closest('#loadMapBtn');
+      if (!btn) return;
+      var wrap = document.getElementById('mapWrap');
+      wrap.innerHTML = '<iframe src="https://www.google.com/maps?q=Hotel+Mulin,+Via+Cuort+31,+7165+Breil/Brigels&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Hotel Mulin Brigels on map" style="width:100%;height:100%;min-height:320px;border:0;border-radius:12px"></iframe>';
+    });
+  </script>
+  <script src="./js/i18n.min.js" defer></script>
+  <script src="./js/app.min.js" defer></script>
+  <script src="./js/booking.min.js" defer></script>
 </body>
 </html>
