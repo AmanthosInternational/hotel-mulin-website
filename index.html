@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hotel Mulin Brigels | Der Hotspot für Genuss-Aktive in der Surselva</title>
+  <meta name="description" content="Hotel Mulin by Amanthos in Brigels — Alpines Lifestyle-Hotel in der Surselva. Frühstücksbuffet Muliniala, Lounge & Bar Mulinera, gratis Parkplatz. Direkt buchen zum besten Preis.">
+  <meta name="keywords" content="Hotel Brigels, Hotel Mulin, Breil/Brigels, Surselva, Graubünden, Hotel Graubünden, Brigels Übernachtung">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://hotelmulin.ch/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Hotel Mulin Brigels — Der Hotspot für Genuss-Aktive">
+  <meta property="og:description" content="Alpines Lifestyle-Hotel in Brigels, Surselva. Frühstück inklusive, Lounge & Bar, gratis Parkplatz. Direkt buchen für den besten Preis.">
+  <meta property="og:image" content="./assets/images/hero-berge.jpg">
+  <meta property="og:url" content="https://hotelmulin.ch/">
+  <meta property="og:locale" content="de_CH">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Hotel Mulin Brigels">
+  <meta name="twitter:description" content="Alpines Lifestyle-Hotel in Brigels, Surselva. Direkt buchen zum besten Preis.">
+  <meta name="twitter:image" content="./assets/images/hero-berge.jpg">
+
+  <!-- Preload critical assets for speed -->
+  <link rel="preload" href="./assets/images/hero-berge.jpg" as="image" fetchpriority="high">
+  <link rel="preload" href="./css/style.css" as="style">
+
+  <!-- Security headers -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta http-equiv="X-Frame-Options" content="DENY">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api.onrender.com; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
+
+  <!-- DNS prefetch for API -->
+  <link rel="dns-prefetch" href="https://amanthos-website-api.onrender.com">
+  <link rel="preconnect" href="https://amanthos-website-api.onrender.com" crossorigin>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="./css/style.css">
+
+  <!-- Favicons -->
+  <link rel="icon" type="image/png" href="./assets/images/logo-white.png">
+  <link rel="apple-touch-icon" href="./assets/images/logo-white.png">
+  <meta name="theme-color" content="#22302a">
+
+  <!-- Schema.org Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Hotel",
+    "name": "Hotel Mulin by Amanthos",
+    "description": "Alpines Lifestyle-Hotel in Brigels (Surselva), der Hotspot für Genuss-Aktive.",
+    "url": "https://hotelmulin.ch",
+    "telephone": "+41415627662",
+    "email": "mulin@amanthos.com",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "Via Cuort 31",
+      "addressLocality": "Breil/Brigels",
+      "postalCode": "7165",
+      "addressCountry": "CH"
+    },
+    "geo": {
+      "@type": "GeoCoordinates",
+      "latitude": 46.7718,
+      "longitude": 9.0614
+    },
+    "amenityFeature": [
+      {"@type": "LocationFeatureSpecification", "name": "Free Wi-Fi", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Breakfast Included", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Lounge & Bar", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Free Parking", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Pets Allowed", "value": true}
+    ],
+    "checkinTime": "15:00",
+    "checkoutTime": "11:00",
+    "priceRange": "CHF 98 - CHF 350",
+    "currenciesAccepted": "CHF",
+    "paymentAccepted": "Credit Card, Debit Card",
+    "image": "./assets/images/hero-berge.jpg"
+  }
+  </script>
+  <style>
+    /* Mulin logo: white asset, darkened via filter when nav is scrolled */
+    .nav-logo img { height: 44px; width: auto; }
+    #logoColor { filter: brightness(0); }
+  </style>
+</head>
+<body>
+
+  <!-- ========== NAVIGATION ========== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <a href="#" class="nav-logo">
+        <img src="./assets/images/logo-white.png" alt="Hotel Mulin by Amanthos" class="logo-white" id="logoWhite">
+        <img src="./assets/images/logo-white.png" alt="Hotel Mulin by Amanthos" class="logo-color" id="logoColor">
+      </a>
+
+      <div class="nav-links" id="navLinks">
+        <a href="#welcome" data-i18n="nav.hotel">Hotel</a>
+        <a href="#rooms" data-i18n="nav.rooms">Zimmer</a>
+        <a href="#dining" data-i18n="nav.dining">Lounge & Frühstück</a>
+        <a href="#wellness" data-i18n="nav.wellness">Aktivitäten</a>
+        <a href="#location" data-i18n="nav.location">Lage</a>
+        <a href="#gallery" data-i18n="nav.gallery">Galerie</a>
+        <a href="#bookingBar" class="nav-book-btn" data-i18n="nav.book_now">Jetzt Buchen</a>
+        <div class="lang-selector" id="langSelector"></div>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <main>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="hero">
+    <div class="hero-bg">
+      <img src="./assets/images/hero-berge.jpg" alt="Bergwelt rund um Brigels" loading="eager">
+    </div>
+    <div class="container">
+      <div class="hero-content">
+        <p class="hero-label">CORDIAL BEINVEGNI TIER NUS</p>
+        <div class="hero-title-wrap">
+          <span class="hero-line"></span>
+          <h1>Hotel Mulin<br>Brigels</h1>
+          <span class="hero-line"></span>
+        </div>
+      </div>
+      <div class="hero-trust-row">
+        <span class="hero-trust-pill" data-i18n="booking_bar.trust_clean">Frühstück & Parkplatz inklusive</span>
+        <span class="hero-trust-dot">&middot;</span>
+        <span class="hero-trust-pill" data-i18n="booking_bar.trust_tonight">Heute Nacht verfügbar</span>
+      </div>
+      <div class="hero-booking" id="bookingBar">
+        <div class="hero-bb-field hero-bb-dates" id="daterangeWrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          <span id="daterangeLabel" data-i18n="booking_bar.set_dates">Reisedaten festlegen</span>
+        </div>
+        <div class="hero-bb-divider"></div>
+        <div class="hero-bb-field hero-bb-guests" id="guestsWrap">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+          <span id="guestsLabel">2 Erwachsene</span>
+        </div>
+        <input type="hidden" id="bb-guests" value="2">
+        <input type="hidden" id="bb-checkin" data-date="">
+        <input type="hidden" id="bb-checkout" data-date="">
+        <input type="hidden" id="bb-children" value="0">
+        <span class="nights-badge" id="nightsBadge"></span>
+        <button class="hero-bb-search" id="bookingSearchBtn" data-i18n="booking_bar.search_btn">SUCHEN</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SCROLL REVEAL WRAPPER ========== -->
+  <div class="reveal-wrapper" id="revealWrapper">
+
+  <!-- ========== BOOKING RESULTS ========== -->
+  <section class="section" id="booking">
+    <div class="container">
+      <div id="offersLoading" style="display:none;text-align:center;padding:2rem;">
+        <p data-i18n="booking.searching">Verfügbarkeit wird geprüft...</p>
+      </div>
+      <div id="offersGrid"></div>
+
+      <!-- Guest Form -->
+      <div id="guestForm">
+        <!-- Upsell Add-ons -->
+        <div class="upsell-section" id="upsellSection">
+          <h3 class="upsell-title" data-i18n="booking.upsell_title">Machen Sie Ihren Aufenthalt besonders</h3>
+          <p class="upsell-subtitle" data-i18n="booking.upsell_subtitle">Extras bereit bei Ihrer Ankunft</p>
+          <div class="upsell-grid" id="upsellGrid"></div>
+        </div>
+
+        <h3 class="guest-form-title" data-i18n="booking.guest_details">Ihre Angaben</h3>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="guest-first" data-i18n="booking.first_name">Vorname *</label>
+            <input type="text" id="guest-first" required autocomplete="given-name">
+          </div>
+          <div class="form-group">
+            <label for="guest-last" data-i18n="booking.last_name">Nachname *</label>
+            <input type="text" id="guest-last" required autocomplete="family-name">
+          </div>
+          <div class="form-group">
+            <label for="guest-email" data-i18n="booking.email">E-Mail *</label>
+            <input type="email" id="guest-email" required autocomplete="email">
+          </div>
+          <div class="form-group">
+            <label for="guest-phone" data-i18n="booking.phone">Telefon</label>
+            <input type="tel" id="guest-phone" autocomplete="tel">
+          </div>
+        </div>
+
+        <!-- Promo Code -->
+        <div class="promo-code-section">
+          <label class="promo-label" data-i18n="booking.promo_label">Promo Code</label>
+          <div class="promo-code-row">
+            <input type="text" id="promoCodeInput" placeholder="Code eingeben" data-i18n-placeholder="booking.promo_placeholder">
+            <button class="btn btn-primary" id="applyPromoBtn" data-i18n="booking.promo_apply">Einlösen</button>
+          </div>
+          <div id="promoMessage"></div>
+          <div id="promoDiscountDisplay"></div>
+        </div>
+
+        <div id="priceSummary" class="price-summary"></div>
+
+        <div class="form-actions">
+          <button class="btn btn-accent btn-lg" id="confirmBookingBtn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="booking.confirm_reservation">Reservierung bestätigen</span>
+          </button>
+          <button class="btn btn-outline btn-cancel" id="cancelBookingBtn" data-i18n="booking.cancel">Abbrechen</button>
+        </div>
+      </div>
+
+      <div class="booking-status" id="bookingStatus" role="alert"></div>
+    </div>
+  </section>
+
+  <!-- ========== WELCOME ========== -->
+  <section class="section" id="welcome">
+    <div class="container">
+      <div class="welcome-grid">
+        <div class="welcome-image" data-animate>
+          <img src="./assets/images/reception.jpg" alt="Hotel Mulin Brigels Empfang" loading="lazy">
+        </div>
+        <div class="welcome-text" data-animate>
+          <p class="section-label" data-num="01" data-i18n="welcome.label">Willkommen</p>
+          <h2 data-i18n="welcome.title">Der Hotspot für Genuss-Aktive</h2>
+          <p data-i18n="welcome.text1">Das Hotel Mulin liegt mitten in Brigels, einem der schönsten Bergdörfer der Surselva. Unsere wunderschöne Alpenwelt bietet beides: Abenteuer für Aktive und Ruhe für Geniesser.</p>
+          <p data-i18n="welcome.text2">Starten Sie mit dem Frühstücksbuffet Muliniala in den Tag, erkunden Sie Berge, Trails und Pisten und lassen Sie den Abend in der Lounge Mulinera am Cheminée ausklingen.</p>
+          <div class="welcome-features">
+            <div class="welcome-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span data-i18n="welcome.feature1">Frühstück inklusive</span>
+            </div>
+            <div class="welcome-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span data-i18n="welcome.feature2">Gratis WLAN & Parkplatz</span>
+            </div>
+            <div class="welcome-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span data-i18n="welcome.feature3">Lounge & Bar Mulinera</span>
+            </div>
+            <div class="welcome-feature">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              <span data-i18n="welcome.feature4">Hunde willkommen</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ROOMS (Tab-based) ========== -->
+  <section class="section section-alt" id="rooms">
+    <div class="container">
+      <p class="section-label" data-num="02" data-animate data-i18n="rooms.label">Unsere Zimmer</p>
+      <h2 class="section-title" data-animate data-i18n="rooms.title">Wählen Sie Ihr perfektes Zimmer</h2>
+
+      <div class="rooms-tabs-wrap" data-animate>
+        <div class="rooms-tabs" role="tablist">
+          <button class="rooms-tab active" data-room="0" role="tab" aria-selected="true" data-i18n="rooms.tab_sgln">Einzelzimmer</button>
+          <button class="rooms-tab" data-room="1" role="tab" aria-selected="false" data-i18n="rooms.tab_sglb">Einzelzimmer Gross</button>
+          <button class="rooms-tab" data-room="2" role="tab" aria-selected="false" data-i18n="rooms.tab_dbln">Doppelzimmer</button>
+          <button class="rooms-tab" data-room="3" role="tab" aria-selected="false" data-i18n="rooms.tab_dbrb">Doppelzimmer mit Balkon</button>
+          <button class="rooms-tab" data-room="4" role="tab" aria-selected="false" data-i18n="rooms.tab_glrs">Galerie Suite</button>
+          <button class="rooms-tab" data-room="5" role="tab" aria-selected="false" data-i18n="rooms.tab_fam6">Familienzimmer (6)</button>
+        </div>
+      </div>
+
+      <div class="room-display" id="roomDisplay" role="tabpanel" data-animate></div>
+    </div>
+  </section>
+
+  <!-- ========== PRICING & CONDITIONS ========== -->
+  <section class="section" id="pricing">
+    <div class="container">
+      <p class="section-label" data-num="02b" data-animate data-i18n="pricing.section_label">Preise & Reservation</p>
+      <h2 class="section-title" data-animate data-i18n="pricing.title">Preise und Reservation</h2>
+      <p class="section-subtitle" data-animate data-i18n="pricing.subtitle">Alle Zimmerpreise beinhalten Frühstücksbuffet, Kurtaxe, Servicegebühren und MwSt.</p>
+
+      <div class="pricing-info" data-animate>
+        <div class="pricing-note">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span data-i18n="pricing.includes">Frühstücksbuffet Muliniala, Kurtaxe, WLAN & Parkplatz inklusive</span>
+        </div>
+        <div class="pricing-note">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 12l2 2 4-4"/></svg>
+          <span data-i18n="pricing.dogs">Hunde sind herzlich willkommen (CHF 25/Nacht) — Hundebett und Näpfe stehen bereit</span>
+        </div>
+        <div class="pricing-note">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span data-i18n="pricing.loyalty">Bestpreis-Garantie bei Direktbuchung über hotelmulin.ch</span>
+        </div>
+      </div>
+
+      <div class="pricing-cards" data-animate>
+        <div class="pricing-card">
+          <div class="pricing-card-price">CHF 98<small data-i18n="pricing.per_night">/Nacht</small></div>
+          <h3 data-i18n="rooms.tab_sgln">Einzelzimmer</h3>
+          <ul class="pricing-checklist">
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_single_bed">Einzelbett</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_tv">TV</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_breakfast">Frühstück</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_bath">Bad/Dusche</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_wifi">WLAN</span></li>
+          </ul>
+          <a href="#bookingBar" class="btn btn-accent pricing-card-btn" data-scroll-to="bookingBar" data-i18n="rooms.book_now">JETZT BUCHEN</a>
+        </div>
+
+        <div class="pricing-card featured">
+          <div class="pricing-card-badge" data-i18n="pricing.popular">Beliebteste Wahl</div>
+          <div class="pricing-card-price">CHF 198<small data-i18n="pricing.per_night">/Nacht</small></div>
+          <h3 data-i18n="rooms.tab_dbrb">Doppelzimmer mit Balkon</h3>
+          <ul class="pricing-checklist">
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_double_bed">Doppelbett</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_balcony">Balkon</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_mountain_view">Bergblick</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_breakfast">Frühstück</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_wifi">WLAN</span></li>
+          </ul>
+          <a href="#bookingBar" class="btn btn-accent pricing-card-btn" data-scroll-to="bookingBar" data-i18n="rooms.book_now">JETZT BUCHEN</a>
+        </div>
+
+        <div class="pricing-card">
+          <div class="pricing-card-price">CHF 219<small data-i18n="pricing.per_night">/Nacht</small></div>
+          <h3 data-i18n="rooms.tab_glrs">Galerie Suite</h3>
+          <ul class="pricing-checklist">
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_gallery_bed">Doppelbett auf Galerie</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_living_area">Wohn- & Schlafbereich</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_balcony">Balkon</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_breakfast">Frühstück</span></li>
+            <li><svg aria-hidden="true" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> <span data-i18n="rooms.amenity_wifi">WLAN</span></li>
+          </ul>
+          <a href="#bookingBar" class="btn btn-accent pricing-card-btn" data-scroll-to="bookingBar" data-i18n="rooms.book_now">JETZT BUCHEN</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LOUNGE & BREAKFAST ========== -->
+  <section class="section" id="dining">
+    <div class="container">
+      <!-- Breakfast Muliniala -->
+      <div class="feature-split" data-animate>
+        <div class="feature-images">
+          <img src="./assets/images/fruehstueck-buffet.jpg" alt="Frühstücksbuffet Muliniala" loading="lazy">
+          <img src="./assets/images/restaurant.jpg" alt="Restaurant Hotel Mulin" loading="lazy">
+        </div>
+        <div class="feature-text">
+          <p class="section-label" data-num="03" data-i18n="dining.label">Frühstück Muliniala</p>
+          <h2 data-i18n="dining.title">Energie für Ihre Abenteuer</h2>
+          <p data-i18n="dining.text">Unser Frühstücksbuffet Muliniala verwöhnt Sie jeden Morgen mit regionalen Spezialitäten aus der Surselva — frisches Brot, Bündner Käse und Fleisch, hausgemachte Konfitüren und vieles mehr. Der perfekte Start für einen aktiven Tag in den Bergen.</p>
+          <div class="feature-highlights">
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="dining.highlight1">Reichhaltiges Buffet mit regionalen Produkten</span>
+            </div>
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="dining.highlight2">Bündner Spezialitäten und frische Backwaren</span>
+            </div>
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="dining.highlight3">Im Zimmerpreis inklusive</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Lounge & Bar Mulinera -->
+      <div class="feature-split reverse" data-animate style="margin-top:4rem">
+        <div class="feature-images">
+          <img src="./assets/images/lounge-bar.png" alt="Lounge & Bar Mulinera" loading="lazy">
+        </div>
+        <div class="feature-text">
+          <p class="section-label" data-num="04" data-i18n="dining.lounge_label">Lounge & Bar Mulinera</p>
+          <h2 data-i18n="dining.lounge_title">Ausklingen am Cheminée</h2>
+          <p data-i18n="dining.lounge_text">Nach einem Tag in den Bergen empfängt Sie die Lounge Mulinera mit knisterndem Cheminée-Feuer, trendigen Cocktails und einer feinen Auswahl an Weinen. Zigarrenliebhaber geniessen in der Fumoir-Ecke «La Pipa».</p>
+          <div class="feature-highlights">
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="dining.lounge_highlight1">Cheminée-Lounge mit Cocktails & Weinen</span>
+            </div>
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="dining.lounge_highlight2">Fumoir «La Pipa» für Zigarren</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== ACTIVITIES ========== -->
+  <section class="section section-alt" id="wellness">
+    <div class="container">
+      <div class="feature-split reverse" data-animate>
+        <div class="feature-images">
+          <img src="./assets/images/aktivitaet-bike.jpg" alt="Biken in Brigels" loading="lazy">
+          <img src="./assets/images/hero-berge.jpg" alt="Bergpanorama Surselva" loading="lazy">
+        </div>
+        <div class="feature-text">
+          <p class="section-label" data-num="05" data-i18n="wellness.label">Aktivitäten</p>
+          <h2 data-i18n="wellness.title">Abenteuer direkt vor der Haustür</h2>
+          <p data-i18n="wellness.text">Brigels ist das ganze Jahr ein Paradies für Aktive: Im Sommer locken Bike-Trails, Wanderwege und der Golfplatz, im Winter das Skigebiet Brigels-Waltensburg-Andiast direkt vor der Haustür. Unser Team stellt Ihnen gerne Ihr persönliches Wochenprogramm zusammen.</p>
+          <div class="feature-highlights">
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="wellness.highlight1">Biken, Wandern & Golf im Sommer</span>
+            </div>
+            <div class="feature-highlight">
+              <div class="feature-highlight-icon">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+              </div>
+              <span data-i18n="wellness.highlight2">Skigebiet Brigels-Waltensburg-Andiast im Winter</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== LOCATION ========== -->
+  <section class="section" id="location">
+    <div class="container">
+      <div class="section-center" data-animate>
+        <p class="section-label" data-num="06" data-i18n="location.label">Lage</p>
+        <h2 class="section-title" data-i18n="location.title">Mitten in Brigels, mitten in der Surselva</h2>
+        <p class="section-subtitle" data-i18n="location.subtitle">Auf dem Sonnenplateau von Brigels, umgeben von der Bergwelt der Surselva.</p>
+      </div>
+
+      <div class="location-grid" data-animate>
+        <div class="location-map">
+          <iframe src="https://www.google.com/maps?q=Hotel+Mulin,+Via+Cuort+31,+7165+Breil/Brigels&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Hotel Mulin Brigels on map"></iframe>
+        </div>
+        <div class="location-info">
+          <h3 data-i18n="location.address_title">Hotel Mulin by Amanthos</h3>
+          <p>Via Cuort 31, 7165 Breil/Brigels</p>
+          <p data-i18n="location.desc">Brigels liegt auf einem Sonnenplateau auf 1'300 m ü. M. in der Surselva. Bergbahnen, Skigebiet, Bike-Trails und der Golfplatz sind in wenigen Minuten erreichbar.</p>
+
+          <div class="location-highlights">
+            <div class="location-highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <strong data-i18n="location.poi1_title">Bergbahnen Brigels</strong>
+                <span data-i18n="location.poi1_time">5 Min. zu Fuss</span>
+              </div>
+            </div>
+            <div class="location-highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <strong data-i18n="location.poi2_title">Golf Brigels</strong>
+                <span data-i18n="location.poi2_time">5 Min. mit dem Auto</span>
+              </div>
+            </div>
+            <div class="location-highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <strong data-i18n="location.poi3_title">Flims Laax Falera</strong>
+                <span data-i18n="location.poi3_time">25 Min. mit dem Auto</span>
+              </div>
+            </div>
+            <div class="location-highlight">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+              <div>
+                <strong data-i18n="location.poi4_title">Chur</strong>
+                <span data-i18n="location.poi4_time">45 Min. mit dem Auto</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== GALLERY ========== -->
+  <section class="section section-alt" id="gallery">
+    <div class="container">
+      <div class="section-center" data-animate>
+        <p class="section-label" data-num="07" data-i18n="gallery.label">Galerie</p>
+        <h2 class="section-title" data-i18n="gallery.title">Impressionen</h2>
+      </div>
+
+      <div class="gallery-grid" data-animate-stagger>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/hero-berge.jpg" alt="Bergwelt Brigels" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/rooms/glrs/2.jpg" alt="Galerie Suite" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/fruehstueck-buffet.jpg" alt="Frühstücksbuffet Muliniala" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/lounge-bar.png" alt="Lounge & Bar Mulinera" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/rooms/dbrb/1.jpg" alt="Doppelzimmer mit Balkon" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/aktivitaet-bike.jpg" alt="Biken in Brigels" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/reception.jpg" alt="Empfang Hotel Mulin" loading="lazy">
+        </div>
+        <div class="gallery-item" data-lightbox>
+          <img src="./assets/images/restaurant.jpg" alt="Restaurant Hotel Mulin" loading="lazy">
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== TRUST / SOCIAL PROOF ========== -->
+  <section class="section" id="trust">
+    <div class="container">
+      <div class="section-center" data-animate>
+        <p class="section-label" data-num="08" data-i18n="trust.label">Warum direkt buchen?</p>
+        <h2 class="section-title" data-i18n="trust.title">Bestpreis-Garantie bei Direktbuchung</h2>
+      </div>
+
+      <div class="trust-grid" data-animate-stagger>
+        <div class="trust-card">
+          <div class="trust-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 data-i18n="trust.guarantee_title">Bestpreis-Garantie</h3>
+          <p data-i18n="trust.guarantee_desc">Buchen Sie direkt und erhalten Sie garantiert den besten verfügbaren Preis. Keine versteckten Gebühren.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+          </div>
+          <h3 data-i18n="trust.secure_title">Sichere Zahlung</h3>
+          <p data-i18n="trust.secure_desc">SSL-verschlüsselte Bezahlung über Adyen. Ihre Daten sind bei uns sicher.</p>
+        </div>
+        <div class="trust-card">
+          <div class="trust-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          </div>
+          <h3 data-i18n="trust.instant_title">Sofortige Bestätigung</h3>
+          <p data-i18n="trust.instant_desc">Erhalten Sie Ihre Buchungsbestätigung sofort per E-Mail. Kein Warten, kein Aufwand.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FINAL CTA ========== -->
+  <section class="section cta-final" id="final-cta">
+    <div class="container" style="text-align:center">
+      <h2 class="cta-final-title" data-animate data-i18n="cta.title">Bereit für Ihre Auszeit in Brigels?</h2>
+      <p class="cta-final-sub" data-animate data-i18n="cta.subtitle">Buchen Sie direkt und sichern Sie sich den besten Preis für Ihr Erlebnis in der Surselva.</p>
+      <div class="cta-final-actions" data-animate>
+        <a href="#bookingBar" class="btn btn-accent btn-lg" data-scroll-to="bookingBar" style="font-size:1.1rem;padding:1.1rem 2.5rem;">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          <span data-i18n="cta.button">Verfügbarkeit prüfen</span>
+        </a>
+        <p class="cta-reassurance" data-i18n="cta.reassurance">Keine Kreditkarte nötig zum Suchen &middot; Bestpreis-Garantie bei Direktbuchung</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer" id="contact">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3>Hotel Mulin by Amanthos</h3>
+          <p data-i18n="footer.brand_desc">Alpines Lifestyle-Hotel in Brigels — der Hotspot für Genuss-Aktive in der Surselva.</p>
+        </div>
+
+        <div class="footer-links">
+          <h4 data-i18n="footer.quick_links">Quicklinks</h4>
+          <ul>
+            <li><a href="#rooms" data-i18n="nav.rooms">Zimmer</a></li>
+            <li><a href="#dining" data-i18n="nav.dining">Lounge & Frühstück</a></li>
+            <li><a href="#gallery" data-i18n="nav.gallery">Galerie</a></li>
+            <li><a href="#location" data-i18n="nav.location">Lage</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h4 data-i18n="footer.contact_title">Kontakt</h4>
+          <p>Via Cuort 31, 7165 Breil/Brigels</p>
+          <p><a href="tel:+41415627662">+41 41 562 76 62</a></p>
+          <p><a href="mailto:mulin@amanthos.com">mulin@amanthos.com</a></p>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="footer-bottom-left">
+          <p>&copy; 2026 Hotel Mulin by Amanthos. <span data-i18n="footer.rights">Alle Rechte vorbehalten.</span></p>
+        </div>
+        <div class="footer-legal">
+          <a href="#" data-i18n="footer.privacy">Datenschutz</a>
+          <a href="#" data-i18n="footer.imprint">Impressum</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  </div><!-- /reveal-wrapper -->
+  </main>
+
+  <!-- Cookie Banner -->
+  <div id="cookieBanner" class="cookie-banner" style="display:none" role="dialog" aria-label="Cookie consent">
+    <div class="cookie-banner-inner">
+      <p data-i18n="cookies.text">Wir verwenden essentielle Cookies für die Funktionalität. Keine Tracking-Cookies.</p>
+      <div class="cookie-actions">
+        <button class="cookie-accept" id="cookieAccept" data-i18n="cookies.accept">Verstanden</button>
+        <a href="#" class="cookie-link" data-i18n="cookies.learn_more">Datenschutz</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
+    <button class="lightbox-close" id="lightboxClose" aria-label="Close">&times;</button>
+    <button class="lightbox-nav lightbox-prev" id="lightboxPrev" aria-label="Previous">&lsaquo;</button>
+    <img src="" alt="" id="lightboxImg">
+    <button class="lightbox-nav lightbox-next" id="lightboxNext" aria-label="Next">&rsaquo;</button>
+  </div>
+
+  <!-- Scripts -->
+  <script src="./js/i18n.js" defer></script>
+  <script src="./js/app.js" defer></script>
+  <script src="./js/booking.js" defer></script>
+</body>
+</html>
