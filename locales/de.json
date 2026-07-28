@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Hotel Mulin Brigels | Der Hotspot für Genuss-Aktive in der Surselva",
-    "description": "Hotel Mulin by Amanthos in Brigels — Alpines Lifestyle-Hotel in der Surselva. Frühstück inklusive, Lounge & Bar, gratis Parkplatz. Direkt buchen zum besten Preis."
+    "description": "Hotel Mulin by Amanthos in Brigels — Alpines Lifestyle-Hotel in der Surselva. Frühstück inklusive, Lounge & Bar. Direkt buchen zum besten Preis."
   },
   "entry": {
     "tagline": "Ihr Zuhause in den Alpen",
@@ -40,7 +40,7 @@
     "subtitle": "Bestpreis-Garantie bei Direktbuchung",
     "trust_secure": "Sichere Buchung",
     "trust_no_cc": "Keine Kreditkarte nötig",
-    "trust_clean": "Frühstück & Parkplatz inklusive",
+    "trust_clean": "Frühstück inklusive",
     "trust_tonight": "Heute Nacht verfügbar",
     "trust_instant": "Sofortige Bestätigung",
     "set_dates": "Reisedaten festlegen",
@@ -52,7 +52,7 @@
     "text1": "Das Hotel Mulin liegt mitten in Brigels, einem der schönsten Bergdörfer der Surselva. Unsere wunderschöne Alpenwelt bietet beides: Abenteuer für Aktive und Ruhe für Geniesser.",
     "text2": "Starten Sie mit dem Frühstücksbuffet Muliniala in den Tag, erkunden Sie Berge, Trails und Pisten und lassen Sie den Abend in der Lounge Mulinera am Cheminée ausklingen.",
     "feature1": "Frühstück inklusive",
-    "feature2": "Gratis WLAN & Parkplatz",
+    "feature2": "Gratis WLAN",
     "feature3": "Lounge & Bar Mulinera",
     "feature4": "Hunde willkommen"
   },
@@ -130,7 +130,7 @@
     "section_label": "Preise & Reservation",
     "title": "Preise und Reservation",
     "subtitle": "Alle Zimmerpreise beinhalten Frühstücksbuffet, Kurtaxe, Servicegebühren und MwSt.",
-    "includes": "Frühstücksbuffet Muliniala, Kurtaxe, WLAN & Parkplatz inklusive",
+    "includes": "Frühstücksbuffet Muliniala, Kurtaxe & WLAN inklusive",
     "dogs": "Hunde sind herzlich willkommen (CHF 25/Nacht) — Hundebett und Näpfe stehen bereit",
     "loyalty": "Bestpreis-Garantie bei Direktbuchung über hotelmulin.ch",
     "per_night": "/Nacht",
