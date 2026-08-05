@@ -31,11 +31,11 @@
   <!-- Security headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api.onrender.com; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api-v2.onrender.com http://localhost:3002; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
 
   <!-- DNS prefetch for API -->
-  <link rel="dns-prefetch" href="https://amanthos-website-api.onrender.com">
-  <link rel="preconnect" href="https://amanthos-website-api.onrender.com" crossorigin>
+  <link rel="dns-prefetch" href="https://amanthos-website-api-v2.onrender.com">
+  <link rel="preconnect" href="https://amanthos-website-api-v2.onrender.com" crossorigin>
 
   <!-- Fonts (self-hosted, variable) -->
   <link rel="preload" href="./assets/fonts/Inter.woff2" as="font" type="font/woff2" crossorigin>
@@ -763,6 +763,7 @@
       wrap.innerHTML = '<iframe src="https://www.google.com/maps?q=Hotel+Mulin,+Via+Cuort+31,+7165+Breil/Brigels&output=embed" allowfullscreen loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Hotel Mulin Brigels on map" style="width:100%;height:100%;min-height:320px;border:0;border-radius:12px"></iframe>';
     });
   </script>
+  <script src="./js/local-api.js"></script>
   <script src="./js/i18n.min.js" defer></script>
   <script src="./js/app.min.js" defer></script>
   <script src="./js/booking.min.js" defer></script>
