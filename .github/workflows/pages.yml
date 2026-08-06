@@ -1,0 +1,35 @@
+name: Deploy static site to Pages
+
+# Replaces the flaky legacy "deploy from branch" build (which was timing out
+# on GitHub's side). This uploads the repo as a Pages artifact and deploys via
+# the modern actions/deploy-pages path. The root CNAME file (hotelmulin.ch) is
+# part of the artifact, so the custom domain is preserved.
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: "."
+      - id: deployment
+        uses: actions/deploy-pages@v4
