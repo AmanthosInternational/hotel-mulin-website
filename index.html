@@ -31,7 +31,7 @@
   <!-- Security headers -->
   <meta http-equiv="X-Content-Type-Options" content="nosniff">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://plausible.io; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api-v2.onrender.com https://o4511372064915456.ingest.de.sentry.io https://plausible.io; worker-src 'self' blob:; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://browser.sentry-cdn.com https://plausible.io https://www.googletagmanager.com; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api-v2.onrender.com https://o4511372064915456.ingest.de.sentry.io https://plausible.io https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://stats.g.doubleclick.net; worker-src 'self' blob:; frame-src https://www.google.com https://eu.adyen.link https://checkout.adyen.com">
 
   <!-- DNS prefetch for API -->
   <link rel="dns-prefetch" href="https://amanthos-website-api-v2.onrender.com">
@@ -109,6 +109,16 @@
   <script>
     window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
     plausible.init()
+  </script>
+  <!-- Google Analytics 4 (eigene Property). consent.js laedt SYNCHRON und VOR dem
+       gtag-Loader: nur so stehen die Consent-Defaults, bevor gtag konfiguriert. -->
+  <script src="./js/consent.js"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-M82K4CLF9E"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-M82K4CLF9E');
   </script>
 </head>
 <body>
@@ -746,16 +756,9 @@
   </div><!-- /reveal-wrapper -->
   </main>
 
-  <!-- Cookie Banner -->
-  <div id="cookieBanner" class="cookie-banner" style="display:none" role="dialog" aria-label="Cookie consent">
-    <div class="cookie-banner-inner">
-      <p data-i18n="cookies.text">Wir verwenden essentielle Cookies für die Funktionalität. Keine Tracking-Cookies.</p>
-      <div class="cookie-actions">
-        <button class="cookie-accept" id="cookieAccept" data-i18n="cookies.accept">Verstanden</button>
-        <a href="./datenschutz.html" class="cookie-link" data-i18n="cookies.learn_more">Datenschutz</a>
-      </div>
-    </div>
-  </div>
+  <!-- Der Cookie-Banner steht nicht mehr im Markup: js/consent.js baut ihn selbst
+       und zeigt ihn nur, solange keine Wahl vorliegt. Der alte Text versprach
+       "Keine Tracking-Cookies" und waere mit Google Analytics unwahr geworden. -->
 
   <!-- Lightbox -->
   <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Image viewer">
@@ -775,7 +778,7 @@
     });
   </script>
   <script src="./js/i18n.min.js" defer></script>
-  <script src="./js/app.min.js" defer></script>
-  <script src="./js/booking.min.js?v=20260820analytics" defer></script>
+  <script src="./js/app.min.js?v=20260820ga4" defer></script>
+  <script src="./js/booking.min.js?v=20260820ga4" defer></script>
 </body>
 </html>

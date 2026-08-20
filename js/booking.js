@@ -46,11 +46,89 @@ function plausibleEvent(name, data) {
   } catch (e) { /* Analytics darf die Buchungsstrecke nie brechen */ }
 }
 
+// GA4 (eigene Property, Consent Mode v2 in js/consent.js). Wie bei Plausible gilt:
+// abschliessende Merkmalsliste je Ereignis, keine Namen, keine E-Mail, keine
+// Reisedaten, keine Gutscheincodes, keine Fehlertexte. Einzige zulaessige Kennung
+// ist transaction_id. Der Umsatz zaehlt genau einmal, am purchase.
+function ga4Event(event, data) {
+  try {
+    if (typeof window.gtag !== 'function') return;
+    var d = data || {};
+    var price = typeof d.total_price === 'number' ? d.total_price : 0;
+    var currency = d.currency || 'CHF';
+
+    switch (event) {
+      case 'search_availability':
+        window.gtag('event', 'search_availability', {
+          location: d.location, guests: d.guests
+        });
+        break;
+      case 'view_offers':
+        window.gtag('event', 'view_item_list', {
+          item_list_name: d.location, offer_count: d.offer_count
+        });
+        break;
+      case 'select_offer':
+        window.gtag('event', 'select_item', {
+          currency: currency,
+          items: [{
+            item_name: d.rate_name,
+            item_category: d.unit_type,
+            item_variant: d.category,
+            price: price,
+            quantity: 1
+          }]
+        });
+        break;
+      case 'begin_checkout':
+        window.gtag('event', 'begin_checkout', {
+          currency: currency,
+          value: price + (typeof d.extras_total === 'number' ? d.extras_total : 0),
+          items: [{ item_name: d.rate_name, quantity: 1 }]
+        });
+        break;
+      case 'submit_booking':
+        window.gtag('event', 'submit_booking', {
+          location: d.location, rate_name: d.rate_name
+        });
+        break;
+      case 'booking_confirmed':
+        window.gtag('event', 'purchase', {
+          transaction_id: d.booking_id, value: price, currency: currency
+        });
+        break;
+      case 'payment_initiated':
+      case 'payment_completed':
+      case 'booking_cancelled_no_payment':
+        // payment_completed bewusst OHNE value: der Umsatz haengt am purchase.
+        window.gtag('event', event, { transaction_id: d.booking_id });
+        break;
+      case 'booking_error':
+        // error_message bleibt draussen -- Freitext ist ein PII-Risiko.
+        window.gtag('event', 'booking_error', { step: d.step });
+        break;
+      case 'promo_code_applied':
+        window.gtag('event', 'promo_code_applied', {});
+        break;
+      default:
+        break;
+    }
+  } catch (e) { /* Analytics darf die Buchungsstrecke nie brechen */ }
+}
+
+// Rebuild-Waechter. esbuild --minify benennt lokale Funktionsnamen um: weder
+// plausibleEvent noch gtmPush stehen in booking.min.js. Objekt-Eigenschaften
+// benennt es NICHT um, deshalb ueberlebt der Name hier. Damit ist
+// "grep ga4Event js/booking.min.js" ein belastbarer Beweis, dass die min-Datei
+// nach einer Aenderung an dieser Quelle wirklich neu gebaut wurde -- genau die
+// Falle, die die Plausible-Anbindung vom 19. bis 20.08.2026 wirkungslos liess.
+var GA4_BUILD_MARKER = { ga4Event: ga4Event };
+
 function gtmPush(event, data) {
   try { plausibleEvent(event, data); } catch (e) { /* nie die Buchung brechen */ }
-  var obj = { event: event };
-  if (data) { var k = Object.keys(data); for (var i = 0; i < k.length; i++) { obj[k[i]] = data[k[i]]; } }
-  window.dataLayer.push(obj);
+  try { ga4Event(event, data); } catch (e) { /* nie die Buchung brechen */ }
+  // dataLayer.push entfernt: gtag.js nutzt denselben dataLayer, ein {event:...}-Push
+  // wuerde die Ereignisse ein zweites Mal ausloesen (GTM ist weg, der Transport tot).
 }
 
 var selectedOffer = null;

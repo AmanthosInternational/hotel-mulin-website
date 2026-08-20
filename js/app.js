@@ -438,17 +438,11 @@ document.addEventListener('keydown', function (e) {
   if (e.key === 'ArrowRight' && lightboxNext) lightboxNext.click();
 });
 
-// ========== COOKIE BANNER ==========
-var cookieBanner = document.getElementById('cookieBanner');
-var cookieAccept = document.getElementById('cookieAccept');
-if (cookieBanner && !localStorage.getItem('cookies_accepted')) {
-  cookieBanner.style.display = 'block';
-}
-if (cookieAccept) {
-  cookieAccept.addEventListener('click', function () {
-    localStorage.setItem('cookies_accepted', '1');
-    if (cookieBanner) cookieBanner.style.display = 'none';
-  });
-}
+// Der alte Cookie-Banner ist ersatzlos entfallen. Er versprach "keine
+// Tracking-Cookies" und war damit ab dem GA4-Einbau schlicht falsch. Banner,
+// Texte und Speicherung liegen jetzt in js/consent.js (Schluessel
+// am_consent_analytics). Der Altschluessel cookies_accepted wird bewusst weder
+// gelesen noch geloescht: eine Zustimmung zu "keine Tracking-Cookies" deckt
+// Google Analytics nicht ab, Bestandsbesucher werden einmalig neu gefragt.
 
 })();
