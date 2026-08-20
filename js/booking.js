@@ -1,3 +1,10 @@
+// ACHTUNG: index.html laedt NICHT diese Datei, sondern js/booking.min.js.
+// Wer hier etwas aendert, muss die minifizierte Fassung neu bauen, sonst geht die
+// Aenderung nie live. Zweimal passiert: beim v2-Backend und bei der Plausible-
+// Anbindung, die dadurch vom 19. bis 20.08.2026 wirkungslos war.
+//   npx esbuild js/booking.js --minify --target=es2017 --outfile=js/booking.min.js
+// Danach den Cache-Bust in index.html hochziehen (?v=JJJJMMTT...).
+
 /*
  * Hotel Mulin Internet Booking Engine (IBE)
  * Version 2.0 — Kurtaxe (city tax) is shown and charged online (brutto pricing).
