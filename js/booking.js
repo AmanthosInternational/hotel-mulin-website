@@ -14,7 +14,7 @@
 'use strict';
 
 var IBE_VERSION = '2.0';
-var API_BASE = window.HOTELMULIN_API_BASE || 'https://amanthos-website-api-v2.onrender.com';
+var API_BASE = window.HOTELMULIN_API_BASE || 'https://amanthos-website-api.onrender.com';
 var PROPERTY_ID = 'MUBRIG';
 try { console.info('Hotel Mulin IBE v' + IBE_VERSION + ' (city tax included)'); } catch (e) {}
 
