@@ -60,7 +60,7 @@
     'line-height:1.55;padding:1rem 1.25rem;box-shadow:0 -2px 14px rgba(0,0,0,.28)}',
     '.am-consent-inner{max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;',
     'align-items:center;justify-content:space-between;gap:.8rem 1.5rem}',
-    '.am-consent-text{margin:0;flex:1 1 320px}',
+    '.am-consent-text{margin:0;flex:1 1 320px;color:#fff}',
     '.am-consent-actions{display:flex;flex-wrap:wrap;align-items:center;gap:.6rem}',
     '.am-consent-btn{font:inherit;cursor:pointer;border:1px solid #fff;',
     'background:transparent;color:#fff;padding:.55rem 1.5rem;border-radius:2px;',
