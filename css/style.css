@@ -2511,3 +2511,9 @@ body.hero-light .nav.scrolled .lang-toggle { color: rgba(44,44,44,.85); }
 .tip-box { margin-top: 1.2rem; }
 .tip-box h3 { color: var(--color-primary); }
 .tip-box p { margin: 0; }
+
+/* Links im Fliesstext der Rechtsseiten muessen ohne Farbe erkennbar sein
+   (WCAG 1.4.1, axe link-in-text-block). Global gilt text-decoration:none;
+   im Fliesstext ist die Unterstreichung das einzige nichtfarbliche Merkmal. */
+.legal-container p a,
+.legal-container li a{text-decoration:underline;text-underline-offset:.15em}
