@@ -709,19 +709,23 @@ function buildGuestsDropdown() {
   });
 }
 
+// MUBRIG (Hotel Mulin): hoechste Belegung = 6 (Family Room 6, 1-6).
+// Immer mind. 1 Erwachsener; Kinder = Max - Erwachsene; Total <= Max.
 function updateGuestCount(type, dir) {
+  var MAX = 6;
+  var adults = parseInt(guestInput.value) || 1;
+  var children = parseInt(childInput.value) || 0;
   if (type === 'adults') {
-    var val = parseInt(guestInput.value) || 1;
-    var newVal = Math.max(1, Math.min(6, val + dir));
-    guestInput.value = newVal;
+    var na = Math.max(1, Math.min(MAX, adults + dir));
+    if (na + children > MAX) na = Math.max(1, MAX - children);
+    guestInput.value = na;
     var el = document.getElementById('adultCount');
-    if (el) el.textContent = newVal;
+    if (el) el.textContent = na;
   } else {
-    var val = parseInt(childInput.value) || 0;
-    var newVal = Math.max(0, Math.min(4, val + dir));
-    childInput.value = newVal;
+    var nc = Math.max(0, Math.min(MAX - adults, children + dir));
+    childInput.value = nc;
     var el = document.getElementById('childCount');
-    if (el) el.textContent = newVal;
+    if (el) el.textContent = nc;
   }
   updateGuestsLabel();
 }
