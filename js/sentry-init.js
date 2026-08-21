@@ -27,13 +27,6 @@
 
     integrations: [
       Sentry.browserTracingIntegration(),
-      Sentry.replayIntegration({
-        // All three default to true — set explicitly so the privacy posture is
-        // stated in the file rather than inherited silently.
-        maskAllText: true,
-        maskAllInputs: true,
-        blockAllMedia: true,
-      }),
     ],
 
     // Core Web Vitals and page load timings. 10% is enough to see trends on a
@@ -87,4 +80,38 @@
 
   // Which of the four sites an event came from, without relying on the URL.
   Sentry.setTag('site', 'hotel-mulin-website');
+
+  // Replay kostet den Besucher einen eigenen Chunk (replay.min.js, 153 KB, vom CDN
+  // unkomprimiert ausgeliefert) und ist nur fuer die Buchungsstrecke wertvoll
+  // (Analyse von Buchungsabbruechen). Er laedt deshalb erst bei der ersten
+  // Interaktion mit der Buchungsleiste, nicht bei jedem Seitenaufruf.
+  var replayArmed = false;
+  function armReplay() {
+    if (replayArmed) return;
+    replayArmed = true;
+    // bundle.tracing.min.js bringt einen Platzhalter Sentry.replayIntegration mit, der
+    // nur warnt und nichts aufzeichnet. lazyLoadIntegration() gibt eine vorhandene
+    // Funktion unbesehen zurueck und erkennt Platzhalter am Merker _isShim — der fehlt
+    // genau beim Replay (gemessen in 10.68.0 und in 10.70.0; feedbackIntegration
+    // daneben traegt ihn). Ohne die Markierung laedt der Chunk nie. Kennzeichen des
+    // Platzhalters: replayIntegration da, getReplay fehlt; replay.min.js setzt beide.
+    if (typeof Sentry.replayIntegration === 'function' && typeof Sentry.getReplay !== 'function') {
+      Sentry.replayIntegration._isShim = true;
+    }
+    Sentry.lazyLoadIntegration('replayIntegration').then(function (replayIntegration) {
+      Sentry.addIntegration(replayIntegration({
+        maskAllText: true,
+        maskAllInputs: true,
+        blockAllMedia: true,
+      }));
+    }).catch(function () {
+      // Adblocker oder Netzproblem: Replay entfaellt, Fehler-Reporting laeuft weiter.
+    });
+  }
+  var bookingBar = document.getElementById('bookingBar');
+  if (bookingBar) {
+    ['focusin', 'pointerdown'].forEach(function (t) {
+      bookingBar.addEventListener(t, armReplay, { once: true, passive: true });
+    });
+  }
 })();
