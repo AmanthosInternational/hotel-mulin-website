@@ -116,17 +116,49 @@ function ga4Event(event, data) {
   } catch (e) { /* Analytics darf die Buchungsstrecke nie brechen */ }
 }
 
-// Rebuild-Waechter. esbuild --minify benennt lokale Funktionsnamen um: weder
-// plausibleEvent noch gtmPush stehen in booking.min.js. Objekt-Eigenschaften
-// benennt es NICHT um, deshalb ueberlebt der Name hier. Damit ist
-// "grep ga4Event js/booking.min.js" ein belastbarer Beweis, dass die min-Datei
-// nach einer Aenderung an dieser Quelle wirklich neu gebaut wurde -- genau die
-// Falle, die die Plausible-Anbindung vom 19. bis 20.08.2026 wirkungslos liess.
-var GA4_BUILD_MARKER = { ga4Event: ga4Event };
+// Rebuild-Waechter, am 30.08.2026 korrigiert. Die alte Fassung war wirkungslos.
+// Sie legte `var GA4_BUILD_MARKER = { ga4Event: ga4Event }` an und nannte
+// "grep ga4Event js/booking.min.js" einen belastbaren Beweis. Gebaut wird hier
+// aber nicht mit esbuild, sondern mit Terser:
+//   npx terser@5 js/booking.js --compress --mangle -o js/booking.min.js
+// (nachgewiesen am 30.08.: reproduziert die bestehende Datei bytegleich, 52427).
+// Terser wirft mit --compress jede ungenutzte Variable weg, also auch den Marker.
+// Gemessen: "ga4Event" stand null Mal in booking.min.js. Der Waechter gegen die
+// Falle, die die Plausible-Anbindung vom 19. bis 20.08.2026 wirkungslos liess,
+// hat also selbst nicht funktioniert.
+//
+// Diese Fassung haelt, weil String-Literale in erreichbarem Code nicht
+// wegoptimiert werden. Der Beweis fuer einen frischen Build lautet ab jetzt:
+//   grep -c CW3DCIqSpuocEJzU_84C js/booking.min.js   muss 1 ergeben
+// Die Kennung steht in adsEvent() und wird bei jeder Buchung gesendet.
+
+// Google Ads: eigene Kennung, eigener Transport, unabhaengig von GA4. Die
+// Conversion haengt am booking_confirmed und nicht am payment_completed: die
+// Adyen-Zahlung verlaesst auf dem Handy die Seite und kehrt ohne verwertbaren
+// Zustand zurueck, dort wuerde payment_completed nie feuern. Gezaehlt wird die
+// bestaetigte Reservierung; um Stornos und Nichtanreisen korrigiert der
+// woechentliche ROAS-Report aus echten Apaleo-Umsaetzen.
+var ADS_CONVERSION_ID = 'AW-702540316';
+var ADS_CONVERSION_LABEL = 'CW3DCIqSpuocEJzU_84C';
+
+function adsEvent(name, data) {
+  try {
+    if (typeof window.gtag !== 'function') return;
+    if (name !== 'booking_confirmed') return;
+    var d = data || {};
+    window.gtag('event', 'conversion', {
+      send_to: ADS_CONVERSION_ID + '/' + ADS_CONVERSION_LABEL,
+      value: d.total_price || 0,
+      currency: d.currency || 'CHF',
+      transaction_id: d.booking_id || ''
+    });
+  } catch (e) { /* Analytics darf die Buchungsstrecke nie brechen */ }
+}
 
 function gtmPush(event, data) {
   try { plausibleEvent(event, data); } catch (e) { /* nie die Buchung brechen */ }
   try { ga4Event(event, data); } catch (e) { /* nie die Buchung brechen */ }
+  try { adsEvent(event, data); } catch (e) { /* nie die Buchung brechen */ }
   // dataLayer.push entfernt: gtag.js nutzt denselben dataLayer, ein {event:...}-Push
   // wuerde die Ereignisse ein zweites Mal ausloesen (GTM ist weg, der Transport tot).
   try { if (window.amMeta) window.amMeta.event(event, data); } catch (e) { /* nie die Buchung brechen */ }
