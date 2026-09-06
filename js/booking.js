@@ -16,6 +16,20 @@
 var IBE_VERSION = '2.0';
 var API_BASE = window.HOTELMULIN_API_BASE || 'https://amanthos-website-api.onrender.com';
 var PROPERTY_ID = 'MUBRIG';
+// Deep Link und Microdata (Bauplan fbl-ibe, Kontrakte K1, K1b, K2). Der Name und
+// die Zeiten stehen genauso im JSON-LD des <head>. MUBRIG traegt die Kurtaxe im
+// Zimmerpreis, deshalb ist der Microdata-Preis der Zimmerpreis und es gibt keine
+// priceComponent. PROPERTY_ID ist zugleich die Hotel-ID des Feeds: aendert der
+// Partner sie, aendert sich nur diese eine Konstante.
+var PROPERTY_NAME = 'Hotel Mulin by Amanthos';
+var MAX_GUESTS = 6;
+var DEEPLINK_LANGS = ['de', 'en'];
+var CHECKIN_TIME = 'T15:00:00';
+var CHECKOUT_TIME = 'T11:00:00';
+var deepLink = null;
+var deepLinkPreselected = false;
+var deepLinkOfferIndex = -1;
+var deepLinkPriceChecked = false;
 try { console.info('Hotel Mulin IBE v' + IBE_VERSION + ' (city tax included)'); } catch (e) {}
 
 // dataLayer helper for GTM conversion tracking
@@ -58,15 +72,17 @@ function ga4Event(event, data) {
     var currency = d.currency || 'CHF';
 
     switch (event) {
+      // booking_source ist die Buchungsquelle aus dem Deep Link (K4) und steht nur
+      // an diesen drei Ereignissen. Fehlt die Quelle, fehlt der Parameter.
       case 'search_availability':
-        window.gtag('event', 'search_availability', {
-          location: d.location, guests: d.guests
-        });
+        var pSearch = { location: d.location, guests: d.guests };
+        if (d.source) pSearch.booking_source = d.source;
+        window.gtag('event', 'search_availability', pSearch);
         break;
       case 'view_offers':
-        window.gtag('event', 'view_item_list', {
-          item_list_name: d.location, offer_count: d.offer_count
-        });
+        var pList = { item_list_name: d.location, offer_count: d.offer_count };
+        if (d.source) pList.booking_source = d.source;
+        window.gtag('event', 'view_item_list', pList);
         break;
       case 'select_offer':
         window.gtag('event', 'select_item', {
@@ -93,9 +109,19 @@ function ga4Event(event, data) {
         });
         break;
       case 'booking_confirmed':
-        window.gtag('event', 'purchase', {
-          transaction_id: d.booking_id, value: price, currency: currency
-        });
+        var pPurchase = { transaction_id: d.booking_id, value: price, currency: currency };
+        if (d.source) pPurchase.booking_source = d.source;
+        window.gtag('event', 'purchase', pPurchase);
+        break;
+      // Deep-Link-Ereignisse (K4). Plausible sieht davon nur step, weil seine
+      // Merkmals-Whitelist unveraendert bleibt.
+      case 'deeplink_applied':
+        var pApplied = { step: d.step };
+        if (d.source) pApplied.booking_source = d.source;
+        window.gtag('event', 'deeplink_applied', pApplied);
+        break;
+      case 'deeplink_price_mismatch':
+        window.gtag('event', 'deeplink_price_mismatch', { step: d.step, delta: d.delta });
         break;
       case 'payment_initiated':
       case 'payment_completed':
@@ -150,7 +176,10 @@ function adsEvent(name, data) {
       send_to: ADS_CONVERSION_ID + '/' + ADS_CONVERSION_LABEL,
       value: d.total_price || 0,
       currency: d.currency || 'CHF',
-      transaction_id: d.booking_id || ''
+      transaction_id: d.booking_id || '',
+      // Googles optionaler Hotel-Parameter (K4). Reisedaten gehen bewusst NICHT
+      // mit: die bestehende Regel "keine Reisedaten an GA4/Ads" bleibt.
+      id: PROPERTY_ID
     });
   } catch (e) { /* Analytics darf die Buchungsstrecke nie brechen */ }
 }
@@ -745,7 +774,7 @@ function buildGuestsDropdown() {
 // MUBRIG (Hotel Mulin): hoechste Belegung = 6 (Family Room 6, 1-6).
 // Immer mind. 1 Erwachsener; Kinder = Max - Erwachsene; Total <= Max.
 function updateGuestCount(type, dir) {
-  var MAX = 6;
+  var MAX = MAX_GUESTS;
   var adults = parseInt(guestInput.value) || 1;
   var children = parseInt(childInput.value) || 0;
   if (type === 'adults') {
@@ -789,7 +818,9 @@ function positionGuestsDropdown() {
 }
 
 function openGuestsDropdown() {
-  if (!guestsDropdown) buildGuestsDropdown();
+  // Beim ersten Oeffnen die Zaehler aus den Feldern uebernehmen, sonst steht dort
+  // 2/0, waehrend die Suche mit den Werten eines Deep Links laeuft.
+  if (!guestsDropdown) { buildGuestsDropdown(); syncGuestCounts(); }
   positionGuestsDropdown();
   guestsDropdown.classList.add('open');
 }
@@ -902,14 +933,152 @@ if (searchBtn) {
       adults: guestsVal,
       children: childrenVal,
     };
-    gtmPush('search_availability', {
+    var searchData = {
       location: 'Hotel Mulin',
       check_in: checkinVal,
       check_out: checkoutVal,
       guests: guestsVal,
-    });
+    };
+    if (deepLink && deepLink.source) searchData.source = deepLink.source;
+    gtmPush('search_availability', searchData);
     fetchOffers();
   });
+}
+
+// ========== DEEP LINK (Google Free Booking Links, Bauplan fbl-ibe K1b) ==========
+// Ohne js/deeplink.js passiert hier nichts: der Code ist inert, bis die
+// Verdrahtung den Script-Tag in index.html setzt.
+function deepLinkConfig() {
+  var properties = {};
+  properties[PROPERTY_ID] = MAX_GUESTS;
+  return {
+    today: new Date(),
+    properties: properties,
+    langs: DEEPLINK_LANGS,
+    defaultProperty: PROPERTY_ID
+  };
+}
+
+function dateFromISO(iso) {
+  var p = String(iso).split('-');
+  return new Date(parseInt(p[0], 10), parseInt(p[1], 10) - 1, parseInt(p[2], 10), 12, 0, 0);
+}
+
+// Die Belegungs-Auswahl wird erst beim ersten Oeffnen gebaut und stuende sonst auf
+// 2/0, waehrend die Suche mit den Zahlen des Deep Links laeuft.
+function syncGuestCounts() {
+  var a = document.getElementById('adultCount');
+  var c = document.getElementById('childCount');
+  if (a && guestInput) a.textContent = parseInt(guestInput.value) || 1;
+  if (c && childInput) c.textContent = parseInt(childInput.value) || 0;
+}
+
+function applyDeepLink() {
+  try {
+    if (!window.amDeepLink || typeof window.amDeepLink.parse !== 'function') return;
+    deepLink = window.amDeepLink.parse(window.location.search, deepLinkConfig());
+    var s = deepLink.search;
+    // Ungueltige Daten: stille Rueckkehr zur normalen Startseite, keine Autosuche,
+    // kein Dialog, keine Meldung.
+    if (!s || !searchBtn) return;
+    cal.checkin = dateFromISO(s.arrival);
+    cal.checkout = dateFromISO(s.departure);
+    cal.selecting = null;
+    syncInputs();
+    if (guestInput) guestInput.value = s.adults;
+    if (childInput) childInput.value = s.children;
+    syncGuestCounts();
+    updateGuestsLabel();
+    // Die Sprache setzt i18n.js ueber denselben ?lang=-Pfad; hier nichts tun.
+    searchBtn.click();
+    var applied = { step: 'deeplink' };
+    if (deepLink.source) applied.source = deepLink.source;
+    gtmPush('deeplink_applied', applied);
+  } catch (e) { /* Ein Deep Link darf die Seite nie brechen */ }
+}
+
+if (window.amDeepLink) {
+  applyDeepLink();
+} else {
+  document.addEventListener('am:deeplink-ready', applyDeepLink, { once: true });
+}
+
+// Vergleich von Zimmer- und Ratencodes: mit oder ohne Property-Praefix,
+// Gross- und Kleinschreibung egal.
+function stripProperty(code) {
+  var c = String(code === null || code === undefined ? '' : code).toUpperCase();
+  var prefix = PROPERTY_ID.toUpperCase() + '-';
+  return c.indexOf(prefix) === 0 ? c.slice(prefix.length) : c;
+}
+
+function codeMatches(wanted, candidates) {
+  var w = stripProperty(wanted);
+  if (!w) return false;
+  for (var i = 0; i < candidates.length; i++) {
+    var c = stripProperty(candidates[i]);
+    if (c && c === w) return true;
+  }
+  return false;
+}
+
+function findPreselectIndex(pre) {
+  for (var i = 0; i < currentOffers.length; i++) {
+    var o = currentOffers[i];
+    if (pre.room && !codeMatches(pre.room, [o.unitGroupId, o.unitGroupCode])) continue;
+    if (pre.rate && !codeMatches(pre.rate, [o.ratePlanCode, o.ratePlanId])) continue;
+    return i;
+  }
+  return -1;
+}
+
+function cheapestGross() {
+  var best = null;
+  for (var i = 0; i < currentOffers.length; i++) {
+    var g = getOfferGross(currentOffers[i]);
+    if (g === null) continue;
+    if (best === null || g < best) best = g;
+  }
+  return best;
+}
+
+// Preisprobe gegen den Betrag, den Google angezeigt hat. Verglichen wird das
+// vorausgewaehlte, sonst das guenstigste Angebot; delta ist IBE minus Google,
+// auf 0.05 gerundet. Toleranz 0.05, weil Rappenrundungen kein Befund sind.
+function checkGooglePrice() {
+  var google = parseFloat(deepLink.google.gtotal);
+  if (!isFinite(google)) return;
+  var reference = selectedOffer ? getOfferGross(selectedOffer) : cheapestGross();
+  if (reference === null) return;
+  if (Math.abs(reference - google) <= 0.05) return;
+  gtmPush('deeplink_price_mismatch', {
+    step: 'deeplink',
+    delta: roundCHF(Math.round((reference - google) / 0.05) * 0.05)
+  });
+}
+
+// Nach dem Rendern: Vorauswahl aus room/rate und die Preisprobe, beides genau
+// einmal je Deep Link (renderOffers laeuft bei jedem Sprachwechsel neu).
+function applyDeepLinkToOffers() {
+  if (!deepLink || !deepLink.search) return;
+  try {
+    if (deepLink.preselect && !deepLinkPreselected) {
+      var idx = findPreselectIndex(deepLink.preselect);
+      if (idx >= 0) {
+        deepLinkPreselected = true;
+        deepLinkOfferIndex = idx;
+        selectOffer(idx);
+      }
+    } else if (deepLinkOfferIndex >= 0) {
+      // Der Sprachwechsel rendert die Liste neu und wirft die Markierung weg;
+      // die Auswahl selbst bleibt bestehen, also nur die Klasse nachziehen.
+      var card = offersGrid.querySelector('.offer-card[data-index="' + deepLinkOfferIndex + '"]');
+      if (card) card.classList.add('selected');
+    }
+    if (!deepLinkPriceChecked && deepLink.google && deepLink.google.gtotal) {
+      deepLinkPriceChecked = true;
+      checkGooglePrice();
+    }
+  } catch (e) { /* Ein Deep Link darf die Angebotsliste nie brechen */ }
 }
 
 function showSkeletonCards() {
@@ -962,12 +1131,15 @@ function fetchOffers() {
   .then(function (data) {
     offersLoading.style.display = 'none';
     currentOffers = (data.offers || []).map(normalizeOffer);
-    gtmPush('view_offers', {
+    var viewData = {
       location: 'Hotel Mulin',
       offer_count: currentOffers.length,
-    });
+    };
+    if (deepLink && deepLink.source) viewData.source = deepLink.source;
+    gtmPush('view_offers', viewData);
     if (currentOffers.length === 0) {
-      offersGrid.innerHTML = '<div class="no-offers"><p>' + (window.t ? window.t('booking.no_offers') : 'Keine Verfügbarkeit für die gewählten Daten. Bitte versuchen Sie andere Daten.') + '</p></div>';
+      offersGrid.innerHTML = '<div class="no-offers"><p>' + (window.t ? window.t('booking.no_offers') : 'Keine Verfügbarkeit für die gewählten Daten. Bitte versuchen Sie andere Daten.') + '</p></div>'
+        + soldOutMicrodata();
       return;
     }
     renderOffers(data);
@@ -1010,6 +1182,56 @@ function fetchOffers() {
   });
 }
 
+// ========== MICRODATA (Bauplan fbl-ibe, K2) ==========
+// Google prueft den Preis auf der Seite. Deshalb steht in price genau der Betrag,
+// den die Karte sichtbar zeigt: bei MUBRIG der Zimmerpreis, denn die Kurtaxe ist
+// im Preis enthalten. Keine priceComponent, weil es fuer den Zimmerpreis keinen
+// Komponententyp gibt und die Kurtaxe nicht separat ausgewiesen wird.
+function hotelMicrodataOpen() {
+  return '<div itemscope itemtype="https://schema.org/Hotel" data-am-microdata="1">'
+    + '<meta itemprop="name" content="' + escapeHtml(PROPERTY_NAME) + '">'
+    + '<meta itemprop="identifier" content="' + escapeHtml(PROPERTY_ID) + '">';
+}
+
+// checkinTime und checkoutTime sind DateTime, nicht blosse Daten.
+function offerStayMicrodata() {
+  var html = '';
+  if (searchParams.arrival) {
+    html += '<meta itemprop="checkinTime" content="' + escapeHtml(searchParams.arrival + CHECKIN_TIME) + '">';
+  }
+  if (searchParams.departure) {
+    html += '<meta itemprop="checkoutTime" content="' + escapeHtml(searchParams.departure + CHECKOUT_TIME) + '">';
+  }
+  html += '<meta itemprop="numAdults" content="' + (parseInt(searchParams.adults) || 1) + '">';
+  html += '<meta itemprop="numChildren" content="' + (parseInt(searchParams.children) || 0) + '">';
+  return html;
+}
+
+// Sichtbarer Bruttobetrag einer Karte. Die Kurtaxe kommt nur dazu, wenn sie
+// separat ausgewiesen ist; bei MUBRIG liefert getOfferCityTax 0.
+function getOfferGross(offer) {
+  var total = offer && offer.totalGrossAmount;
+  if (!total || typeof total.amount !== 'number' || !isFinite(total.amount)) return null;
+  return roundCHF(total.amount + getOfferCityTax(offer));
+}
+
+function offerPriceMicrodata(offer) {
+  var gross = getOfferGross(offer);
+  if (gross === null) return '';
+  return '<div itemprop="priceSpecification" itemscope itemtype="https://schema.org/CompoundPriceSpecification">'
+    + '<meta itemprop="price" content="' + gross.toFixed(2) + '">'
+    + '<meta itemprop="priceCurrency" content="CHF">'
+    + '</div>';
+}
+
+function soldOutMicrodata() {
+  return hotelMicrodataOpen()
+    + '<div itemprop="makesOffer" itemscope itemtype="https://schema.org/Offer https://schema.org/LodgingReservation">'
+    + '<meta itemprop="availability" content="https://schema.org/SoldOut">'
+    + offerStayMicrodata()
+    + '</div></div>';
+}
+
 function renderOffers(data) {
   var html = '';
   var nights = data.nights || 1;
@@ -1027,6 +1249,10 @@ function renderOffers(data) {
   html += '<div class="offers-summary-dates">' + escapeHtml(data.arrival) + ' &mdash; ' + escapeHtml(data.departure) + '</div>';
   html += '<div class="offers-summary-detail">' + nights + ' ' + nightLabel + ' &middot; ' + guestSummary + '</div>';
   html += '</div>';
+
+  // Alle Karten stehen in genau einem Hotel-Knoten; die Karte selbst ist der
+  // Offer-Knoten (siehe renderOfferCard).
+  html += hotelMicrodataOpen();
 
   var refundable = currentOffers.filter(function (o) { return o.category === 'Refundable'; });
   var nonRefundable = currentOffers.filter(function (o) { return o.category === 'Non-Refundable'; });
@@ -1048,6 +1274,8 @@ function renderOffers(data) {
     html += '</div>';
   }
 
+  html += '</div>';
+
   offersGrid.innerHTML = html;
   offersGrid.querySelectorAll('.offer-card').forEach(function (card) {
     card.addEventListener('click', function () {
@@ -1062,6 +1290,8 @@ function renderOffers(data) {
       }
     });
   });
+
+  applyDeepLinkToOffers();
 }
 
 // Storno-Bedingung aus Apaleo cancellationFee + Kategorie in lesbaren Text uebersetzen.
@@ -1104,7 +1334,11 @@ function renderOfferCard(offer, categoryClass, index, isBestPrice) {
   var perNightAmount = perNight.amount ? (Math.round(perNight.amount * 100) / 100).toFixed(2) : '\u2014';
 
   var unitName = offer._displayUnitGroupName || offer.unitGroupName || '';
-  var html = '<div class="offer-card' + (isBestPrice ? ' best-price' : '') + '" data-index="' + index + '" tabindex="0" role="button" aria-label="' + escapeHtml(unitName) + '">';
+  var html = '<div class="offer-card' + (isBestPrice ? ' best-price' : '') + '" data-index="' + index + '" tabindex="0" role="button" aria-label="' + escapeHtml(unitName) + '"'
+    + ' itemprop="makesOffer" itemscope itemtype="https://schema.org/Offer https://schema.org/LodgingReservation">';
+  html += '<meta itemprop="availability" content="https://schema.org/InStock">';
+  html += offerStayMicrodata();
+  html += offerPriceMicrodata(offer);
   html += '<div class="offer-card-top">';
   html += '<div class="offer-unit">' + escapeHtml(unitName || (window.t ? window.t('booking.room') : 'Zimmer')) + '</div>';
   html += '<span class="offer-category ' + categoryClass + '">' + (categoryClass === 'refundable' ? (window.t ? window.t('booking.flexible') : 'Flexibel') : (window.t ? window.t('booking.best_price_tag') : 'Bester Preis')) + '</span>';
@@ -1451,6 +1685,12 @@ if (confirmBtn) {
       comment: commentParts.join(' | ').replace(/\| $/,'').trim(),
     };
 
+    // Buchungsquelle und Kampagne aus dem Deep Link (K3, Frontend-Seite). Beide
+    // Felder sind optional und fehlen ohne Deep Link ganz. Es sind Kampagnen-
+    // bezeichner, keine Personendaten, deshalb haengen sie nicht am Consent.
+    if (deepLink && deepLink.source) payload.bookingSource = deepLink.source;
+    if (deepLink && deepLink.campaign) payload.campaign = deepLink.campaign;
+
     // Klick-IDs mitschicken, damit der Server die Buchung der Anzeige
 
     // zuordnen kann. Ohne Einwilligung liefert tracking() null und das
@@ -1480,13 +1720,15 @@ if (confirmBtn) {
 
       if (data.success) {
         var finalTotal = fullCents / 100;
-        gtmPush('booking_confirmed', {
+        var confirmedData = {
           booking_id: data.confirmationId || '',
           reservation_id: data.reservationId || '',
           total_price: finalTotal,
           currency: selectedOffer.totalGrossAmount ? selectedOffer.totalGrossAmount.currency : 'CHF',
           promo_code: appliedPromo ? appliedPromo.code : '',
-        });
+        };
+        if (deepLink && deepLink.source) confirmedData.source = deepLink.source;
+        gtmPush('booking_confirmed', confirmedData);
 
         guestForm.querySelector('.form-grid').style.display = 'none';
         guestForm.querySelector('.form-actions').style.display = 'none';
