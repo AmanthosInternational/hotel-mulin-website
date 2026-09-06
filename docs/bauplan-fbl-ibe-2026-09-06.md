@@ -405,14 +405,14 @@ sendet (oder ein Consent-Gast mit FBL-UTM bucht).
   tests/fixtures/offers-mubrig.json
   ```
 - **Auftrag:** Wie Segment 1 mit `MAX = 6`, Property `MUBRIG`, `cityTax.included = true`:
-  Microdata-`price` ist der Zimmerpreis, eine Komponente `Room`. **`js/booking.min.js`
+  Microdata-`price` ist der Zimmerpreis, keine `priceComponent` (K2, abgeglichen 06.09.). **`js/booking.min.js`
   wird NICHT neu gebaut und NICHT committet** (Sammelstelle; die Verdrahtung baut und setzt
   den Cache-Bust). Der Harness serviert `booking.js` direkt und neutralisiert
   `local-api.js` (K7).
 - **Akzeptanzkriterien:**
   ```bauplan-kriterien segment=2
   - [ ] node --test tests/ Exit 0, Testzahl zitiert; alle Faelle aus tests/fixtures/deeplink-cases.json laufen durch parse()
-  - [ ] Harness: http://localhost:8080/?property=MUBRIG&arrival=<heute+30>&departure=<heute+32>&adults=2&children=0&lang=en&utm_source=google&utm_medium=organic&utm_campaign=hotel-fbl zeigt OHNE Klick die Angebotsliste; meta[itemprop=identifier][content=MUBRIG]; meta[itemprop=price] je Karte gleich dem sichtbaren Zimmerpreis (Kurtaxe inkludiert, nur eine priceComponent); DevTools-Ausgabe zitiert
+  - [ ] Harness: http://localhost:8080/?property=MUBRIG&arrival=<heute+30>&departure=<heute+32>&adults=2&children=0&lang=en&utm_source=google&utm_medium=organic&utm_campaign=hotel-fbl zeigt OHNE Klick die Angebotsliste; meta[itemprop=identifier][content=MUBRIG]; meta[itemprop=price] je Karte gleich dem sichtbaren Zimmerpreis (Kurtaxe inkludiert, keine priceComponent), checkinTime/checkoutTime als DateTime; DevTools-Ausgabe zitiert
   - [ ] &adults=7: Suche laeuft mit 6 Erwachsenen (Klemmung), Label zeigt 6
   - [ ] ?arrival=2020-01-01&departure=2020-01-03: keine Autosuche, kein Dialog, keine Ausnahme; ?lang=fr fuehrt zu html[lang=en]
   - [ ] ?fixture=empty: SoldOut-Knoten ohne Preis
