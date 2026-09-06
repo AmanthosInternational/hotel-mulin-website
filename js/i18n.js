@@ -25,17 +25,25 @@
   }
 
   function detectLanguage() {
-    // URL param ?lang=xx
+    // URL param ?lang=xx. Kontrakt K1 des Bauplans fbl-ibe: gewertet werden die
+    // ersten zwei Zeichen (also auch "de-CH" und "DE"). Ein vorhandener, aber
+    // nicht unterstuetzter Wert faellt auf Englisch, nicht mehr auf Storage,
+    // Browser oder Standardsprache. Grund: ein Gast, der ueber einen fremd-
+    // sprachigen Google-Deep-Link kommt, versteht Englisch eher als Deutsch.
+    // Nur die unterstuetzte Wahl wird gemerkt, der en-Rueckfall nicht.
     try {
       var urlParams = new URLSearchParams(window.location.search);
       var urlLang = urlParams.get('lang');
-      if (urlLang && SUPPORTED_LANGS[urlLang.toLowerCase()]) {
-        var lang = urlLang.toLowerCase();
-        // Eigenes try: der umgebende catch gehoert URLSearchParams. Wirft das setItem
-        // bei gesperrtem Storage, wuerde das return uebersprungen und ?lang=xx still
-        // ignoriert. Gleicher Fix wie amanthos-living-website #35.
-        try { localStorage.setItem(STORAGE_KEY, lang); } catch (e2) { /* Storage gesperrt */ }
-        return lang;
+      if (urlLang) {
+        var lang = urlLang.slice(0, 2).toLowerCase();
+        if (SUPPORTED_LANGS[lang]) {
+          // Eigenes try: der umgebende catch gehoert URLSearchParams. Wirft das setItem
+          // bei gesperrtem Storage, wuerde das return uebersprungen und ?lang=xx still
+          // ignoriert. Gleicher Fix wie amanthos-living-website #35.
+          try { localStorage.setItem(STORAGE_KEY, lang); } catch (e2) { /* Storage gesperrt */ }
+          return lang;
+        }
+        return 'en';
       }
     } catch (e) {}
 
