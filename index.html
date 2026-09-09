@@ -22,7 +22,11 @@
   <meta property="og:image" content="https://hotelmulin.ch/assets/images/hero-berge-1280.jpg">
   <meta property="og:url" content="https://hotelmulin.ch/">
   <meta property="og:locale" content="de_CH">
-  <meta property="og:locale:alternate" content="en_US">
+  <!-- Kein og:locale:alternate mehr. Die Behauptung "en_US" liess eine englische
+       Fassung unter eigener Adresse erwarten, es gibt aber keine: /en/ antwortet
+       mit 404, Englisch entsteht nur clientseitig ueber js/i18n.js auf derselben
+       URL. Eine unbelegbare Sprachangabe schadet mehr, als sie nuetzt. Entfernt
+       10.09.2026 im Zuge der GEO-Massnahmen. -->
 
   <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image">
@@ -64,8 +68,9 @@
   {
     "@context": "https://schema.org",
     "@type": "Hotel",
+    "@id": "https://hotelmulin.ch/#hotel",
     "name": "Hotel Mulin by Amanthos",
-    "description": "Alpines Lifestyle-Hotel in Brigels (Surselva), der Hotspot für Genuss-Aktive.",
+    "description": "Alpines Lifestyle-Hotel in Brigels (Surselva), der Hotspot für Genuss-Aktive. 15 Zimmer vom Einzelzimmer bis zum Familienzimmer für bis zu 6 Personen. Kinder und Familien sind willkommen, Hunde ebenfalls (CHF 25 pro Nacht).",
     "url": "https://hotelmulin.ch",
     "telephone": "+41415627662",
     "email": "mulin@amanthos.com",
@@ -85,14 +90,189 @@
       {"@type": "LocationFeatureSpecification", "name": "Free Wi-Fi", "value": true},
       {"@type": "LocationFeatureSpecification", "name": "Breakfast Included", "value": true},
       {"@type": "LocationFeatureSpecification", "name": "Lounge & Bar", "value": true},
-      {"@type": "LocationFeatureSpecification", "name": "Pets Allowed", "value": true}
+      {"@type": "LocationFeatureSpecification", "name": "Pets Allowed", "value": true},
+      {"@type": "LocationFeatureSpecification", "name": "Family Rooms", "value": true}
     ],
+    "petsAllowed": true,
+    "numberOfRooms": 15,
     "checkinTime": "15:00",
     "checkoutTime": "11:00",
-    "priceRange": "CHF 98 - CHF 350",
+    "priceRange": "CHF 98 - CHF 718",
     "currenciesAccepted": "CHF",
     "paymentAccepted": "Credit Card, Debit Card",
-    "image": "https://hotelmulin.ch/assets/images/hero-berge-1280.jpg"
+    "image": "https://hotelmulin.ch/assets/images/hero-berge-1280.jpg",
+    "makesOffer": [
+      {
+        "@type": "Offer",
+        "name": "Hotel & Skipass",
+        "description": "Ab 1 Nacht mit Gourmet-Frühstück, Welcome-Drink in der Lounge La Pipa, Hotel-Skipass für die Bergbahnen Brigels, Ortsbus gratis und 10% Rabatt in ausgewählten Sportgeschäften. Anreise Sonntag bis Donnerstag.",
+        "url": "https://hotelmulin.ch/#deals",
+        "priceCurrency": "CHF",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "minPrice": 159,
+          "priceCurrency": "CHF",
+          "unitText": "pro Person"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": {"@id": "https://hotelmulin.ch/#hotel"}
+      },
+      {
+        "@type": "Offer",
+        "name": "Mulin-Winter-Deal",
+        "description": "5 Nächte mit Gourmet-Frühstück, Begrüssungsapéro in der Lounge Mulinera, 5-Tages-Skipass für die Bergbahnen Brigels, Ortsbus gratis und 10% Rabatt in ausgewählten Sportgeschäften. Januar ab CHF 699, Februar ab CHF 799, März ab CHF 749.",
+        "url": "https://hotelmulin.ch/#deals",
+        "priceCurrency": "CHF",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "minPrice": 699,
+          "priceCurrency": "CHF",
+          "unitText": "pro Person für 5 Nächte"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": {"@id": "https://hotelmulin.ch/#hotel"}
+      },
+      {
+        "@type": "Offer",
+        "name": "Abschlag. Hole in one.",
+        "description": "Golf senza cun fins: Übernachtung mit Gourmet-Frühstück, Welcome-Drink in der Lounge La Pipa, Greenfee auf dem Golfplatz Brigels, Mietrucksack und Surselva-Gästekarte.",
+        "url": "https://hotelmulin.ch/#deals",
+        "priceCurrency": "CHF",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "minPrice": 169,
+          "priceCurrency": "CHF",
+          "unitText": "pro Person"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": {"@id": "https://hotelmulin.ch/#hotel"}
+      },
+      {
+        "@type": "Offer",
+        "name": "Bergauf. Bergab. Mittendurch.",
+        "description": "E-Mountainbike-Fun: 5 Nächte mit Gourmet-Frühstück, Welcome-Drink, 2 geführte E-MTB-Touren mit lokalem Guide, 3 Tage Miet-E-Hardtail, Energieriegel und isotonische Getränke, Mietrucksack und Surselva-Gästekarte.",
+        "url": "https://hotelmulin.ch/#deals",
+        "priceCurrency": "CHF",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "minPrice": 899,
+          "priceCurrency": "CHF",
+          "unitText": "pro Person für 5 Nächte"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": {"@id": "https://hotelmulin.ch/#hotel"}
+      },
+      {
+        "@type": "Offer",
+        "name": "Bike & E-Bike-Touren",
+        "description": "Wöchentliche Touren in verschiedenen Schwierigkeitsgraden mit professionellen Bike-Guides, Werkstatt- und Bikewash-Station im Hotel, Energieriegel und Getränke, Surselva-Gästekarte. E-Bike-Miete ab CHF 50/Tag. Buchung telefonisch, mind. 5 Tage im Voraus.",
+        "url": "https://hotelmulin.ch/#deals",
+        "priceCurrency": "CHF",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "minPrice": 189,
+          "priceCurrency": "CHF",
+          "unitText": "pro Person inkl. Übernachtung und Frühstück"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": {"@id": "https://hotelmulin.ch/#hotel"}
+      },
+      {
+        "@type": "Offer",
+        "name": "Geführte Wandertouren",
+        "description": "Geführte Touren mit professionellen Guides, Lunchpaket, Energieriegel und Getränken, Mietrucksack und Surselva-Gästekarte. Routenwahl auf Anfrage. Buchung telefonisch, mind. 5 Tage im Voraus.",
+        "url": "https://hotelmulin.ch/#deals",
+        "priceCurrency": "CHF",
+        "priceSpecification": {
+          "@type": "UnitPriceSpecification",
+          "minPrice": 179,
+          "priceCurrency": "CHF",
+          "unitText": "pro Person inkl. Übernachtung und Frühstück"
+        },
+        "availability": "https://schema.org/InStock",
+        "seller": {"@id": "https://hotelmulin.ch/#hotel"}
+      }
+    ]
+  }
+  </script>
+
+  <!-- FAQPage. Der Wortlaut ist mit dem sichtbaren Abschnitt #faq identisch und mit
+       locales/de.json (Schluessel faq.*) gleichgezogen: Googles Richtlinie verlangt,
+       dass ausgezeichnete Fragen und Antworten so auf der Seite stehen. Wer hier
+       etwas aendert, aendert beide Stellen mit.
+       Storno- und Zahlungsbedingungen fehlen bewusst: sie stehen nirgends auf der
+       Seite, und eine erfundene Frist waere schlimmer als eine fehlende. -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "@id": "https://hotelmulin.ch/#faq",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "Sind Kinder und Familien im Hotel Mulin willkommen?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja. Das Hotel Mulin ist ein Haus für Familien, Paare und Aktive und kein reines Erwachsenenhotel. Unser Familienzimmer nimmt bis zu 6 Personen auf und ist für Familien und kleine Gruppen gedacht, die gemeinsam die Surselva entdecken."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Darf mein Hund mit ins Hotel Mulin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Ja, Hunde sind herzlich willkommen. Wir berechnen CHF 25 pro Nacht, Hundebett und Näpfe stehen bereit."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Was ist im Zimmerpreis enthalten?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Alle Zimmerpreise beinhalten das Frühstücksbuffet Muliniala, die Kurtaxe, Servicegebühren und MwSt. WLAN ist ebenfalls inklusive."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wann sind Check-in und Check-out?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Check-in ist ab 15:00 Uhr möglich, Check-out bis 11:00 Uhr."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie viele Zimmer hat das Hotel Mulin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Das Hotel Mulin hat 15 Zimmer in sechs Kategorien: Einzelzimmer, Einzelzimmer Gross, Doppelzimmer, Doppelzimmer mit Balkon, Galerie Suite und Familienzimmer für bis zu 6 Personen."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wann ist die Lounge Mulinera geöffnet?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Die Lounge und Bar Mulinera ist von Donnerstag bis Samstag von 16 bis 23 Uhr geöffnet. Zigarrenliebhaber finden in der Fumoir-Ecke La Pipa Platz."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Wie weit sind die Bergbahnen und wie weit ist Chur?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Die Bergbahnen Brigels erreichen Sie in 5 Minuten zu Fuss. Der Golfplatz Brigels liegt 5 Minuten mit dem Auto entfernt, Flims Laax Falera 25 Minuten und Chur 45 Minuten."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Welche Packages bietet das Hotel Mulin an?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Sechs Packages sind direkt beim Hotel buchbar: Hotel & Skipass ab CHF 159 pro Person, Mulin-Winter-Deal über 5 Nächte ab CHF 699 pro Person, das Golf-Package ab CHF 169, E-Mountainbike-Fun ab CHF 899, Bike- und E-Bike-Touren ab CHF 189 sowie geführte Wandertouren ab CHF 179."
+        }
+      }
+    ]
   }
   </script>
   <style>
@@ -104,6 +284,12 @@
     /* Mulin logo: white asset, darkened via filter when nav is scrolled */
     .nav-logo img { height: 44px; width: auto; }
     #logoColor { filter: brightness(0); }
+    /* FAQ. Steht hier und nicht in css/style.css, weil die Seite die minifizierte
+       Fassung laedt: eine Regel nur in der Quelldatei waere wirkungslos, und ein
+       Minify-Lauf gehoert nicht in eine Inhaltsaenderung. */
+    .faq-list { display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.75rem 2.5rem; margin-top:2.5rem; }
+    .faq-item h3 { font-family:var(--font-body); font-size:1.05rem; font-weight:600; margin:0 0 .5rem; color:var(--color-text); }
+    .faq-item p { margin:0; line-height:1.65; }
   </style>
   <!-- Sentry: error + performance monitoring. Config in js/sentry-init.js -->
   <script src="https://browser.sentry-cdn.com/10.68.0/bundle.tracing.min.js"
@@ -324,6 +510,11 @@
     <div class="container">
       <p class="section-label" data-num="02" data-animate data-i18n="rooms.label">Unsere Zimmer</p>
       <h2 class="section-title" data-animate data-i18n="rooms.title">Wählen Sie Ihr perfektes Zimmer</h2>
+      <!-- Diese Zeile ist GEO-Substanz, keine Deko: KI-Zusammenfassungen beschreiben das
+           Haus bis heute als Erwachsenenhotel, weil die alten Portaleintraege so heissen.
+           Zimmerzahl, Familienzimmer und Hunde muessen deshalb im sichtbaren Text stehen,
+           nicht nur in einer Zimmerliste, die per JavaScript nachgeladen wird. -->
+      <p class="section-subtitle" data-animate data-i18n="rooms.overview">15 Zimmer in sechs Kategorien, vom Einzelzimmer bis zum Familienzimmer für bis zu 6 Personen. Kinder und Familien sind willkommen, Hunde ebenfalls (CHF 25 pro Nacht).</p>
 
       <div class="rooms-tabs-wrap" data-animate>
         <div class="rooms-tabs" role="tablist">
@@ -359,6 +550,12 @@
         <div class="pricing-note">
           <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
           <span data-i18n="pricing.loyalty">Bestpreis-Garantie bei Direktbuchung über hotelmulin.ch</span>
+        </div>
+        <!-- Check-in und Check-out standen bisher nur im JSON-LD. Eine Zeit, die kein
+             Gast lesen kann, beantwortet auch keine Frage. -->
+        <div class="pricing-note">
+          <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--color-primary)" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          <span data-i18n="pricing.checkin">Check-in ab 15:00 Uhr, Check-out bis 11:00 Uhr</span>
         </div>
       </div>
 
@@ -713,6 +910,55 @@
     </div>
   </section>
 
+  <!-- ========== FAQ ==========
+       Wortgleich mit dem FAQPage-Schema im Kopf der Seite. Bewusst offen dargestellt
+       und nicht als Akkordeon: zugeklappter Text ist fuer Leser wie fuer zitierende
+       Systeme schwaechere Substanz, und ein Akkordeon braeuchte JavaScript, das hier
+       nichts gewinnt. -->
+  <section class="section" id="faq">
+    <div class="container">
+      <div class="section-center" data-animate>
+        <p class="section-label" style="justify-content:center" data-num="09" data-i18n="faq.label">Häufige Fragen</p>
+        <h2 class="section-title" data-i18n="faq.title">Antworten auf die häufigsten Fragen</h2>
+      </div>
+
+      <div class="faq-list" data-animate>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_family">Sind Kinder und Familien im Hotel Mulin willkommen?</h3>
+          <p data-i18n="faq.a_family">Ja. Das Hotel Mulin ist ein Haus für Familien, Paare und Aktive und kein reines Erwachsenenhotel. Unser Familienzimmer nimmt bis zu 6 Personen auf und ist für Familien und kleine Gruppen gedacht, die gemeinsam die Surselva entdecken.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_dogs">Darf mein Hund mit ins Hotel Mulin?</h3>
+          <p data-i18n="faq.a_dogs">Ja, Hunde sind herzlich willkommen. Wir berechnen CHF 25 pro Nacht, Hundebett und Näpfe stehen bereit.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_included">Was ist im Zimmerpreis enthalten?</h3>
+          <p data-i18n="faq.a_included">Alle Zimmerpreise beinhalten das Frühstücksbuffet Muliniala, die Kurtaxe, Servicegebühren und MwSt. WLAN ist ebenfalls inklusive.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_checkin">Wann sind Check-in und Check-out?</h3>
+          <p data-i18n="faq.a_checkin">Check-in ist ab 15:00 Uhr möglich, Check-out bis 11:00 Uhr.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_rooms">Wie viele Zimmer hat das Hotel Mulin?</h3>
+          <p data-i18n="faq.a_rooms">Das Hotel Mulin hat 15 Zimmer in sechs Kategorien: Einzelzimmer, Einzelzimmer Gross, Doppelzimmer, Doppelzimmer mit Balkon, Galerie Suite und Familienzimmer für bis zu 6 Personen.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_lounge">Wann ist die Lounge Mulinera geöffnet?</h3>
+          <p data-i18n="faq.a_lounge">Die Lounge und Bar Mulinera ist von Donnerstag bis Samstag von 16 bis 23 Uhr geöffnet. Zigarrenliebhaber finden in der Fumoir-Ecke La Pipa Platz.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_distance">Wie weit sind die Bergbahnen und wie weit ist Chur?</h3>
+          <p data-i18n="faq.a_distance">Die Bergbahnen Brigels erreichen Sie in 5 Minuten zu Fuss. Der Golfplatz Brigels liegt 5 Minuten mit dem Auto entfernt, Flims Laax Falera 25 Minuten und Chur 45 Minuten.</p>
+        </div>
+        <div class="faq-item">
+          <h3 data-i18n="faq.q_packages">Welche Packages bietet das Hotel Mulin an?</h3>
+          <p data-i18n="faq.a_packages">Sechs Packages sind direkt beim Hotel buchbar: Hotel &amp; Skipass ab CHF 159 pro Person, Mulin-Winter-Deal über 5 Nächte ab CHF 699 pro Person, das Golf-Package ab CHF 169, E-Mountainbike-Fun ab CHF 899, Bike- und E-Bike-Touren ab CHF 189 sowie geführte Wandertouren ab CHF 179.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- ========== FINAL CTA ========== -->
   <section class="section cta-final" id="final-cta">
     <div class="container" style="text-align:center">
@@ -758,6 +1004,7 @@
             <li><a href="#dining" data-i18n="nav.dining">Lounge & Frühstück</a></li>
             <li><a href="#gallery" data-i18n="nav.gallery">Galerie</a></li>
             <li><a href="#location" data-i18n="nav.location">Lage</a></li>
+            <li><a href="#faq" data-i18n="faq.label">Häufige Fragen</a></li>
           </ul>
         </div>
 

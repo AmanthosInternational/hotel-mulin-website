@@ -61,6 +61,7 @@
     "label": "Our Rooms",
     "title": "Choose Your Perfect Room",
     "subtitle": "From cosy single rooms to spacious family rooms — find your perfect home in the mountains.",
+    "overview": "15 rooms in six categories, from the single room to the family room for up to 6 guests. Children and families are welcome, and so are dogs (CHF 25 per night).",
     "tab_single": "Single Room",
     "tab_standard_double": "Standard Double / Twin",
     "tab_superior_double": "Double with Balcony",
@@ -135,7 +136,28 @@
     "dogs": "Dogs are very welcome (CHF 25/night) — dog bed and bowls provided",
     "loyalty": "Best price guarantee when booking direct on hotelmulin.ch",
     "per_night": "/night",
-    "popular": "Most Popular"
+    "popular": "Most Popular",
+    "checkin": "Check-in from 15:00, check-out until 11:00"
+  },
+  "faq": {
+    "label": "Frequently Asked Questions",
+    "title": "Answers to the most common questions",
+    "q_family": "Are children and families welcome at Hotel Mulin?",
+    "a_family": "Yes. Hotel Mulin is a house for families, couples and active guests, not an adults-only hotel. Our family room sleeps up to 6 guests and is made for families and small groups exploring the Surselva together.",
+    "q_dogs": "Can I bring my dog to Hotel Mulin?",
+    "a_dogs": "Yes, dogs are very welcome. We charge CHF 25 per night, and a dog bed and bowls are provided.",
+    "q_included": "What is included in the room rate?",
+    "a_included": "All room rates include the Muliniala breakfast buffet, city tax, service charges and VAT. Wi-Fi is included as well.",
+    "q_checkin": "What are the check-in and check-out times?",
+    "a_checkin": "Check-in is possible from 15:00, check-out until 11:00.",
+    "q_rooms": "How many rooms does Hotel Mulin have?",
+    "a_rooms": "Hotel Mulin has 15 rooms in six categories: single room, large single room, double room, double room with balcony, gallery suite and a family room for up to 6 guests.",
+    "q_lounge": "When is the Mulinera lounge open?",
+    "a_lounge": "The Mulinera lounge and bar is open Thursday to Saturday from 16:00 to 23:00. Cigar lovers will find a seat in the La Pipa smoking corner.",
+    "q_distance": "How far are the mountain railways, and how far is Chur?",
+    "a_distance": "The Brigels mountain railways are 5 minutes away on foot. The Brigels golf course is 5 minutes by car, Flims Laax Falera 25 minutes and Chur 45 minutes.",
+    "q_packages": "Which packages does Hotel Mulin offer?",
+    "a_packages": "Six packages are bookable directly with the hotel: Hotel & Ski Pass from CHF 159 per person, the Mulin Winter Deal over 5 nights from CHF 699 per person, the golf package from CHF 169, E-Mountain Bike Fun from CHF 899, bike and e-bike tours from CHF 189 and guided hiking tours from CHF 179."
   },
   "dining": {
     "label": "Breakfast Muliniala",
