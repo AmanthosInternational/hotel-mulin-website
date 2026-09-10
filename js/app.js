@@ -240,7 +240,7 @@ var roomData = [
     nameKey: 'rooms.name_glrs',
     name: 'Galerie Suite',
     count: 2,
-    price: 'ab CHF 198',
+    price: 'ab CHF 219',
     priceNote: '/Nacht',
     descKey: 'rooms.desc_glrs',
     desc: 'Grosszügige Suite (ca. 31 m²) mit getrenntem Wohn- und Schlafbereich: Doppelbett auf der Galerie, Sofa und Balkon mit Bergblick.',
