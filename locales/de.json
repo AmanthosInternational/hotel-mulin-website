@@ -61,7 +61,7 @@
     "label": "Unsere Zimmer",
     "title": "Wählen Sie Ihr perfektes Zimmer",
     "subtitle": "Von gemütlichen Einzelzimmern bis zu geräumigen Familienzimmern — finden Sie Ihr perfektes Zuhause in den Bergen.",
-    "overview": "15 Zimmer in sechs Kategorien, vom Einzelzimmer bis zum Familienzimmer für bis zu 6 Personen. Kinder und Familien sind willkommen, Hunde ebenfalls (CHF 25 pro Nacht).",
+    "overview": "16 Zimmer in sechs Kategorien, vom Einzelzimmer bis zum Familienzimmer für bis zu 6 Personen. Kinder und Familien sind willkommen, Hunde ebenfalls (CHF 25 pro Nacht).",
     "tab_single": "Einzelzimmer",
     "tab_standard_double": "Standard Doppel / Twin",
     "tab_superior_double": "Doppel mit Balkon",
@@ -157,7 +157,9 @@
     "q_distance": "Wie weit sind die Bergbahnen und wie weit ist Chur?",
     "a_distance": "Die Bergbahnen Brigels erreichen Sie in 5 Minuten zu Fuss. Der Golfplatz Brigels liegt 5 Minuten mit dem Auto entfernt, Flims Laax Falera 25 Minuten und Chur 45 Minuten.",
     "q_packages": "Welche Packages bietet das Hotel Mulin an?",
-    "a_packages": "Sechs Packages sind direkt beim Hotel buchbar: Hotel & Skipass ab CHF 159 pro Person, Mulin-Winter-Deal über 5 Nächte ab CHF 699 pro Person, das Golf-Package ab CHF 169, E-Mountainbike-Fun ab CHF 899, Bike- und E-Bike-Touren ab CHF 189 sowie geführte Wandertouren ab CHF 179."
+    "a_packages": "Sechs Packages sind direkt beim Hotel buchbar: Hotel & Skipass ab CHF 159 pro Person, Mulin-Winter-Deal über 5 Nächte ab CHF 699 pro Person, das Golf-Package ab CHF 169, E-Mountainbike-Fun ab CHF 899, Bike- und E-Bike-Touren ab CHF 189 sowie geführte Wandertouren ab CHF 179.",
+    "q_cancel": "Kann ich meine Buchung stornieren?",
+    "a_cancel": "Bei der Standardrate stornieren Sie bis 7 Tage vor Anreise kostenlos, jeweils bis 15:00 Uhr. Danach wird der Aufenthalt verrechnet. Die nicht erstattbare Rate ist günstiger und lässt sich nicht stornieren."
   },
   "dining": {
     "label": "Frühstück Muliniala",
