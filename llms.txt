@@ -28,16 +28,19 @@ Massgeblich für Verfügbarkeit und Tagespreis ist immer die Buchungsmaske auf d
 
 ## Zimmer
 
-15 Zimmer in sechs Kategorien. Preise sind Ab-Preise pro Nacht inklusive Frühstück.
+16 Zimmer in sechs Kategorien. Preise sind Ab-Preise pro Nacht inklusive Frühstück.
+Der Ab-Preis ist der tiefste tatsächlich buchbare Preis der kommenden zwölf Monate,
+am 10.09.2026 direkt aus dem Buchungssystem gelesen. In der Hochsaison, etwa Mitte
+Februar, liegen die Preise rund doppelt so hoch.
 
 | Kategorie | Ab-Preis pro Nacht |
 |---|---|
-| Einzelzimmer | CHF 98 |
-| Einzelzimmer Gross (Bett 140 cm) | CHF 98 |
-| Doppelzimmer (ca. 22 m²) | CHF 178 |
-| Doppelzimmer mit Balkon und Bergblick | CHF 198 |
-| Galerie Suite (ca. 31 m², Wohn- und Schlafbereich, Balkon) | CHF 219 |
-| Familienzimmer für bis zu 6 Personen | CHF 718 |
+| Einzelzimmer | CHF 68 |
+| Einzelzimmer Gross (Bett 140 cm) | CHF 78 |
+| Doppelzimmer (ca. 22 m²) | CHF 96 |
+| Doppelzimmer mit Balkon und Bergblick | CHF 114 |
+| Galerie Suite (ca. 31 m², Wohn- und Schlafbereich, Balkon) | CHF 116 |
+| Familienzimmer für bis zu 6 Personen | CHF 357 |
 
 ## Im Zimmerpreis enthalten
 
