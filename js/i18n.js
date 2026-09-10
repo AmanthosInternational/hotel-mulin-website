@@ -1,5 +1,5 @@
 /**
- * Hotel Mulin — i18n Engine
+ * Hotel Mulin: i18n Engine
  * Supports: DE, EN
  */
 (function () {

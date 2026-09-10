@@ -1,7 +1,7 @@
 {
   "meta": {
     "title": "Hotel Mulin Brigels | Der Hotspot für Genuss-Aktive in der Surselva",
-    "description": "Hotel Mulin by Amanthos in Brigels — Alpines Lifestyle-Hotel in der Surselva. Frühstück inklusive, Lounge & Bar. Direkt buchen zum besten Preis."
+    "description": "Hotel Mulin by Amanthos in Brigels, alpines Lifestyle-Hotel in der Surselva. Frühstück inklusive, Lounge & Bar. Direkt buchen zum besten Preis."
   },
   "entry": {
     "tagline": "Ihr Zuhause in den Alpen",
@@ -60,7 +60,7 @@
   "rooms": {
     "label": "Unsere Zimmer",
     "title": "Wählen Sie Ihr perfektes Zimmer",
-    "subtitle": "Von gemütlichen Einzelzimmern bis zu geräumigen Familienzimmern — finden Sie Ihr perfektes Zuhause in den Bergen.",
+    "subtitle": "Von gemütlichen Einzelzimmern bis zu geräumigen Familienzimmern: Hier finden Sie Ihr perfektes Zuhause in den Bergen.",
     "overview": "16 Zimmer in sechs Kategorien, vom Einzelzimmer bis zum Familienzimmer für bis zu 6 Personen. Kinder und Familien sind willkommen, Hunde ebenfalls (CHF 25 pro Nacht).",
     "tab_single": "Einzelzimmer",
     "tab_standard_double": "Standard Doppel / Twin",
@@ -117,11 +117,11 @@
     "name_glrs": "Galerie Suite",
     "name_fam6": "Familienzimmer (6)",
     "desc_sgln": "Gemütliches Einzelzimmer (ca. 12 m²) mit 120 cm breitem Bett, Bodenheizung und eigener Kaffee- & Teemaschine. Ideal für Alleinreisende.",
-    "desc_sglb": "Grosszügiges Einzelzimmer mit breitem 140 cm Bett — mehr Platz und Komfort für Alleinreisende, die es gerne geräumig haben.",
+    "desc_sglb": "Grosszügiges Einzelzimmer mit breitem 140 cm Bett. Mehr Platz und Komfort für Alleinreisende, die es gerne geräumig haben.",
     "desc_dbln": "Komfortables Doppelzimmer (ca. 22 m²) mit grossem Doppelbett, Sitzgelegenheit und Blick auf Dorf oder Berge. Perfekt für Paare.",
-    "desc_dbrb": "Doppelzimmer mit privatem Balkon und Bergblick — geniessen Sie den Morgenkaffee mit Blick auf die Bündner Bergwelt. Hunde willkommen.",
+    "desc_dbrb": "Doppelzimmer mit privatem Balkon und Bergblick. Geniessen Sie den Morgenkaffee mit Blick auf die Bündner Bergwelt. Hunde willkommen.",
     "desc_glrs": "Grosszügige Suite (ca. 31 m²) mit getrenntem Wohn- und Schlafbereich: Doppelbett auf der Galerie, Sofa und Balkon mit Bergblick.",
-    "desc_fam6": "Unser grösstes Zimmer für bis zu 6 Personen — ideal für Familien und kleine Gruppen, die gemeinsam die Surselva entdecken wollen.",
+    "desc_fam6": "Unser grösstes Zimmer für bis zu 6 Personen, ideal für Familien und kleine Gruppen, die gemeinsam die Surselva entdecken wollen.",
     "amenity_coffee": "Kaffee & Tee",
     "amenity_big_bed": "Bett 140 cm",
     "amenity_gallery_bed": "Doppelbett auf Galerie",
@@ -133,7 +133,7 @@
     "title": "Preise und Reservation",
     "subtitle": "Alle Zimmerpreise beinhalten Frühstücksbuffet, Kurtaxe, Servicegebühren und MwSt.",
     "includes": "Frühstücksbuffet Muliniala, Kurtaxe & WLAN inklusive",
-    "dogs": "Hunde sind herzlich willkommen (CHF 25/Nacht) — Hundebett und Näpfe stehen bereit",
+    "dogs": "Hunde sind herzlich willkommen (CHF 25/Nacht). Hundebett und Näpfe stehen bereit",
     "loyalty": "Bestpreis-Garantie bei Direktbuchung über hotelmulin.ch",
     "per_night": "/Nacht",
     "from": "ab",
@@ -165,7 +165,7 @@
   "dining": {
     "label": "Frühstück Muliniala",
     "title": "Energie für Ihre Abenteuer",
-    "text": "Unser Frühstücksbuffet Muliniala verwöhnt Sie jeden Morgen mit regionalen Spezialitäten aus der Surselva — frisches Brot, Bündner Käse und Fleisch, hausgemachte Konfitüren und vieles mehr. Der perfekte Start für einen aktiven Tag in den Bergen.",
+    "text": "Unser Frühstücksbuffet Muliniala verwöhnt Sie jeden Morgen mit regionalen Spezialitäten aus der Surselva: frisches Brot, Bündner Käse und Fleisch, hausgemachte Konfitüren und vieles mehr. Der perfekte Start für einen aktiven Tag in den Bergen.",
     "highlight1": "Reichhaltiges Buffet mit regionalen Produkten",
     "highlight2": "Bündner Spezialitäten und frische Backwaren",
     "highlight3": "Im Zimmerpreis inklusive",
@@ -174,16 +174,16 @@
     "fondue_title": "Käsefondue",
     "fondue_desc": "Traditionelles Schweizer Käsefondue mit Gruyère & Vacherin, serviert mit frischem Brot und Beilagen.",
     "fondue_wine_title": "Fondue & Wein",
-    "fondue_wine_desc": "Käsefondue für zwei inklusive einer Flasche ausgewähltem Schweizer Wein — das perfekte Erlebnis.",
+    "fondue_wine_desc": "Käsefondue für zwei inklusive einer Flasche ausgewähltem Schweizer Wein. Das perfekte Erlebnis.",
     "raclette_title": "Raclette",
     "raclette_desc": "Original Walliser Raclette mit Kartoffeln, Cornichons und Silberzwiebeln.",
     "flammkuchen_title": "Flammkuchen",
     "flammkuchen_desc": "Knuspriger Flammkuchen nach Elsässer Art mit Crème fraîche, Speck und Zwiebeln.",
     "pizza_title": "Pizza Auswahl",
-    "pizza_desc": "Frisch aus dem Ofen — verschiedene Pizzen mit hausgemachtem Teig und erstklassigen Zutaten.",
+    "pizza_desc": "Frisch aus dem Ofen: verschiedene Pizzen mit hausgemachtem Teig und erstklassigen Zutaten.",
     "pizza_price": "CHF 19.90",
     "noodles_title": "Cup Noodles",
-    "noodles_desc": "Schneller Snack für zwischendurch — heisses Wasser inklusive.",
+    "noodles_desc": "Schneller Snack für zwischendurch, heisses Wasser inklusive.",
     "for_two": "für 2 Personen",
     "menu_note": "Mittag- und Abendessen auf Anfrage. Bitte informieren Sie uns bei der Buchung oder an der Rezeption.",
     "lounge_label": "Lounge & Bar Mulinera",
@@ -199,7 +199,7 @@
     "text": "Brigels ist das ganze Jahr ein Paradies für Aktive: Im Winter 50 km breite, sonnige Pisten im Skigebiet Brigels-Waltensburg-Andiast, Langlaufloipen 30 m vom Hotel, Schlittelwege von 5 und 7 km, Schneeschuh- und Skitouren bis auf 3'100 m. Im Sommer Golf auf 1'300 m ü. M., hunderte Kilometer Bike- und Wanderwege am Fuss des Piz Tumpiv, River Rafting und Bergsteigen bis 3'400 m mit Bergführern. Unser Team stellt Ihnen gerne Ihr persönliches Wochenprogramm zusammen.",
     "highlight1": "Biken, Wandern & Golf im Sommer",
     "highlight2": "Skigebiet Brigels-Waltensburg-Andiast im Winter",
-    "quote": "«Einmal Brigels, immer Brigels» — das sagt ein Stammgast, der das Sonnenplateau seit über 60 Jahren besucht."
+    "quote": "«Einmal Brigels, immer Brigels», das sagt ein Stammgast, der das Sonnenplateau seit über 60 Jahren besucht."
   },
   "location": {
     "label": "Lage",
@@ -230,8 +230,8 @@
     "cal_pick_week": "1 Woche",
     "cal_prev_month": "Vorheriger Monat",
     "cal_next_month": "Nächster Monat",
-    "rateplan_nonrefbb_ibe": "Treuepreis — nicht erstattbar",
-    "rateplan_standardbb_ibe": "Standardpreis — kostenlos stornierbar",
+    "rateplan_nonrefbb_ibe": "Treuepreis, nicht erstattbar",
+    "rateplan_standardbb_ibe": "Standardpreis, kostenlos stornierbar",
     "rateplan_loyalty_badge": "11% Treuerabatt",
     "searching": "Verfügbarkeit wird geprüft...",
     "guest_details": "Ihre Angaben",
@@ -250,8 +250,8 @@
     "adults_plural": "Erwachsene",
     "child_singular": "Kind",
     "children_plural": "Kinder",
-    "best_price_label": "Bester Preis — Nicht erstattbar",
-    "flexible_label": "Kostenlose Stornierung — Erstattbar",
+    "best_price_label": "Bester Preis, nicht erstattbar",
+    "flexible_label": "Kostenlose Stornierung, erstattbar",
     "flexible": "Kostenlose Stornierung",
     "best_price_tag": "Bester Preis",
     "room": "Zimmer",
@@ -289,7 +289,7 @@
     "payment_pending": "NÄCHSTER SCHRITT: ZAHLUNG",
     "not_confirmed_yet": "Du hast noch keine gültige Buchung!",
     "will_be_cancelled": "Ohne Zahlung wird die Buchung in 10 Minuten storniert.",
-    "payment_step_indicator": "Schritt 2 von 2 — Zahlung",
+    "payment_step_indicator": "Schritt 2 von 2: Zahlung",
     "payment_instruction": "Bitte schliessen Sie jetzt Ihre Zahlung ab, um die Reservierung zu bestätigen. Klicken Sie auf den Button unten.",
     "pay_now": "Jetzt Zahlung abschliessen",
     "payment_secure_note": "Es öffnet sich ein sicheres Zahlungsfenster. Bitte schliessen Sie die Zahlung dort ab.",
@@ -299,7 +299,7 @@
     "cancelled_no_payment": "Zahlung nicht abgeschlossen. Ihre Reservierung wurde storniert.",
     "cancelled_rebook": "Sie können jederzeit eine neue Reservierung vornehmen.",
     "search_again": "Erneut suchen",
-    "payment_success": "Zahlung erfolgreich — Reservierung bestätigt!",
+    "payment_success": "Zahlung erfolgreich, Reservierung bestätigt!",
     "confirmation_email_sent": "Ihre Reservierung ist bestätigt.",
     "payment_link_expired": "Zahlungslink konnte nicht erstellt werden. Bitte versuchen Sie es erneut.",
     "retry_payment": "Zahlungslink erneut erstellen",
@@ -307,7 +307,7 @@
     "payment_not_confirmed_yet": "Zahlung noch nicht bestätigt",
     "payment_processing_wait": "Falls Sie bezahlt haben, kann die Verarbeitung einen Moment dauern. Sie können weiter prüfen oder uns kontaktieren.",
     "keep_checking": "Weiter prüfen",
-    "did_not_pay_cancel": "Ich habe nicht bezahlt — Reservierung stornieren",
+    "did_not_pay_cancel": "Ich habe nicht bezahlt, Reservierung stornieren",
     "upsell_title": "Machen Sie Ihren Aufenthalt besonders",
     "upsell_subtitle": "Extras bereit bei Ihrer Ankunft",
     "upsell_wine_red": "Rotwein (Flasche)",
@@ -317,7 +317,7 @@
     "upsell_beer": "Bier (regional)",
     "upsell_beer_desc": "Regionales Bier aus der Region",
     "upsell_roses_champagne": "Rosen & Champagner",
-    "upsell_roses_champagne_desc": "Rosenstrauss mit Champagner — bereit im Zimmer",
+    "upsell_roses_champagne_desc": "Rosenstrauss mit Champagner, bereit im Zimmer",
     "upsell_fondue_1": "Fondue für 1",
     "upsell_fondue_1_desc": "Käsefondue für eine Person",
     "upsell_fondue_2": "Fondue für 2",
@@ -335,13 +335,13 @@
     "upsell_parking": "Parkplatz",
     "upsell_parking_desc": "Pro Tag",
     "citytax": "Kurtaxe",
-    "citytax_note": "Kurtaxe — vor Ort zu entrichten",
+    "citytax_note": "Kurtaxe, vor Ort zu entrichten",
     "summary_room": "Zimmer",
     "summary_addons": "Add-ons",
     "summary_discount": "Rabatt",
     "summary_total": "Gesamtbetrag",
     "upsell_dog": "Hund",
-    "upsell_dog_desc": "Pro Nacht — Hundebett & Näpfe stehen bereit",
+    "upsell_dog_desc": "Pro Nacht: Hundebett & Näpfe stehen bereit",
     "citytax_included": "inkl. Kurtaxe"
   },
   "trust": {
@@ -361,7 +361,7 @@
     "reassurance": "Keine Kreditkarte nötig zum Suchen · Bestpreis-Garantie bei Direktbuchung"
   },
   "footer": {
-    "brand_desc": "Alpines Lifestyle-Hotel in Brigels — der Hotspot für Genuss-Aktive in der Surselva.",
+    "brand_desc": "Alpines Lifestyle-Hotel in Brigels, der Hotspot für Genuss-Aktive in der Surselva.",
     "quick_links": "Quicklinks",
     "explore": "Entdecken",
     "interlaken": "Brigels",
@@ -380,7 +380,7 @@
   "deals": {
     "label": "Deals",
     "title": "Unsere Packages",
-    "subtitle": "Übernachtung, Gourmet-Frühstück und Erlebnis in einem — direkt beim Hotel buchbar.",
+    "subtitle": "Übernachtung, Gourmet-Frühstück und Erlebnis in einem. Direkt beim Hotel buchbar.",
     "per_person": "pro Person",
     "per_person_incl": "pro Person inkl. Übernachtung & Frühstück",
     "skipass_title": "Hotel & Skipass",
@@ -406,6 +406,6 @@
     "bogdan_deals_title": "Bogdans Tipp",
     "bogdan_deals_text": "Wer flexibel ist, reist Sonntag bis Donnerstag an: beste Preise beim Skipass-Deal und die Pisten gehören fast Ihnen allein. Im Januar ist der Mulin-Winter-Deal am günstigsten.",
     "kaito_activities_title": "Kaitos Tipp",
-    "kaito_activities_text": "Die nötige Ausrüstung für Ihr Sommer- und Winterabenteuer können Sie direkt in Brigels mieten — bei unseren Partnern im Dorf."
+    "kaito_activities_text": "Die nötige Ausrüstung für Ihr Sommer- und Winterabenteuer können Sie direkt in Brigels mieten, bei unseren Partnern im Dorf."
   }
 }

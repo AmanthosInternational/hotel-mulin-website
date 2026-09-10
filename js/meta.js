@@ -125,7 +125,7 @@
     }
     if (fbc) { out.fbc = fbc; }
 
-    // consent allein sagt nichts aus — dann lieber gar nichts mitschicken.
+    // consent allein sagt nichts aus, dann lieber gar nichts mitschicken.
     return (out.gclid || out.fbclid || out.fbp || out.fbc ||
             out.utm_source || out.utm_medium || out.utm_campaign) ? out : null;
   }
