@@ -1,5 +1,5 @@
 /**
- * Sentry browser telemetry — Hotel Mulin (hotelmulin.ch)
+ * Sentry browser telemetry for Hotel Mulin (hotelmulin.ch)
  *
  * Loaded from the CDN bundle rather than the Loader script: the org lives in
  * Sentry's EU region, and keeping the whole configuration here means sampling
@@ -13,7 +13,7 @@
  */
 (function () {
   // The bundle is blocked by common ad blockers. Without this guard that turns
-  // into a ReferenceError on every such visit — noise in the console of exactly
+  // into a ReferenceError on every such visit, noise in the console of exactly
   // the users we cannot observe anyway.
   if (typeof Sentry === 'undefined') return;
 
@@ -38,12 +38,12 @@
     // marketing site and keeps well inside the org's event quota.
     tracesSampleRate: 0.1,
 
-    // DELIBERATELY EMPTY — do not add the API hosts here without changing them
+    // DELIBERATELY EMPTY: do not add the API hosts here without changing them
     // first. Trace propagation adds `sentry-trace` and `baggage` headers to
     // outgoing requests. Measured 2026-08-17: the booking API answers the CORS
     // preflight with `Access-Control-Allow-Headers: Content-Type, X-API-Key,
     // Authorization`. Neither header is on that list, so the browser would
-    // reject the preflight and the availability call would fail — the booking
+    // reject the preflight and the availability call would fail, and the booking
     // funnel would break to gain a trace. Connecting browser and backend traces
     // requires allowing both headers server-side first.
     tracePropagationTargets: [],
@@ -56,7 +56,7 @@
     replaysOnErrorSampleRate: 1.0,
 
     // Noise that is not our code and cannot be fixed by us. Left unfiltered,
-    // these bury the real errors — the same failure mode that made 559 of 673
+    // these bury the real errors, the same failure mode that made 559 of 673
     // events in this org a single client disconnect (fixed 2026-08-17).
     ignoreErrors: [
       // Benign browser layout notice, fires on healthy pages.
@@ -116,7 +116,7 @@
     replayArmed = true;
     // bundle.tracing.min.js bringt einen Platzhalter Sentry.replayIntegration mit, der
     // nur warnt und nichts aufzeichnet. lazyLoadIntegration() gibt eine vorhandene
-    // Funktion unbesehen zurueck und erkennt Platzhalter am Merker _isShim — der fehlt
+    // Funktion unbesehen zurueck und erkennt Platzhalter am Merker _isShim, der fehlt
     // genau beim Replay (gemessen in 10.68.0 und in 10.70.0; feedbackIntegration
     // daneben traegt ihn). Ohne die Markierung laedt der Chunk nie. Kennzeichen des
     // Platzhalters: replayIntegration da, getReplay fehlt; replay.min.js setzt beide.

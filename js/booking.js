@@ -7,7 +7,7 @@
 
 /*
  * Hotel Mulin Internet Booking Engine (IBE)
- * Version 2.0 — Kurtaxe (city tax) is shown and charged online (brutto pricing).
+ * Version 2.0: Kurtaxe (city tax) is shown and charged online (brutto pricing).
  * Version 1.0 (city tax collected at check-in) is preserved on the `main` branch.
  */
 (function () {
@@ -145,9 +145,11 @@ function ga4Event(event, data) {
 // Rebuild-Waechter, am 30.08.2026 korrigiert. Die alte Fassung war wirkungslos.
 // Sie legte `var GA4_BUILD_MARKER = { ga4Event: ga4Event }` an und nannte
 // "grep ga4Event js/booking.min.js" einen belastbaren Beweis. Gebaut wird hier
-// aber nicht mit esbuild, sondern mit Terser:
-//   npx terser@5 js/booking.js --compress --mangle -o js/booking.min.js
-// (nachgewiesen am 30.08.: reproduziert die bestehende Datei bytegleich, 52427).
+// mit esbuild, nicht mit Terser:
+//   npx esbuild js/booking.js --minify --target=es2017 --outfile=js/booking.min.js
+// Am 10.09.2026 nachgemessen: esbuild reproduziert die eingecheckte Datei
+// bytegleich (57603), Terser liefert 56556 und einen anderen Praeambel-Stil
+// (!function statt (function). Die Terser-Angabe vom 30.08. stimmt nicht mehr.
 // Terser wirft mit --compress jede ungenutzte Variable weg, also auch den Marker.
 // Gemessen: "ga4Event" stand null Mal in booking.min.js. Der Waechter gegen die
 // Falle, die die Plausible-Anbindung vom 19. bis 20.08.2026 wirkungslos liess,
@@ -205,14 +207,14 @@ var RATE_PLAN_MAP = {
   'NONREFBB_IBE': {
     category: 'Non-Refundable',
     displayKey: 'booking.rateplan_nonrefbb_ibe',
-    displayFallback: 'Loyalty Rate — Non-Refundable',
+    displayFallback: 'Loyalty Rate, Non-Refundable',
     discountBadgeKey: 'booking.rateplan_loyalty_badge',
     discountBadgeFallback: '11% Loyalty Discount'
   },
   'STANDARDBB_IBE': {
     category: 'Refundable',
     displayKey: 'booking.rateplan_standardbb_ibe',
-    displayFallback: 'Standard Rate — Free Cancellation',
+    displayFallback: 'Standard Rate, Free Cancellation',
     discountBadgeKey: 'booking.rateplan_loyalty_badge',
     discountBadgeFallback: '11% Loyalty Discount'
   }
@@ -291,14 +293,14 @@ var UPSELL_ITEMS = [
   { id: 'wine_red', icon: '\uD83C\uDF77', nameKey: 'booking.upsell_wine_red', descKey: 'booking.upsell_wine_red_desc', nameFallback: 'Rotwein (Flasche)', descFallback: 'Ausgewählter Schweizer Rotwein', price: 49.90 },
   { id: 'wine_white', icon: '\uD83E\uDD42', nameKey: 'booking.upsell_wine_white', descKey: 'booking.upsell_wine_white_desc', nameFallback: 'Weisswein (Flasche)', descFallback: 'Frischer Schweizer Weisswein', price: 49.90 },
   { id: 'beer', icon: '\uD83C\uDF7A', nameKey: 'booking.upsell_beer', descKey: 'booking.upsell_beer_desc', nameFallback: 'Bier (regional)', descFallback: 'Regionales Bier aus der Region', price: 6.90 },
-  { id: 'roses_champagne', icon: '\uD83C\uDF39', nameKey: 'booking.upsell_roses_champagne', descKey: 'booking.upsell_roses_champagne_desc', nameFallback: 'Rosen & Champagner', descFallback: 'Rosenstrauss mit Champagner — bereit im Zimmer', price: 99.90 },
-  { id: 'dog', icon: '\uD83D\uDC15', nameKey: 'booking.upsell_dog', descKey: 'booking.upsell_dog_desc', nameFallback: 'Hund', descFallback: 'Pro Nacht — Hundebett & Näpfe stehen bereit', price: 25, perDay: true },
+  { id: 'roses_champagne', icon: '\uD83C\uDF39', nameKey: 'booking.upsell_roses_champagne', descKey: 'booking.upsell_roses_champagne_desc', nameFallback: 'Rosen & Champagner', descFallback: 'Rosenstrauss mit Champagner, bereit im Zimmer', price: 99.90 },
+  { id: 'dog', icon: '\uD83D\uDC15', nameKey: 'booking.upsell_dog', descKey: 'booking.upsell_dog_desc', nameFallback: 'Hund', descFallback: 'Pro Nacht: Hundebett & Näpfe stehen bereit', price: 25, perDay: true },
   { id: 'towels', icon: '\uD83D\uDEC1', nameKey: 'booking.upsell_towels', descKey: 'booking.upsell_towels_desc', nameFallback: 'Extra Handtücher', descFallback: 'Pro Nacht / Stück', price: 5, perDay: true },
   { id: 'blankets', icon: '\uD83D\uDECF\uFE0F', nameKey: 'booking.upsell_blankets', descKey: 'booking.upsell_blankets_desc', nameFallback: 'Extra Decke & Kissen', descFallback: 'Pro Nacht / Stück', price: 10, perDay: true }
 ];
 var selectedUpsells = {};
 
-// Currency rounding — all CHF amounts go through this to avoid floating-point drift
+// Currency rounding: all CHF amounts go through this to avoid floating-point drift
 function roundCHF(n) { return Math.round(n * 100) / 100; }
 
 // City tax (Kurtaxe). The backend returns Apaleo's city tax for the searched
@@ -605,7 +607,7 @@ function renderCal() {
     var date = new Date(cal.year, cal.month, d, 12, 0, 0);
     var t = epoch(date);
     var cls = 'cal-day';
-    // Only truly disable past dates — everything else is clickable
+    // Only truly disable past dates, everything else is clickable
     if (date < today) {
       cls += ' disabled';
     }
@@ -699,7 +701,7 @@ if (daterangeWrap) {
   });
 }
 
-// No smart defaults — start clean like hotelmulin.ch
+// No smart defaults: start clean like hotelmulin.ch
 buildCalendar();
 
 // ========== GUESTS DROPDOWN (Adults + Children) ==========
@@ -1495,7 +1497,7 @@ function getUpsellComment() {
   return items.length > 0 ? ' | Add-ons: ' + items.join(', ') : '';
 }
 
-// Promo code functions — validated server-side
+// Promo code functions, validated server-side
 function applyPromoCode() {
   var input = document.getElementById('promoCodeInput');
   var msg = document.getElementById('promoMessage');
@@ -1593,7 +1595,7 @@ function updatePriceDisplay() {
   html += '<div style="border-top:1px solid var(--color-border,#e5e5e5);margin:.4rem 0;"></div>';
   html += line(tFallback('booking.summary_total', 'Gesamtbetrag'), b.totalCents, { big: true });
   if (b.cityTaxCents > 0) {
-    html += '<div style="font-size:.72rem;color:var(--color-text-muted);margin-top:.3rem;">' + tFallback('booking.citytax_note', 'inkl. Kurtaxe — wird mit der Buchung bezahlt') + '</div>';
+    html += '<div style="font-size:.72rem;color:var(--color-text-muted);margin-top:.3rem;">' + tFallback('booking.citytax_note', 'inkl. Kurtaxe, wird mit der Buchung bezahlt') + '</div>';
   }
   box.innerHTML = html;
   box.style.display = 'block';
@@ -1695,7 +1697,7 @@ if (confirmBtn) {
 
     // zuordnen kann. Ohne Einwilligung liefert tracking() null und das
 
-    // Feld entfaellt — der Server sieht dann nichts und tut nichts.
+    // Feld entfaellt, der Server sieht dann nichts und tut nichts.
 
     try {
 
@@ -1806,7 +1808,7 @@ function showFreeBookingConfirmation(confirmationId, email) {
   html += '<div class="payment-step-success" style="border-left:4px solid #059669;background:#ECFDF5;">';
   html += '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
   html += '<div>';
-  html += '<h4 style="color:#065F46;">' + (window.t ? window.t('booking.confirmed_title') : 'Buchung bestätigt') + ' — ' + escapeHtml(confirmationId) + '</h4>';
+  html += '<h4 style="color:#065F46;">' + (window.t ? window.t('booking.confirmed_title') : 'Buchung bestätigt') + ': ' + escapeHtml(confirmationId) + '</h4>';
   html += '<p style="font-size:.82rem;color:#059669;margin-top:.25rem;">' + escapeHtml(email) + '</p>';
   html += '</div>';
   html += '</div>';
@@ -1843,7 +1845,7 @@ function pollPaymentStatus(reservationId, bookingId, paymentSection, confirmatio
       html += '<div class="payment-step-success" style="border-left:4px solid #059669;background:#ECFDF5;">';
       html += '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
       html += '<div>';
-      html += '<h4 style="color:#065F46;">' + (window.t ? window.t('booking.payment_success') : 'Zahlung erfolgreich \u2014 Reservierung best\u00e4tigt!') + '</h4>';
+      html += '<h4 style="color:#065F46;">' + (window.t ? window.t('booking.payment_success') : 'Zahlung erfolgreich, Reservierung best\u00e4tigt!') + '</h4>';
       html += '<p style="font-size:.85rem;color:#059669;margin-top:.25rem;">' + (window.t ? window.t('booking.confirmation_email_sent') : 'Eine Best\u00e4tigungsmail wurde an Sie gesendet.') + '</p>';
       html += '</div>';
       html += '</div>';
@@ -1884,7 +1886,7 @@ function showPaymentUncertain(reservationId, bookingId, paymentSection, confirma
   html += '</button>';
   html += '<br>';
   html += '<button class="btn btn-lg" id="cancelReservationBtn" style="font-size:.9rem;padding:.65rem 1.5rem;cursor:pointer;border:1px solid #DC2626;background:transparent;color:#DC2626;border-radius:8px;margin-top:.5rem;">';
-  html += (window.t ? window.t('booking.did_not_pay_cancel') : 'Ich habe nicht bezahlt \u2014 Reservierung stornieren');
+  html += (window.t ? window.t('booking.did_not_pay_cancel') : 'Ich habe nicht bezahlt, Reservierung stornieren');
   html += '</button>';
   html += '<p style="font-size:.82rem;color:var(--color-text-muted);margin-top:1rem;">' + (window.t ? window.t('booking.or_contact') : 'Oder kontaktieren Sie uns:') + ' <a href="mailto:mulin@amanthos.com" style="color:var(--color-primary);">mulin@amanthos.com</a></p>';
   html += '</div>';
@@ -1941,7 +1943,7 @@ function cancelUnpaidBooking(reservationId, bookingId, paymentSection) {
       html2 += '<div class="payment-step-success" style="border-left:4px solid #059669;background:#ECFDF5;">';
       html2 += '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>';
       html2 += '<div>';
-      html2 += '<h4 style="color:#065F46;">' + (window.t ? window.t('booking.payment_success') : 'Zahlung erfolgreich \u2014 Reservierung best\u00e4tigt!') + '</h4>';
+      html2 += '<h4 style="color:#065F46;">' + (window.t ? window.t('booking.payment_success') : 'Zahlung erfolgreich, Reservierung best\u00e4tigt!') + '</h4>';
       html2 += '<p style="font-size:.85rem;color:#059669;margin-top:.25rem;">' + (window.t ? window.t('booking.confirmation_email_sent') : 'Eine Best\u00e4tigungsmail wurde an Sie gesendet.') + '</p>';
       html2 += '</div>';
       html2 += '</div>';
@@ -2009,13 +2011,13 @@ function showPaymentStep(confirmationId, paymentLink, email, bookingData) {
   html += '<div class="payment-step-success" style="border-left:4px solid #F59E0B;background:#FFFBEB;">';
   html += '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
   html += '<div>';
-  html += '<h4 style="color:#92400E;">' + (window.t ? window.t('booking.reservation_created') : 'Reservierung erstellt') + ' — ' + escapeHtml(confirmationId) + '</h4>';
+  html += '<h4 style="color:#92400E;">' + (window.t ? window.t('booking.reservation_created') : 'Reservierung erstellt') + ': ' + escapeHtml(confirmationId) + '</h4>';
   html += '<p style="font-size:.82rem;color:#B45309;margin-top:.25rem;">' + escapeHtml(email) + '</p>';
   html += '</div>';
   html += '</div>';
   // Payment action area
   html += '<div class="payment-step-action">';
-  html += '<p style="font-size:.8rem;color:var(--color-text-muted);margin-bottom:.5rem;font-weight:600;letter-spacing:.5px;">' + (window.t ? window.t('booking.payment_step_indicator') : 'Schritt 2 von 2 \u2014 Zahlung') + '</p>';
+  html += '<p style="font-size:.8rem;color:var(--color-text-muted);margin-bottom:.5rem;font-weight:600;letter-spacing:.5px;">' + (window.t ? window.t('booking.payment_step_indicator') : 'Schritt 2 von 2: Zahlung') + '</p>';
   html += '<p style="font-weight:600;color:var(--color-text);margin-bottom:.75rem;font-size:1.05rem;">' + escapeHtml(paymentMsg) + '</p>';
   if (totalText) {
     html += '<p style="font-size:1.8rem;font-weight:800;color:var(--color-primary);font-family:var(--font-heading);margin:.75rem 0;">' + escapeHtml(totalText) + '</p>';
@@ -2065,7 +2067,7 @@ function showPaymentStep(confirmationId, paymentLink, email, bookingData) {
       var pollTimer = setInterval(function () {
         if (popup.closed) {
           clearInterval(pollTimer);
-          // Popup closed — start polling for payment status (never auto-cancel)
+          // Popup closed, start polling for payment status (never auto-cancel)
           pollPaymentStatus(reservationId, confirmationId, paymentSection, confirmationId, 0);
         }
       }, 2000);
@@ -2087,7 +2089,7 @@ function showPaymentRetry(confirmationId, email, bookingData) {
   html += '<div class="payment-step-success" style="border-left:4px solid #F59E0B;background:#FFFBEB;">';
   html += '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>';
   html += '<div>';
-  html += '<h4 style="color:#92400E;">' + (window.t ? window.t('booking.reservation_created') : 'Reservierung erstellt') + ' — ' + escapeHtml(confirmationId) + '</h4>';
+  html += '<h4 style="color:#92400E;">' + (window.t ? window.t('booking.reservation_created') : 'Reservierung erstellt') + ': ' + escapeHtml(confirmationId) + '</h4>';
   html += '<p style="font-size:.82rem;color:#DC2626;font-weight:600;margin-top:.25rem;">' + (window.t ? window.t('booking.payment_link_expired') : 'Zahlungslink konnte nicht erstellt werden. Bitte versuchen Sie es erneut.') + '</p>';
   html += '</div>';
   html += '</div>';
