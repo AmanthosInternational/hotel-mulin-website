@@ -496,6 +496,40 @@
     }
   },
   {
+    "name": "kampagne_mit_leerzeichen_getrimmt",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta&utm_medium=paid&utm_campaign=mulin-test&kampagne=%20sofort%20",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null,
+      "kampagne": "sofort"
+    }
+  },
+  {
     "name": "kampagne_32_zeichen_ok",
     "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&kampagne=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
     "today": "2026-11-18",
