@@ -1,0 +1,686 @@
+[
+  {
+    "name": "meta_url_vorlage",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&rate=NONREFBB_IBE&utm_source=meta&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": {
+        "room": null,
+        "rate": "NONREFBB_IBE"
+      },
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "facebook_paid",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=facebook&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "facebook",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "fb_paid",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=fb&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "fb",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "instagram_paid",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=instagram&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "instagram",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "ig_paid",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=ig&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "ig",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "FB_gross",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=FB&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "FB",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "meta_ohne_medium_und_kampagne",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "meta"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "meta_lead",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta&utm_medium=lead&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_lead",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "lead",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "ig_LEAD_gross",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=ig&utm_medium=LEAD&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_lead",
+      "campaign": {
+        "utm_source": "ig",
+        "utm_medium": "LEAD",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "newsletter_keine_quelle",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=newsletter&utm_medium=email&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": null,
+      "campaign": {
+        "utm_source": "newsletter",
+        "utm_medium": "email",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "meta_mit_sonderzeichen_verworfen",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta%21&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": null,
+      "campaign": {
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "google_fbl_bleibt",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=google&utm_medium=organic&utm_campaign=hotel-fbl",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "google_fbl",
+      "campaign": {
+        "utm_source": "google",
+        "utm_medium": "organic",
+        "utm_campaign": "hotel-fbl"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "google_hotel_ads_bleibt",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=google&utm_medium=cpc&utm_campaign=hotel-ads",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "google_hotel_ads",
+      "campaign": {
+        "utm_source": "google",
+        "utm_medium": "cpc",
+        "utm_campaign": "hotel-ads"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "gverify_vor_meta",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&gverify=true&utm_source=meta&utm_medium=paid&utm_campaign=mulin-test",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "google_verify",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "kampagne_sofort",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta&utm_medium=paid&utm_campaign=mulin-test&kampagne=sofort",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null,
+      "kampagne": "sofort"
+    }
+  },
+  {
+    "name": "kampagne_32_zeichen_ok",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&kampagne=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": null,
+      "campaign": null,
+      "google": null,
+      "kampagne": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    }
+  },
+  {
+    "name": "kampagne_mit_leerzeichen_und_ausrufezeichen",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta&utm_medium=paid&utm_campaign=mulin-test&kampagne=So%20fort%21",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "kampagne_33_zeichen",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&kampagne=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": null,
+      "campaign": null,
+      "google": null
+    }
+  },
+  {
+    "name": "kampagne_leer",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=meta&utm_medium=paid&utm_campaign=mulin-test&kampagne=",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_ads",
+      "campaign": {
+        "utm_source": "meta",
+        "utm_medium": "paid",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null
+    }
+  },
+  {
+    "name": "kampagne_gross_ungueltig",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&kampagne=SOFORT",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": null,
+      "campaign": null,
+      "google": null
+    }
+  },
+  {
+    "name": "lead_mit_kampagne",
+    "query": "?arrival=2027-02-14&departure=2027-02-17&adults=2&utm_source=fb&utm_medium=lead&utm_campaign=mulin-test&kampagne=sofort",
+    "today": "2026-11-18",
+    "site": {
+      "properties": {
+        "MUBRIG": 6
+      },
+      "langs": [
+        "de",
+        "en"
+      ],
+      "defaultProperty": "MUBRIG"
+    },
+    "expect": {
+      "search": {
+        "property": "MUBRIG",
+        "arrival": "2027-02-14",
+        "departure": "2027-02-17",
+        "adults": 2,
+        "children": 0,
+        "lang": null
+      },
+      "preselect": null,
+      "source": "meta_lead",
+      "campaign": {
+        "utm_source": "fb",
+        "utm_medium": "lead",
+        "utm_campaign": "mulin-test"
+      },
+      "google": null,
+      "kampagne": "sofort"
+    }
+  }
+]

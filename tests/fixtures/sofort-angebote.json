@@ -1,0 +1,64 @@
+[
+  {
+    "id": "test-drei-naechte",
+    "titel": "Testangebot: drei Nächte unter der Woche",
+    "text": "Synthetisches Angebot für Tests. Drei Nächte im Doppelzimmer mit Balkon, Anreise Sonntag oder Montag.",
+    "bild": "assets/images/rooms/dbrb/1.jpg",
+    "room": "DBRB",
+    "rate": "NONREFBB_IBE",
+    "naechte": 3,
+    "anreise_wochentage": [
+      0,
+      1
+    ],
+    "von": "2027-02-07",
+    "bis": "2027-03-04",
+    "gesperrt": [],
+    "personen": 2,
+    "kampagne": null
+  },
+  {
+    "id": "test-kampagne-sofort",
+    "titel": "Testangebot: Kampagnenplan",
+    "text": "Synthetisches Angebot für Tests. Kampagnenplan, sichtbar nur mit dem Schlüssel sofort.",
+    "bild": "assets/images/mulin-winter.jpg",
+    "room": "DBRB",
+    "rate": "SOFORT3N_IBE",
+    "naechte": 3,
+    "anreise_wochentage": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "von": "2027-02-14",
+    "bis": "2027-03-04",
+    "gesperrt": [
+      {
+        "von": "2027-02-21",
+        "bis": "2027-02-23"
+      }
+    ],
+    "personen": 2,
+    "kampagne": "sofort"
+  },
+  {
+    "id": "test-ungueltig-null-naechte",
+    "titel": "Testangebot: absichtlich ungültig",
+    "text": "Synthetisch. naechte ist 0, pruefeAngebote muss das Angebot verwerfen.",
+    "bild": "assets/images/zimmer-01.jpg",
+    "room": "DBRB",
+    "rate": "NONREFBB_IBE",
+    "naechte": 0,
+    "anreise_wochentage": [
+      0,
+      1
+    ],
+    "von": "2027-02-07",
+    "bis": "2027-03-04",
+    "gesperrt": [],
+    "personen": 2,
+    "kampagne": null
+  }
+]

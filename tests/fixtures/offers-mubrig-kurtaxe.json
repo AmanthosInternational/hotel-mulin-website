@@ -1,0 +1,168 @@
+{
+  "_hinweis": "Synthetische Angebote fuer den Test-Harness (?fixture=kurtaxe), an der Form des oeffentlichen Endpunkts /api/offers orientiert (MUBRIG, Kurtaxe getrennt ausgewiesen: cityTax.included false). Testwerte, keine Preisliste, keine Gaestedaten. Das nicht erstattbare Angebot traegt Zimmer 472.80 und Kurtaxe 19.20 fuer zwei Erwachsene, gesamt 492.00 (Kriterium der Segmente 5 und 8); SOFORT3N_IBE ist der Kampagnenplan des Plans mulin-sofortbuchung. arrival, departure, nights und adults schreibt tests/dev-server.py aus der Anfrage um.",
+  "property": "MUBRIG",
+  "propertyName": "Hotel Mulin by Amanthos",
+  "arrival": "2027-02-14",
+  "departure": "2027-02-17",
+  "nights": 3,
+  "adults": 2,
+  "offers": [
+    {
+      "ratePlanId": "MUBRIG-NONREFBB_IBE-DBRB",
+      "ratePlanCode": "NONREFBB_IBE",
+      "ratePlanName": "NONREF BB_IBE",
+      "category": "Non-Refundable",
+      "unitGroupId": "MUBRIG-DBRB",
+      "unitGroupName": "Double Room with Balcony",
+      "unitGroupDescription": "Double Room with Balcony",
+      "availableUnits": 3,
+      "totalGrossAmount": {
+        "amount": 472.8,
+        "currency": "CHF"
+      },
+      "averagePerNight": {
+        "amount": 157.6,
+        "currency": "CHF"
+      },
+      "cityTax": {
+        "amount": 19.2,
+        "currency": "CHF",
+        "included": false
+      },
+      "timeSlices": [
+        {
+          "from": "2027-02-14T15:00:00+01:00",
+          "to": "2027-02-15T11:00:00+01:00",
+          "amount": {
+            "amount": 157.6,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-02-15T11:00:00+01:00",
+          "to": "2027-02-16T11:00:00+01:00",
+          "amount": {
+            "amount": 157.6,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-02-16T11:00:00+01:00",
+          "to": "2027-02-17T11:00:00+01:00",
+          "amount": {
+            "amount": 157.6,
+            "currency": "CHF"
+          }
+        }
+      ]
+    },
+    {
+      "ratePlanId": "MUBRIG-STANDARDBB_IBE-DBRB",
+      "ratePlanCode": "STANDARDBB_IBE",
+      "ratePlanName": "STANDARD BB_IBE",
+      "category": "Refundable",
+      "unitGroupId": "MUBRIG-DBRB",
+      "unitGroupName": "Double Room with Balcony",
+      "unitGroupDescription": "Double Room with Balcony",
+      "availableUnits": 3,
+      "totalGrossAmount": {
+        "amount": 525.0,
+        "currency": "CHF"
+      },
+      "averagePerNight": {
+        "amount": 175.0,
+        "currency": "CHF"
+      },
+      "cancellationFee": {
+        "code": "LEX7DAYS",
+        "name": "Flexible 7 days",
+        "description": "Free cancellation 7 days prior arrival.",
+        "dueDateTime": "2027-02-07T15:00:00+01:00",
+        "fee": {
+          "amount": 0.0,
+          "currency": "CHF"
+        }
+      },
+      "cityTax": {
+        "amount": 19.2,
+        "currency": "CHF",
+        "included": false
+      },
+      "timeSlices": [
+        {
+          "from": "2027-02-14T15:00:00+01:00",
+          "to": "2027-02-15T11:00:00+01:00",
+          "amount": {
+            "amount": 175.0,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-02-15T11:00:00+01:00",
+          "to": "2027-02-16T11:00:00+01:00",
+          "amount": {
+            "amount": 175.0,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-02-16T11:00:00+01:00",
+          "to": "2027-02-17T11:00:00+01:00",
+          "amount": {
+            "amount": 175.0,
+            "currency": "CHF"
+          }
+        }
+      ]
+    },
+    {
+      "ratePlanId": "MUBRIG-SOFORT3N_IBE-DBRB",
+      "ratePlanCode": "SOFORT3N_IBE",
+      "ratePlanName": "SOFORT 3N_IBE",
+      "category": "Non-Refundable",
+      "unitGroupId": "MUBRIG-DBRB",
+      "unitGroupName": "Double Room with Balcony",
+      "unitGroupDescription": "Double Room with Balcony",
+      "availableUnits": 2,
+      "totalGrossAmount": {
+        "amount": 450.0,
+        "currency": "CHF"
+      },
+      "averagePerNight": {
+        "amount": 150.0,
+        "currency": "CHF"
+      },
+      "cityTax": {
+        "amount": 19.2,
+        "currency": "CHF",
+        "included": false
+      },
+      "timeSlices": [
+        {
+          "from": "2027-02-14T15:00:00+01:00",
+          "to": "2027-02-15T11:00:00+01:00",
+          "amount": {
+            "amount": 150.0,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-02-15T11:00:00+01:00",
+          "to": "2027-02-16T11:00:00+01:00",
+          "amount": {
+            "amount": 150.0,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-02-16T11:00:00+01:00",
+          "to": "2027-02-17T11:00:00+01:00",
+          "amount": {
+            "amount": 150.0,
+            "currency": "CHF"
+          }
+        }
+      ]
+    }
+  ]
+}
