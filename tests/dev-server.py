@@ -24,7 +24,12 @@ Erweiterung aus Segment 0 des Bauplans mulin-sofortbuchung (K5), ebenfalls nur i
                       gilt auf / 'standard' (die Antwort von bisher), auf /sofortbuchung '201'
     kern=double       js/sofort-kern.js kommt aus tests/fixtures/sofort-kern-double.js
     buchen=double     js/sofort-buchen.js kommt aus tests/fixtures/sofort-buchen-double.js
-  Fehlt ein Double, antwortet die Skript-Adresse mit 404.
+    angebote=fixture  js/sofort-angebote.js ist 'window.amSofortAngebote = <Inhalt von
+                      tests/fixtures/sofort-angebote.json>;'
+    angebote=leer     js/sofort-angebote.js ist 'window.amSofortAngebote = [];'
+  Fehlt ein Double, antwortet die Skript-Adresse mit 404; ohne angebote kommt die echte
+  js/sofort-angebote.js (Sammelstelle der Verdrahtung) oder 404. angebote gilt auch direkt
+  an der Skript-Adresse (/js/sofort-angebote.js?angebote=leer).
 - Steuerung aus dem Browser oder per curl:
     GET /__mock                  Zustand (Modi, Zahl der protokollierten Buchungen)
     GET /__mock?antwort=409      setzt die Antwort bis zum naechsten Seitenaufruf
@@ -46,9 +51,10 @@ from urllib.parse import urlparse, parse_qs
 ROOT = Path(__file__).resolve().parent.parent
 FIXTURE = ROOT / "tests" / "fixtures" / "offers-mubrig.json"
 FIXTURE_KURTAXE = ROOT / "tests" / "fixtures" / "offers-mubrig-kurtaxe.json"
+FIXTURE_ANGEBOTE = ROOT / "tests" / "fixtures" / "sofort-angebote.json"
 SOFORT_HTML = ROOT / "sofortbuchung.html"
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
-STATE = {"fixture": "full", "antwort": "standard", "kern": "", "buchen": ""}
+STATE = {"fixture": "full", "antwort": "standard", "kern": "", "buchen": "", "angebote": ""}
 LOG = []
 LOCK = threading.Lock()
 
@@ -142,7 +148,13 @@ def booking_js():
     return gleiche_origin((ROOT / "js" / "booking.js").read_text(encoding="utf-8"))
 
 
-def sofort_js(name):
+def sofort_js(name, query):
+    angebote = query.get("angebote", [STATE["angebote"]])[0]
+    if name == "sofort-angebote" and angebote == "leer":
+        return "window.amSofortAngebote = [];\n", None
+    if name == "sofort-angebote" and angebote == "fixture":
+        liste = FIXTURE_ANGEBOTE.read_text(encoding="utf-8").strip()
+        return "window.amSofortAngebote = " + liste + ";\n", FIXTURE_ANGEBOTE
     datei = ROOT / "js" / (name + ".js")
     if name in DOUBLES and STATE[DOUBLES[name][0]] == "double":
         datei = ROOT / "tests" / "fixtures" / DOUBLES[name][1]
@@ -158,6 +170,7 @@ def seite(query, antwort):
     STATE["antwort"] = wunsch if wunsch in ANTWORTEN else antwort
     STATE["kern"] = query.get("kern", [""])[0]
     STATE["buchen"] = query.get("buchen", [""])[0]
+    STATE["angebote"] = query.get("angebote", [""])[0]
 
 
 def offers(query):
@@ -248,7 +261,7 @@ class Handler(SimpleHTTPRequestHandler):
             return self.send_body(booking_js(), "text/javascript")
         treffer = SOFORT_JS.match(parsed.path)
         if treffer:
-            js, datei = sofort_js(treffer.group(1))
+            js, datei = sofort_js(treffer.group(1), query)
             if js is None:
                 return self.fehlt(datei)
             return self.send_body(js, "text/javascript")
