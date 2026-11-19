@@ -1,15 +1,21 @@
 /*
- * Deep-Link-Parser der IBE, Kontrakt K1 des Bauplans fbl-ibe (2026-09-06).
+ * Deep-Link-Parser der IBE, Kontrakt K1 des Bauplans fbl-ibe (2026-09-06), erweitert
+ * um Kontrakt K1 des Bauplans mulin-sofortbuchung (2026-11-18): Quelle Meta und der
+ * Parameter kampagne.
  *
  * Reine Funktion ohne Seiteneffekte und ohne site-spezifische Werte: Haus-Codes,
  * Belegungsgrenzen, Sprachen und das Standardhaus kommen ausschliesslich aus `cfg`.
- * Deshalb ist die Datei zwischen Chalet, Mulin und Living austauschbar.
+ * Ab mulin-sofortbuchung weicht diese Datei von den Kopien bei Chalet Swiss und Living
+ * ab; das Nachziehen dort ist ein eigener PR je Repo (Bauplan, Abschnitt 12). Die 46
+ * gemeinsamen Faelle aus tests/fixtures/deeplink-cases.json gelten weiter unveraendert.
  *
- *   parse(search, cfg) -> { search, preselect, source, campaign, google }
+ *   parse(search, cfg) -> { search, preselect, source, campaign, google [, kampagne] }
  *   cfg = { today: Date, properties: { <CODE>: <MAX> }, langs: [...], defaultProperty: <CODE>|null }
  *
  * Ein Deep Link zaehlt nur als Suche, wenn Haus UND beide Daten gueltig sind.
- * Quelle, Kampagne und die Google-Preisprobe werden auch ohne Suche geliefert.
+ * Quelle, Kampagne, kampagne und die Google-Preisprobe werden auch ohne Suche geliefert.
+ * kampagne erscheint nur, wenn der Wert nach dem Trimmen ^[a-z0-9-]{1,32}$ erfuellt;
+ * sonst traegt die Rueckgabe genau die fuenf bisherigen Schluessel.
  * Stil: ES5 (var, keine Arrow-Functions), wie booking.js.
  */
 (function () {
@@ -27,6 +33,8 @@ var CURRENCY_RE = /^[A-Z]{3}$/;
 var TOTAL_RE = /^\d+(\.\d{1,2})?$/;
 var DATE_RE = /^(\d{4})-(\d{1,2})-(\d{1,2})$/;
 var INT_RE = /^-?\d+$/;
+var META_SOURCES = ['meta', 'facebook', 'fb', 'instagram', 'ig'];
+var KAMPAGNE_RE = /^[a-z0-9-]{1,32}$/;
 
 function value(params, name) {
   var raw = params.get(name);
@@ -98,12 +106,22 @@ function resolveLang(raw, langs) {
 
 function normalizeCode(raw) { return raw === null ? null : raw.toUpperCase(); }
 
-// Quellableitung, deterministisch in dieser Reihenfolge. Grundlage sind die bereits
-// geprueften Kampagnenwerte: ein verworfenes utm_campaign darf keine Quelle setzen.
+// Meta erst nach den Google-Regeln (K1 mulin-sofortbuchung): utm_source und utm_medium
+// klein verglichen; medium lead ergibt meta_lead, sonst meta_ads.
+function metaSource(campaign) {
+  var src = campaign.utm_source ? campaign.utm_source.toLowerCase() : '';
+  if (META_SOURCES.indexOf(src) < 0) return null;
+  var medium = campaign.utm_medium ? campaign.utm_medium.toLowerCase() : '';
+  return medium === 'lead' ? 'meta_lead' : 'meta_ads';
+}
+
+// Quellableitung, deterministisch in dieser Reihenfolge: gverify, Google, Meta.
+// Grundlage sind die bereits geprueften Kampagnenwerte: ein verworfenes utm_campaign
+// darf keine Quelle setzen.
 function deriveSource(gverify, campaign) {
   if (gverify !== null && gverify.toLowerCase() === 'true') return 'google_verify';
   if (!campaign) return null;
-  if (campaign.utm_source !== 'google') return null;
+  if (campaign.utm_source !== 'google') return metaSource(campaign);
   if (!campaign.utm_campaign || campaign.utm_campaign.indexOf('hotel-') !== 0) return null;
   if (campaign.utm_medium === 'organic') return 'google_fbl';
   if (campaign.utm_medium === 'cpc') return 'google_hotel_ads';
@@ -130,6 +148,9 @@ function parse(search, cfg) {
   }
   out.campaign = campaign;
   out.source = deriveSource(value(params, 'gverify'), campaign);
+
+  var kampagne = value(params, 'kampagne');
+  if (kampagne !== null && KAMPAGNE_RE.test(kampagne)) out.kampagne = kampagne;
 
   var ucur = value(params, 'ucur');
   if (ucur === null || !CURRENCY_RE.test(ucur)) ucur = null;
