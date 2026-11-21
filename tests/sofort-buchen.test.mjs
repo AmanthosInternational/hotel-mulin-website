@@ -366,6 +366,22 @@ test('ungueltige Angaben senden nichts und markieren die Felder', () => {
   }
 });
 
+test('wirft der Kern, gibt es keinen POST und keinen Ereignisaufruf, sondern den Verweis auf die Buchungsmaske', () => {
+  const wirft = () => { throw new Error('NotImplemented'); };
+  const ctx = lade();
+  ctx.win.amSofort.gesamt = wirft;
+  ctx.win.amSofortBuchen.oeffnen(ctx.behaelter, AUSWAHL);
+  assert.equal(ctx.behaelter.alle((k) => k.tagName === 'FORM').length, 0, 'ohne Endpreis kein Formular');
+  assert.equal(links(ctx.behaelter).filter((h) => h.startsWith('/?arrival=2027-02-14')).length, 1);
+  const zwei = bereit();
+  zwei.ctx.win.amSofort.buchungsBody = wirft;
+  zwei.f.form.ausloesen('submit');
+  assert.equal(zwei.ctx.r.posts.length, 0);
+  assert.deepEqual(zwei.ctx.meta, []);
+  assert.equal(links(zwei.f.hinweis).filter((h) => h.startsWith('/?')).length, 1);
+  assert.equal(zwei.f.knopf.disabled, false);
+});
+
 test('API-Basis wie booking.js, eine Zeile, die der Harness auf gleiche Origin umschreibt', () => {
   const zeile = /var API_BASE = [^;]+;/g;
   assert.equal(QUELLE.match(zeile).length, 1);
@@ -387,5 +403,5 @@ test('Telefon und Postfach sind die oeffentlichen Angaben aus index.html, Mock-L
 test('ES5-Stil: kein let, const, Arrow, Template-String, class', () => {
   const code = QUELLE.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/.*$/gm, '');
   assert.doesNotMatch(code, /\blet\s|\bconst\s|=>|`|\bclass\s/);
-  assert.equal(QUELLE.includes('—'), false, 'kein Gedankenstrich');
+  assert.equal(QUELLE.includes(String.fromCharCode(0x2014)), false, 'kein Gedankenstrich');
 });
