@@ -105,7 +105,7 @@ test('kein fbq ausserhalb von meta.js, kein Eingabefeld in Seite und Skript', ()
 
 test('Texte ohne Gedankenstrich und ohne scharfes s', () => {
   for (const p of [SEITE, SKRIPT, 'css/sofort.css', DOUBLE_KERN, DOUBLE_BUCHEN]) {
-    assert.doesNotMatch(lies(p), /[—ß]/, p);
+    assert.doesNotMatch(lies(p), /[\u2014\u00df]/, p);
   }
 });
 
