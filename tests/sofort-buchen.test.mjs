@@ -30,8 +30,12 @@ const AUSWAHL = {
   anreise: '2027-02-14', abreise: '2027-02-17', erwachsene: 2, kinder: 0,
 };
 const ENDPREIS = { zimmer: 472.8, kurtaxe: 19.2, gesamt: 492 };
-const TEL = '+41 41 562 76 62';
-const POSTFACH = 'mulin@amanthos.com';
+// Erwartete Kontaktangaben aus dem oeffentlichen Kontaktblock von index.html (eine Quelle).
+const KONTAKT_TEL = /<a href="tel:([^"]+)">([^<]+)<\/a>/.exec(INDEX_HTML);
+const KONTAKT_MAIL = /<a href="mailto:([^"]+)">([^<]+)<\/a>/.exec(INDEX_HTML);
+const TEL = KONTAKT_TEL[2];
+const TEL_HREF = 'tel:' + KONTAKT_TEL[1];
+const POSTFACH = KONTAKT_MAIL[1];
 
 // Antworten wie ANTWORTEN in tests/dev-server.py (Quelle dort, Abgleich im Test unten).
 const ZAHLUNGSLINK = 'https://eu.adyen.link/PLTESTMOCK';
@@ -191,7 +195,7 @@ function zeigtKontakt(hinweis) {
   assert.equal(hinweis.hidden, false, 'Hinweis sichtbar');
   assert.ok(hinweis.textContent.includes(TEL), 'Telefon im Hinweis');
   assert.ok(hinweis.textContent.includes(POSTFACH), 'Postfach im Hinweis');
-  assert.ok(links(hinweis).includes('tel:+41415627662'));
+  assert.ok(links(hinweis).includes(TEL_HREF));
   assert.ok(links(hinweis).includes('mailto:' + POSTFACH));
 }
 
@@ -395,8 +399,10 @@ test('API-Basis wie booking.js, eine Zeile, die der Harness auf gleiche Origin u
 });
 
 test('Telefon und Postfach sind die oeffentlichen Angaben aus index.html, Mock-Links wie im Harness', () => {
-  assert.ok(INDEX_HTML.includes('<a href="tel:+41415627662">' + TEL + '</a>'));
-  assert.ok(INDEX_HTML.includes('<a href="mailto:' + POSTFACH + '">' + POSTFACH + '</a>'));
+  assert.equal(KONTAKT_MAIL[2], POSTFACH, 'Linktext gleich Adresse');
+  assert.ok(QUELLE.includes("telefon: '" + TEL + "'"), 'Anzeige der Nummer wie index.html');
+  assert.ok(QUELLE.includes("tel: '" + KONTAKT_TEL[1] + "'"), 'tel-Link wie index.html');
+  assert.ok(QUELLE.includes("postfach: '" + POSTFACH + "'"), 'Postfach wie index.html');
   for (const modus of ['201', '201-http', '201-fremd']) assert.ok(DEV_SERVER.includes('"' + ANTWORT[modus][1].paymentLink + '"'), modus);
 });
 
