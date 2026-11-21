@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Seite Sofortbuchung (Bauplan mulin-sofortbuchung, K5): Landeseite der
+       Meta-Anzeigen. Nur Deutsch, nicht im Index und nicht in der Sitemap.
+       Gebucht wird hier selbst (js/sofort-buchen.js), ueber dieselbe Route
+       POST /api/bookings wie die Startseite. -->
+  <title>Sofort buchen | Hotel Mulin Brigels</title>
+  <meta name="description" content="Hotel Mulin Brigels: Angebot wählen, Anreisetag tippen und direkt buchen.">
+  <meta name="robots" content="noindex">
+
+  <!-- Security headers. Die CSP nennt nur Quellen, die auch index.html nennt
+       (Pruefung in tests/sofort-seite.test.mjs). -->
+  <meta http-equiv="X-Content-Type-Options" content="nosniff">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://plausible.io https://connect.facebook.net; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data: blob: https:; connect-src 'self' https://amanthos-website-api.onrender.com https://plausible.io https://www.facebook.com">
+
+  <link rel="stylesheet" href="./css/sofort.css">
+  <link rel="icon" type="image/png" href="./assets/images/logo-white.png">
+  <meta name="theme-color" content="#22302a">
+
+  <!-- Privacy-friendly analytics by Plausible -->
+  <script async src="https://plausible.io/js/pa-wxH1rs3S-BhPL7vkG6M0Q.js"></script>
+  <script>
+    window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+    plausible.init()
+  </script>
+  <!-- consent.js synchron und vor meta.js, wie auf der Startseite. -->
+  <script src="./js/consent.js"></script>
+  <script defer src="./js/meta.js"></script>
+</head>
+<body>
+  <header class="sf-kopf">
+    <a href="./" class="sf-logo"><img src="./assets/images/logo-white.png" alt="Hotel Mulin Brigels"></a>
+  </header>
+
+  <main class="sf-haupt">
+    <h1>Sofort buchen</h1>
+    <p class="sf-einleitung">Angebot wählen, Anreisetag tippen, Preis sehen und direkt buchen. Bezahlt wird anschliessend sicher online.</p>
+
+    <div class="sf-liste" id="sofortListe"></div>
+
+    <noscript>
+      <p class="sf-verweis">Diese Seite braucht JavaScript. <a href="./#bookingBar">Zur Buchungsmaske</a></p>
+    </noscript>
+  </main>
+
+  <footer class="sf-fuss">
+    <a href="./">Startseite</a>
+    <a href="./impressum.html">Impressum</a>
+    <a href="./datenschutz.html">Datenschutz</a>
+  </footer>
+
+  <script src="./js/deeplink.js" defer></script>
+  <script src="./js/sofort-kern.js" defer></script>
+  <script src="./js/sofort-seite.js" defer></script>
+  <script src="./js/sofort-buchen.js" defer></script>
+  <script src="./js/sofort-angebote.js" defer></script>
+</body>
+</html>

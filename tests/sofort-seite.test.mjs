@@ -96,7 +96,9 @@ test('ES5-Stil in js/sofort-seite.js und den beiden Doubles', () => {
 });
 
 test('kein fbq ausserhalb von meta.js, kein Eingabefeld in Seite und Skript', () => {
-  for (const p of [SEITE, SKRIPT]) assert.doesNotMatch(lies(p), /fbq/, p);
+  // Im Kommentar von js/sofort-seite.js steht "nie fbq direkt"; gezaehlt wird nur Code.
+  assert.doesNotMatch(lies(SEITE), /fbq/);
+  assert.doesNotMatch(ohneKommentare(lies(SKRIPT)), /fbq/);
   assert.doesNotMatch(lies(SEITE), /<(input|textarea|select)\b/i);
   assert.doesNotMatch(lies(SKRIPT), /createElement\(\s*'(input|textarea|select)'/);
 });
@@ -138,14 +140,18 @@ class Knoten {
   getAttribute(n) { return n in this.attrs ? this.attrs[n] : null; }
   addEventListener(t, f) { (this.listeners[t] ||= []).push(f); }
   click() { if (!this.disabled) (this.listeners.click || []).forEach((f) => f.call(this, { type: 'click' })); }
-  set textContent(v) { this.children = []; this.text = String(v); }
-  get textContent() { return this.text + this.children.map((c) => c.textContent).join(''); }
+  // Wie im DOM: Text ist ein Kindknoten, removeChild leert also auch den Text.
+  set textContent(v) { this.children = []; if (String(v)) this.appendChild(textKnoten(v)); }
+  get textContent() { return this.tagName === '#TEXT' ? this.text : this.children.map((c) => c.textContent).join(''); }
   alle(pred) { const out = []; const geh = (k) => { if (pred(k)) out.push(k); k.children.forEach(geh); }; geh(this); return out; }
 }
 
+function textKnoten(s) { const k = new Knoten('#text'); k.text = String(s); return k; }
 const ruhe = () => new Promise((r) => setImmediate(r));
 
-// fetch: Funktion (url) -> Promise einer Antwort; Standard ist die Kurtaxe-Fixture.
+// fetch: Funktion (url, antwort) -> Promise einer Antwort; Standard ist die Kurtaxe-Fixture.
+// angebote: FEHLT laesst window.amSofortAngebote ungesetzt (Angebotsdatei fehlt).
+const FEHLT = Symbol('fehlt');
 function starte({ angebote = ANGEBOTE, fetch } = {}) {
   const liste = new Knoten('div');
   const ctx = vm.createContext({});
@@ -155,12 +161,12 @@ function starte({ angebote = ANGEBOTE, fetch } = {}) {
     readyState: 'complete',
     getElementById: (id) => (id === 'sofortListe' ? liste : null),
     createElement: (t) => new Knoten(t),
-    createTextNode: (s) => { const k = new Knoten('#text'); k.text = String(s); return k; },
+    createTextNode: textKnoten,
     addEventListener: () => {},
   };
   vm.runInContext(lies(DOUBLE_KERN), ctx);
   vm.runInContext(lies(DOUBLE_BUCHEN), ctx);
-  if (angebote !== undefined) ctx.amSofortAngebote = angebote;
+  if (angebote !== FEHLT) ctx.amSofortAngebote = angebote;
   ctx.plausible = (name, opts) => aufrufe.plausible.push(plain([name, opts]));
   ctx.amMeta = { event: (name, data) => aufrufe.meta.push(plain([name, data])), tracking: () => null };
   const antwort = (daten, status = 200) => Promise.resolve({ ok: status < 300, status, json: () => Promise.resolve(daten) });
@@ -181,7 +187,7 @@ test('je gueltigem Angebot eine Karte, sofort_ansicht je Karte mit genau angebot
     ['sofort_ansicht', { props: { angebot: 'test-kampagne-sofort', step: 'ansicht' } }],
   ]);
   const tage = s.karte('test-drei-naechte').alle((k) => k.getAttribute('data-tag'));
-  assert.deepEqual(tage.map((k) => k.getAttribute('data-tag')), s.ctx.amSofort.anreisetage(ANGEBOTE[0], ''));
+  assert.deepEqual(tage.map((k) => k.getAttribute('data-tag')), plain(s.ctx.amSofort.anreisetage(ANGEBOTE[0], '')));
   assert.ok(tage.every((k) => k.tagName === 'BUTTON' && k.type === 'button'));
   assert.equal(s.liste.alle((k) => /^(INPUT|TEXTAREA|SELECT)$/.test(k.tagName)).length, 0);
 });
@@ -248,7 +254,7 @@ test('Route nicht erreichbar oder Fehlerstatus: Verweis auf die Buchungsmaske', 
 });
 
 test('leere oder fehlende Angebotsdatei: Verweis auf die Buchungsmaske, keine Karte', () => {
-  for (const angebote of [[], undefined]) {
+  for (const angebote of [[], FEHLT]) {
     const s = starte({ angebote });
     assert.equal(s.karten.length, 0);
     assert.equal(s.liste.alle((k) => k.tagName === 'A')[0].href, './#bookingBar');
