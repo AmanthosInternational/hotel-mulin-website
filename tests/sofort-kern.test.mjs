@@ -325,7 +325,7 @@ test('buchungsBody: ohne Offer, ohne gueltige Daten oder ohne Erwachsene null', 
 test('pruefeGast: drei Pflichtfelder, Telefon darf fehlen', () => {
   assert.deepEqual(kern.pruefeGast(GAST), { gueltig: true, fehler: [] });
   assert.deepEqual(kern.pruefeGast({ vorname: 'Test', nachname: 'Gast', email: 'gast@example.com' }), { gueltig: true, fehler: [] });
-  assert.deepEqual(kern.pruefeGast(mit(GAST, { telefon: '+41 00 000 00 00' })).gueltig, true);
+  assert.deepEqual(kern.pruefeGast(mit(GAST, { telefon: '000' })).gueltig, true);
 });
 
 test('pruefeGast: fehlender Vorname, Nachname oder Mail ist ungueltig', () => {
