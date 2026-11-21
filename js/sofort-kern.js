@@ -71,8 +71,7 @@ function pad2(n) { return n < 10 ? '0' + n : '' + n; }
 function enc(v) { return encodeURIComponent(String(v)); }
 function kampagneOk(k) { return typeof k === 'string' && KAMPAGNE_RE.test(k); }
 
-// 'JJJJ-MM-TT' als Tagesnummer ueber UTC, damit Sommerzeit keine Nacht verschiebt.
-// Nur echte Kalenderdaten: der 30. Februar faellt durch.
+// 'JJJJ-MM-TT' als Tagesnummer ueber UTC (Sommerzeit verschiebt nichts), nur echte Kalenderdaten.
 function tagNr(iso) {
   var m = typeof iso === 'string' ? DATUM_RE.exec(iso) : null;
   if (!m) return null;
@@ -89,10 +88,8 @@ function isoVon(nr) {
 
 // heute als 'JJJJ-MM-TT' oder als Date (lokaler Kalendertag des Gastes).
 function heuteNr(heute) {
-  if (heute instanceof Date && !isNaN(heute.getTime())) {
-    return Date.UTC(heute.getFullYear(), heute.getMonth(), heute.getDate()) / TAG_MS;
-  }
-  return tagNr(heute);
+  var ok = heute instanceof Date && !isNaN(heute.getTime());
+  return ok ? Date.UTC(heute.getFullYear(), heute.getMonth(), heute.getDate()) / TAG_MS : tagNr(heute);
 }
 
 function wochentageOk(w) {
@@ -204,8 +201,7 @@ function waehleOffer(offers, angebot) {
 function kurtaxe(offer, erwachsene, kinder) {
   if (!offer.cityTax || !offer.cityTax.amount || offer.cityTax.included) return 0;
   var base = offer.cityTax.amount;
-  var adults = parseInt(erwachsene, 10) || 1;
-  var children = parseInt(kinder, 10) || 0;
+  var adults = parseInt(erwachsene, 10) || 1, children = parseInt(kinder, 10) || 0;
   if (adults <= 0) return rund(base);
   return rund(base * (adults + children) / adults);
 }
@@ -221,8 +217,7 @@ function gesamt(offer, erwachsene, kinder) {
 // Wie der payload in booking.js: totalAmount ist der Zimmerbetrag, cityTax getrennt.
 // kampagne: die des Angebots (mit ihr lief sucheQuery), sonst die aus parse.
 function buchungsBody(auswahl, gast, herkunft, tracking) {
-  var s = auswahl || {};
-  var offer = s.offer;
+  var s = auswahl || {}, offer = s.offer;
   var preis = gesamt(offer, s.erwachsene, s.kinder);
   var adults = parseInt(s.erwachsene, 10);
   if (!preis || !offer.ratePlanId || !(adults >= 1) || tagNr(s.anreise) === null || tagNr(s.abreise) === null) return null;
@@ -245,8 +240,7 @@ function buchungsBody(auswahl, gast, herkunft, tracking) {
 }
 
 function pruefeGast(gast) {
-  var g = gast || {};
-  var fehler = [];
+  var g = gast || {}, fehler = [];
   if (!trim(g.vorname)) fehler.push('vorname');
   if (!trim(g.nachname)) fehler.push('nachname');
   if (!MAIL_RE.test(trim(g.email))) fehler.push('email');
@@ -263,8 +257,7 @@ function zahlungsZiel(antwort) {
 
 var api = {
   pruefeAngebote: pruefeAngebote, anreisetage: anreisetage, abreise: abreise, sucheQuery: sucheQuery,
-  waehleOffer: waehleOffer, gesamt: gesamt, buchungsBody: buchungsBody, pruefeGast: pruefeGast,
-  zahlungsZiel: zahlungsZiel
+  waehleOffer: waehleOffer, gesamt: gesamt, buchungsBody: buchungsBody, pruefeGast: pruefeGast, zahlungsZiel: zahlungsZiel
 };
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = api; }
