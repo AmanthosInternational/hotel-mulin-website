@@ -1,0 +1,100 @@
+/* Seite Sofortbuchung (Bauplan mulin-sofortbuchung, K5). Eigenes Stylesheet, damit die
+   Seite nicht an css/style.min.css haengt; Farben und Schriften wie die Startseite.
+   Das Formular unter der Karte (.sf-buchen) gestaltet Segment 10. */
+@font-face{font-family:'Inter';font-style:normal;font-weight:400 700;font-display:swap;src:url(../assets/fonts/Inter.woff2) format('woff2')}
+@font-face{font-family:'Playfair Display';font-style:normal;font-weight:400 700;font-display:swap;src:url(../assets/fonts/PlayfairDisplay.woff2) format('woff2')}
+
+:root {
+  --sf-gruen: #2F4A3C;
+  --sf-dunkel: #22302a;
+  --sf-grund: #FAF8F5;
+  --sf-grund-alt: #F2EDE6;
+  --sf-text: #2C2C2C;
+  --sf-leise: #5D5C58;
+  --sf-rand: rgba(0,0,0,.08);
+  --sf-radius: 12px;
+  --sf-schrift: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --sf-titel: 'Playfair Display', Georgia, 'Times New Roman', serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  font-family: var(--sf-schrift);
+  color: var(--sf-text);
+  background: var(--sf-grund);
+  line-height: 1.6;
+  overflow-wrap: break-word;
+}
+
+img { display: block; max-width: 100%; }
+
+a { color: var(--sf-gruen); }
+
+.sf-kopf { background: var(--sf-dunkel); padding: .85rem 16px; }
+.sf-logo { display: inline-block; }
+.sf-logo img { height: 40px; width: auto; }
+
+.sf-haupt { max-width: 960px; margin: 0 auto; padding: 1.5rem 16px 3rem; }
+
+h1 { font-family: var(--sf-titel); font-size: clamp(1.7rem, 6vw, 2.5rem); line-height: 1.2; margin: .5rem 0 .75rem; }
+
+.sf-einleitung { color: var(--sf-leise); margin: 0 0 1.75rem; }
+
+.sf-liste { display: grid; gap: 1.5rem; }
+
+.sf-karte {
+  background: #fff;
+  border: 1px solid var(--sf-rand);
+  border-radius: var(--sf-radius);
+  box-shadow: 0 4px 16px rgba(0,0,0,.06);
+  overflow: hidden;
+}
+
+.sf-bild { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; background: var(--sf-grund-alt); }
+
+.sf-inhalt { padding: 1.25rem; min-width: 0; }
+
+.sf-titel { font-family: var(--sf-titel); font-size: 1.4rem; line-height: 1.25; margin: 0 0 .5rem; }
+
+.sf-text { color: var(--sf-leise); margin: 0 0 1.1rem; }
+
+.sf-frage { font-weight: 600; margin: 0 0 .6rem; }
+
+.sf-tage { display: flex; flex-wrap: wrap; gap: .5rem; }
+
+.sf-tag {
+  font: inherit;
+  font-size: .92rem;
+  min-height: 44px;
+  padding: .5rem .9rem;
+  border: 1px solid var(--sf-gruen);
+  border-radius: 9999px;
+  background: #fff;
+  color: var(--sf-gruen);
+  cursor: pointer;
+}
+.sf-tag:hover { background: var(--sf-grund-alt); }
+.sf-tag[aria-pressed="true"] { background: var(--sf-gruen); color: #fff; }
+.sf-tag:disabled { opacity: .45; cursor: not-allowed; text-decoration: line-through; }
+.sf-tag:focus-visible { outline: 3px solid var(--sf-dunkel); outline-offset: 2px; }
+
+.sf-preis { font-size: 1.12rem; font-weight: 700; color: var(--sf-gruen); margin: 1.1rem 0 0; }
+.sf-daten { color: var(--sf-leise); font-size: .92rem; margin: .2rem 0 0; }
+.sf-preis:empty, .sf-daten:empty { display: none; }
+
+.sf-meldung, .sf-verweis { margin: 1rem 0 0; }
+.sf-verweis { padding: .75rem 1rem; background: var(--sf-grund-alt); border-radius: 8px; }
+.sf-verweis a { font-weight: 600; }
+
+.sf-fuss { text-align: center; font-size: .88rem; color: var(--sf-leise); padding: 1.5rem 16px 2.5rem; }
+.sf-fuss a { display: inline-block; margin: .25rem .6rem; }
+
+@media (min-width: 760px) {
+  .sf-karte { display: grid; grid-template-columns: 2fr 3fr; }
+  .sf-bild { height: 100%; aspect-ratio: auto; }
+  .sf-inhalt { padding: 1.5rem 1.75rem; }
+}
