@@ -17,8 +17,9 @@ var IBE_VERSION = '2.0';
 var API_BASE = window.HOTELMULIN_API_BASE || 'https://amanthos-website-api.onrender.com';
 var PROPERTY_ID = 'MUBRIG';
 // Deep Link und Microdata (Bauplan fbl-ibe, Kontrakte K1, K1b, K2). Der Name und
-// die Zeiten stehen genauso im JSON-LD des <head>. MUBRIG traegt die Kurtaxe im
-// Zimmerpreis, deshalb ist der Microdata-Preis der Zimmerpreis und es gibt keine
+// die Zeiten stehen genauso im JSON-LD des <head>. Die Route weist die Kurtaxe fuer
+// MUBRIG getrennt aus (cityTax.included false), die Karte addiert sie: der
+// Microdata-Preis ist Zimmer plus Kurtaxe, die Kurtaxe steht als einzige
 // priceComponent. PROPERTY_ID ist zugleich die Hotel-ID des Feeds: aendert der
 // Partner sie, aendert sich nur diese eine Konstante.
 var PROPERTY_NAME = 'Hotel Mulin by Amanthos';
@@ -30,7 +31,7 @@ var deepLink = null;
 var deepLinkPreselected = false;
 var deepLinkOfferIndex = -1;
 var deepLinkPriceChecked = false;
-try { console.info('Hotel Mulin IBE v' + IBE_VERSION + ' (city tax included)'); } catch (e) {}
+try { console.info('Hotel Mulin IBE v' + IBE_VERSION + ' (city tax shown separately)'); } catch (e) {}
 
 // dataLayer helper for GTM conversion tracking
 window.dataLayer = window.dataLayer || [];
@@ -309,7 +310,8 @@ function roundCHF(n) { return Math.round(n * 100) / 100; }
 // adults only; scale it to all persons (incl. children) since every person pays
 // the same per-night rate. Charged on top of the room, never discounted.
 function getOfferCityTax(offer) {
-  // City tax already included in the rate (MUBRIG): never add it on top.
+  // Only a city tax the route marks as included in the rate is never added on top;
+  // for MUBRIG the route reports it separately (included false).
   if (!offer || !offer.cityTax || !offer.cityTax.amount || offer.cityTax.included) return 0;
   var base = offer.cityTax.amount;
   var adults = parseInt(searchParams.adults) || 1;
@@ -1188,9 +1190,10 @@ function fetchOffers() {
 
 // ========== MICRODATA (Bauplan fbl-ibe, K2) ==========
 // Google prueft den Preis auf der Seite. Deshalb steht in price genau der Betrag,
-// den die Karte sichtbar zeigt: bei MUBRIG der Zimmerpreis, denn die Kurtaxe ist
-// im Preis enthalten. Keine priceComponent, weil es fuer den Zimmerpreis keinen
-// Komponententyp gibt und die Kurtaxe nicht separat ausgewiesen wird.
+// den die Karte sichtbar als Gesamt zeigt: Zimmerpreis plus Kurtaxe, wenn die Route
+// sie getrennt ausweist (bei MUBRIG der Fall), sonst nur der Zimmerpreis. Die
+// getrennte Kurtaxe steht als genau eine priceComponent (City tax, GenericTax);
+// fuer den Zimmerpreis gibt es keinen Komponententyp, also keine zweite.
 function hotelMicrodataOpen() {
   return '<div itemscope itemtype="https://schema.org/Hotel" data-am-microdata="1">'
     + '<meta itemprop="name" content="' + escapeHtml(PROPERTY_NAME) + '">'
@@ -1212,7 +1215,7 @@ function offerStayMicrodata() {
 }
 
 // Sichtbarer Bruttobetrag einer Karte. Die Kurtaxe kommt nur dazu, wenn sie
-// separat ausgewiesen ist; bei MUBRIG liefert getOfferCityTax 0.
+// separat ausgewiesen ist; mit included true liefert getOfferCityTax 0.
 function getOfferGross(offer) {
   var total = offer && offer.totalGrossAmount;
   if (!total || typeof total.amount !== 'number' || !isFinite(total.amount)) return null;
@@ -1222,10 +1225,19 @@ function getOfferGross(offer) {
 function offerPriceMicrodata(offer) {
   var gross = getOfferGross(offer);
   if (gross === null) return '';
-  return '<div itemprop="priceSpecification" itemscope itemtype="https://schema.org/CompoundPriceSpecification">'
+  var tax = getOfferCityTax(offer);
+  var html = '<div itemprop="priceSpecification" itemscope itemtype="https://schema.org/CompoundPriceSpecification">'
     + '<meta itemprop="price" content="' + gross.toFixed(2) + '">'
-    + '<meta itemprop="priceCurrency" content="CHF">'
-    + '</div>';
+    + '<meta itemprop="priceCurrency" content="CHF">';
+  if (tax > 0) {
+    html += '<div itemprop="priceComponent" itemscope itemtype="https://schema.org/UnitPriceSpecification">'
+      + '<meta itemprop="name" content="City tax">'
+      + '<meta itemprop="priceComponentType" content="GenericTax">'
+      + '<meta itemprop="price" content="' + tax.toFixed(2) + '">'
+      + '<meta itemprop="priceCurrency" content="CHF">'
+      + '</div>';
+  }
+  return html + '</div>';
 }
 
 function soldOutMicrodata() {
