@@ -249,7 +249,11 @@ test('flexOffer: Abgleich wie waehleOffer, ohne rate_flex oder ohne passendes Of
 const bewertungMit = (felder) => ({ bewertung: Object.assign({}, VERTRAUEN.bewertung, felder), telefon: VERTRAUEN.telefon });
 
 const T7 = 'Gäste bewerten uns mit 8,6 von 10 auf Booking.com (384 Bewertungen, Stand 25.11.2026).';
-const T8 = 'Fragen? Wir sind gerne für Sie da: +41 41 562 76 62';
+// Telefon der Seite aus der synthetischen Fixture; das echte (KONTAKT im Formular) liest der
+// Test aus dem oeffentlichen Kontaktblock von index.html, wie tests/sofort-buchen.test.mjs.
+const KONTAKT_TEL = /<a href="tel:([^"]+)">([^<]+)<\/a>/.exec(lies('index.html'));
+const T8 = 'Fragen? Wir sind gerne für Sie da: ' + VERTRAUEN.telefon.anzeige;
+const T8_FORMULAR = 'Fragen? Wir sind gerne für Sie da: ' + KONTAKT_TEL[2];
 const block = (s) => s.main.kinder.find((k) => k.hat('sf-vertrauen')) || null;
 
 test('test_alte_bewertung_verschwindet', () => {
@@ -265,7 +269,7 @@ test('test_alte_bewertung_verschwindet', () => {
 
   const v = kern.vertrauen(VERTRAUEN, HEUTE);
   assert.deepEqual(v.bewertung, { wert: '8,6', von: '10', anzahl: 384, quelle: 'Booking.com', stand: '2026-11-25' });
-  assert.deepEqual(v.telefon, { anzeige: '+41 41 562 76 62', tel: '+41415627662' });
+  assert.deepEqual(v.telefon, { anzeige: '+99 99 999 99 99', tel: '+99999999999' });
   // 2026-09-26 liegt genau 60 Tage vor HEUTE, 2026-09-25 einen Tag zu weit.
   assert.notEqual(kern.vertrauen(bewertungMit({ stand: '2026-09-26' }), HEUTE).bewertung, null);
   for (const [fall, stand] of [['61 Tage alt', '2026-09-25'], ['Zukunft', '2026-11-26'], ['kein Datum', '2026-02-30'],
@@ -295,8 +299,8 @@ test('vertrauen: Telefon nur mit tel nach ^\\+[0-9]{8,15}$ und einer Anzeige', (
   assert.deepEqual(tel({}), VERTRAUEN.telefon);
   assert.notEqual(tel({ tel: '+12345678' }), null, '8 Ziffern');
   assert.notEqual(tel({ tel: '+123456789012345' }), null, '15 Ziffern');
-  for (const t of ['+1234567', '+1234567890123456', '0415627662', '+41 41 562 76 62', '+41415627662x',
-    'tel:+41415627662', '', undefined, 41415627662]) {
+  for (const t of ['+1234567', '+1234567890123456', '0999999999', '+99 99 999 99 99', '+99999999999x',
+    'tel:+99999999999', '', undefined, 99999999999]) {
     assert.equal(tel({ tel: t }), null, String(t));
   }
   assert.equal(tel({ anzeige: '' }), null, 'ohne Anzeige');
@@ -306,9 +310,9 @@ test('vertrauen: Telefon nur mit tel nach ^\\+[0-9]{8,15}$ und einer Anzeige', (
 test('vertrauen auf der Seite: Telefon als tel:-Link, ohne window.amSofortVertrauen kein Block und kein Fehler', () => {
   const s = seite();
   const a = block(s).alle((k) => k.tagName === 'A')[0];
-  assert.equal(a.href, 'tel:+41415627662');
+  assert.equal(a.href, 'tel:' + VERTRAUEN.telefon.tel);
   assert.equal(block(s).alle((k) => k.hat('sf-fragen'))[0].textContent, T8);
-  for (const vertrauen of [FEHLT, {}, { telefon: { anzeige: '041 562 76 62', tel: '0415627662' } }]) {
+  for (const vertrauen of [FEHLT, {}, { telefon: { anzeige: '099 999 99 99', tel: '0999999999' } }]) {
     const ohne = seite({ vertrauen });
     assert.equal(block(ohne), null);
     assert.deepEqual(ohne.ids(), ['k6-festtage', 'k6-januar', 'k6-ohne-felder']);
@@ -542,9 +546,10 @@ test('Formular: Stornosatz unter dem Gesamtpreis, Zeile Fragen mit dem Telefon a
   assert.equal(kinder.indexOf('sofort-buchen-storno'), kinder.indexOf('sofort-buchen-preis') + 1);
   assert.equal(klasse(form, 'sofort-buchen-storno').textContent, T4);
   const fragen = klasse(form, 'sofort-buchen-fragen');
-  assert.equal(fragen.textContent, T8);
-  assert.equal(fragen.alle((k) => k.tagName === 'A')[0].getAttribute('href'), 'tel:+41415627662');
-  assert.match(lies('js/sofort-buchen.js'), /KONTAKT = \{ telefon: '\+41 41 562 76 62', tel: '\+41415627662'/);
+  assert.equal(fragen.textContent, T8_FORMULAR);
+  assert.equal(fragen.alle((k) => k.tagName === 'A')[0].getAttribute('href'), 'tel:' + KONTAKT_TEL[1]);
+  assert.ok(lies('js/sofort-buchen.js').includes("telefon: '" + KONTAKT_TEL[2] + "', tel: '" + KONTAKT_TEL[1] + "'"),
+    'KONTAKT im Formular wie index.html');
 });
 
 // ---- f) Messung: Plausible je Schritt, nur angebot und step ------------------------
