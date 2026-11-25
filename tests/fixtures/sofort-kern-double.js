@@ -5,6 +5,8 @@
  * tests/sofort-seite.test.mjs laedt sie direkt. Gleiche Funktionen und Parameter wie
  * der Kontrakt, feste Rueckgaben passend zu tests/fixtures/sofort-angebote.json und
  * tests/fixtures/offers-mubrig-kurtaxe.json. Den echten Kern prueft die Verdrahtung.
+ * K6 (Segment 11): die fuenf neuen Funktionen mit denselben Namen und Parameterzahlen,
+ * feste Rueckgaben aus den Datenfeldern; ohne die neuen Felder null wie am 21.11.2026.
  *
  * Jeder Aufruf landet als [name, argumente] in window.__kernCalls; buchungsBody und
  * pruefeGast nur mit dem Namen, damit nie ein Gaestefeld im Protokoll steht.
@@ -131,6 +133,42 @@ var api = {
       var u = new URL(antwort.paymentLink);
       return u.protocol === 'https:' && HOSTS.indexOf(u.hostname) >= 0 ? u.href : null;
     } catch (e) { return null; }
+  },
+  passendesAngebot: function (angebote, utmCampaign) {
+    notiere('passendesAngebot', arguments);
+    var w = String(utmCampaign || '').toLowerCase();
+    var l = angebote || [];
+    for (var i = 0; i < l.length; i++) {
+      var p = (l[i] && l[i].anzeigen) || [];
+      for (var j = 0; j < p.length; j++) { if (w && w.indexOf(p[j]) === 0) { return l[i].id; } }
+    }
+    return null;
+  },
+  abTag: function (angebot, heute) {
+    notiere('abTag', arguments);
+    var t = angebot && angebot.ab_anreise;
+    return t && (TAGE[angebot.id] || []).indexOf(t) >= 0 ? t : null;
+  },
+  storno: function (offer, jetzt) {
+    notiere('storno', arguments);
+    var f = offer && offer.cancellationFee;
+    var d = String((f && f.dueDateTime) || '');
+    if (offer && offer.category === 'Refundable' && d.length >= 16) {
+      return { art: 'flexibel', frist: d.slice(0, 10), zeit: d.slice(11, 16) };
+    }
+    return { art: 'nicht_erstattbar', frist: null, zeit: null };
+  },
+  flexOffer: function (offers, angebot, jetzt) {
+    notiere('flexOffer', arguments);
+    var l = offers || [];
+    for (var i = 0; angebot && angebot.rate_flex && i < l.length; i++) {
+      if (l[i].ratePlanCode === angebot.rate_flex) { return l[i]; }
+    }
+    return null;
+  },
+  vertrauen: function (daten, heute) {
+    notiere('vertrauen', arguments);
+    return { bewertung: (daten && daten.bewertung) || null, telefon: (daten && daten.telefon) || null };
   }
 };
 

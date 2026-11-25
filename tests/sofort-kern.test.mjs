@@ -75,9 +75,12 @@ function queryBookingJs(searchParams) {
   return query;
 }
 
-test('Modul exportiert genau die neun Funktionen aus K5', () => {
-  assert.deepEqual(Object.keys(kern).sort(), ['abreise', 'anreisetage', 'buchungsBody', 'gesamt',
-    'pruefeAngebote', 'pruefeGast', 'sucheQuery', 'waehleOffer', 'zahlungsZiel']);
+// Geaenderte Erwartung (Segment 11): Kontrakt K6 erweitert die Exportliste um fuenf
+// Funktionen, keine Signatur aus K5 aendert sich; deren Faelle in sofort-konversion.test.mjs.
+test('Modul exportiert genau die neun Funktionen aus K5 und die fuenf aus K6', () => {
+  assert.deepEqual(Object.keys(kern).sort(), ['abTag', 'abreise', 'anreisetage', 'buchungsBody', 'flexOffer',
+    'gesamt', 'passendesAngebot', 'pruefeAngebote', 'pruefeGast', 'storno', 'sucheQuery', 'vertrauen',
+    'waehleOffer', 'zahlungsZiel']);
 });
 
 test('ES5-Stil: kein let, const, Arrow, Template-String, class im Kern', () => {

@@ -1,0 +1,14 @@
+{
+  "_hinweis": "Testwert fuer window.amSofortVertrauen (Kontrakt K6, Segment 11; der Harness setzt ihn mit ?angebote=k6). Bewertung als oeffentlicher Datenwert mit Stand, Telefon wie der oeffentliche Kontaktblock von index.html. Keine Gaestedaten.",
+  "bewertung": {
+    "wert": "8,6",
+    "von": "10",
+    "anzahl": 384,
+    "quelle": "Booking.com",
+    "stand": "2026-11-25"
+  },
+  "telefon": {
+    "anzeige": "+41 41 562 76 62",
+    "tel": "+41415627662"
+  }
+}
