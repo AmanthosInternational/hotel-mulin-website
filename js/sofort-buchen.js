@@ -57,6 +57,9 @@ var MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'Aug
   'November', 'Dezember'];
 var frueher = [];  // { b: Behaelter, f: Felder } je Behaelter, damit Angaben ein oeffnen ueberleben
 var fokusGezaehlt = false;
+// Seitenweit (Befund E1): 'laeuft' waehrend des POST, nach 201 'weiter' oder 'eingegangen';
+// jedes neu geoeffnete Formular uebernimmt die Sperre, die Antwort gilt dem zuletzt geoeffneten.
+var sperre = null, aktiv = null;
 
 var FELDER = [
   { name: 'vorname', label: 'Vorname *', typ: 'text', auto: 'given-name', pflicht: true },
@@ -189,12 +192,14 @@ function oeffnen(behaelter, auswahl) {
   form.appendChild(fragen);
   behaelter.appendChild(form);
 
-  // laeuft bleibt nach 201, 409 und 429 gesetzt: die Antwort ist endgueltig, ein
-  // zweiter POST legte eine zweite Reservierung an oder scheitert gleich.
-  var laeuft = false;
+  // dies.zu bleibt nach 409 und 429 gesetzt: dieses Formular versucht es nicht nochmals.
+  var dies = aktiv = { knopf: knopf, hinweis: hinweis, auswahl: auswahl, zu: false };
+  if (sperre) { knopf.disabled = true; knopf.textContent = TEXT[sperre] || TEXT.knopf; }
+  if (sperre === 'eingegangen') { melden(hinweis, TEXT.ohneZiel, null, true); }
+  function aufAktiv() { dies = aktiv; knopf = dies.knopf; hinweis = dies.hinweis; auswahl = dies.auswahl; }
 
   function fehlschlag() {
-    laeuft = false;
+    aufAktiv(); sperre = null; dies.zu = false;
     knopf.disabled = false;
     knopf.textContent = TEXT.knopf;
     zaehle('sofort_fehler', id, 'fehler');
@@ -202,11 +207,13 @@ function oeffnen(behaelter, auswahl) {
   }
 
   function antwort(status, daten) {
+    aufAktiv();
     if (status === 201) {
       metaEreignis('booking_confirmed', {});
       zaehle('sofort_gebucht', id, rate);
       var ziel = null;
       try { ziel = window.amSofort.zahlungsZiel(daten); } catch (e) { ziel = null; }
+      sperre = ziel ? 'weiter' : 'eingegangen';
       // Guard: navigiert wird nur auf ein Ziel, das der Kern geprueft hat (https,
       // Adyen-Host), nie auf den rohen Link; sonst Kontakt statt Zahlungsschritt.
       if (!ziel) {
@@ -219,6 +226,7 @@ function oeffnen(behaelter, auswahl) {
       return;
     }
     if (status === 409 || status === 429) {
+      sperre = null; dies.zu = true;
       zaehle('sofort_fehler', id, String(status));
       knopf.textContent = TEXT.knopf;
       return melden(hinweis, TEXT.belegt, null, true);
@@ -240,7 +248,7 @@ function oeffnen(behaelter, auswahl) {
     if (!pruefung || !pruefung.gueltig) { zaehle('sofort_fehler', id, 'pflicht'); return melden(hinweis, TEXT.pflicht); }
 
     var body = window.amSofort.buchungsBody(auswahl, gast, herkunft(), tracking());
-    laeuft = true;
+    dies.zu = true; sperre = 'laeuft';
     knopf.disabled = true;
     knopf.textContent = TEXT.laeuft;
     hinweis.hidden = true;
@@ -256,7 +264,7 @@ function oeffnen(behaelter, auswahl) {
 
   form.addEventListener('submit', function (ev) {
     if (ev && ev.preventDefault) { ev.preventDefault(); }
-    if (laeuft) { return; }
+    if (dies.zu || sperre) { return; }
     try { absenden(); } catch (e) { fehlschlag(); }
   });
 }
