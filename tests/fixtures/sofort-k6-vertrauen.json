@@ -1,5 +1,5 @@
 {
-  "_hinweis": "Testwert fuer window.amSofortVertrauen (Kontrakt K6, Segment 11; der Harness setzt ihn mit ?angebote=k6). Bewertung als oeffentlicher Datenwert mit Stand, Telefon wie der oeffentliche Kontaktblock von index.html. Keine Gaestedaten.",
+  "_hinweis": "Testwert fuer window.amSofortVertrauen (Kontrakt K6, Segment 11; der Harness setzt ihn mit ?angebote=k6). Bewertung als oeffentlicher Datenwert mit Stand; das Telefon ist synthetisch (+99, keine vergebene Landesvorwahl), das echte steht im Kontaktblock von index.html und kommt erst mit der Verdrahtung in js/sofort-angebote.js. Keine Gaestedaten.",
   "bewertung": {
     "wert": "8,6",
     "von": "10",
@@ -8,7 +8,7 @@
     "stand": "2026-11-25"
   },
   "telefon": {
-    "anzeige": "+41 41 562 76 62",
-    "tel": "+41415627662"
+    "anzeige": "+99 99 999 99 99",
+    "tel": "+99999999999"
   }
 }
