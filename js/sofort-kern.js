@@ -275,13 +275,57 @@ function zahlungsZiel(antwort) {
   return u.protocol === 'https:' && ZAHLUNGS_HOSTS.indexOf(u.hostname) >= 0 ? link : null;
 }
 
-// K6: Ruempfe aus dem Kontrakt-Commit, die Logik folgt in Segment 11, Aufgabe 2.
-function nichtGebaut() { throw new Error('NotImplemented'); }
-function passendesAngebot(angebote, utmCampaign) { nichtGebaut(); }
-function abTag(angebot, heute) { nichtGebaut(); }
-function storno(offer, jetzt) { nichtGebaut(); }
-function flexOffer(offers, angebot, jetzt) { nichtGebaut(); }
-function vertrauen(daten, heute) { nichtGebaut(); }
+// ---- K6 (Segment 11) ----
+var ANZEIGE_RE = /^[a-z0-9-]{1,48}$/;
+var TEL_RE = /^\+[0-9]{8,15}$/;
+var ZAHL_RE = /^[0-9]{1,3}([.,][0-9]{1,2})?$/;
+var FRIST_RE = /^(\d{4}-\d{2}-\d{2})T(\d{2}:\d{2})(:\d{2}(\.\d+)?)?(Z|[+-]\d{2}:\d{2})$/;
+var STAND_TAGE = 60;
+
+function passendesAngebot(angebote, utmCampaign) {
+  var w = typeof utmCampaign === 'string' ? utmCampaign.toLowerCase() : '';
+  if (!w || !Array.isArray(angebote)) return null;
+  for (var i = 0; i < angebote.length; i++) {
+    var p = angebote[i] && Array.isArray(angebote[i].anzeigen) ? angebote[i].anzeigen : [];
+    for (var j = 0; j < p.length; j++) {
+      if (typeof p[j] === 'string' && ANZEIGE_RE.test(p[j]) && w.indexOf(p[j]) === 0) return angebote[i].id;
+    }
+  }
+  return null;
+}
+
+function abTag(angebot, heute) {
+  var t = angebot && angebot.ab_anreise;
+  return tagNr(t) !== null && anreisetage(angebot, heute).indexOf(t) >= 0 ? t : null;
+}
+
+// Nur mit Zone ist der Zeitpunkt eindeutig; ohne sie gilt die strengere Aussage.
+function storno(offer, jetzt) {
+  var d = offer && offer.category === 'Refundable' && offer.cancellationFee ? offer.cancellationFee.dueDateTime : null;
+  var m = typeof d === 'string' ? FRIST_RE.exec(d) : null;
+  var j = jetzt instanceof Date ? jetzt.getTime() : jetzt;
+  if (m && tagNr(m[1]) !== null && typeof j === 'number' && Date.parse(d) > j) {
+    return { art: 'flexibel', frist: m[1], zeit: m[2] };
+  }
+  return { art: 'nicht_erstattbar', frist: null, zeit: null };
+}
+
+function flexOffer(offers, angebot, jetzt) {
+  if (!angebot || !trim(angebot.rate_flex)) return null;
+  var o = waehleOffer(offers, { room: angebot.room, rate: angebot.rate_flex });
+  return o && storno(o, jetzt).art === 'flexibel' ? o : null;
+}
+
+function vertrauen(daten, heute) {
+  var d = daten && typeof daten === 'object' ? daten : {};
+  var b = d.bewertung || {}, t = d.telefon || {}, h = heuteNr(heute), s = tagNr(b.stand);
+  var gut = ZAHL_RE.test(b.wert) && ZAHL_RE.test(b.von) && ganz(b.anzahl) && b.anzahl > 0 && trim(b.quelle) &&
+    s !== null && h !== null && s <= h && h - s <= STAND_TAGE;
+  return {
+    bewertung: gut ? { wert: String(b.wert), von: String(b.von), anzahl: b.anzahl, quelle: trim(b.quelle), stand: b.stand } : null,
+    telefon: trim(t.anzeige) && typeof t.tel === 'string' && TEL_RE.test(t.tel) ? { anzeige: trim(t.anzeige), tel: t.tel } : null
+  };
+}
 
 var api = {
   pruefeAngebote: pruefeAngebote, anreisetage: anreisetage, abreise: abreise, sucheQuery: sucheQuery,
