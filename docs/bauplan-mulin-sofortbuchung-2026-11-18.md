@@ -4,12 +4,12 @@ datum: 2026-11-18
 status: aktiv
 plankey: mulin-sofortbuchung
 klasse: FL-3 durchgehend (Zahlungsweg, Apaleo-Writes, Gästedaten, Gästekommunikation, Migration, render.yaml): jeder PR ist Handmerge durch den Inhaber nach vollständiger Lektüre, nie --auto; der Plan-PR selbst ist Doku
-auszug: Gate-Auszug des Masters docs/bauplan-mulin-sofortbuchung-2026-11-18.md im Repo amanthos-platform (origin/main 594e3dd); massgeblich ist der Master, dieser Auszug trägt nur, was Edit-Gate, Commit-Gate und plan-abgleich in diesem Repo brauchen
+auszug: Gate-Auszug des Masters docs/bauplan-mulin-sofortbuchung-2026-11-18.md im Repo amanthos-platform (origin/main 594e3dd); massgeblich ist der Master, dieser Auszug trägt nur, was Edit-Gate, Commit-Gate und plan-abgleich in diesem Repo brauchen; Nachtrag §14 vom 25.11.2026 (Segment 11) ergänzt
 ---
 
 # Bauplan: Hotel Mulin Brigels, Sofortbuchung über Meta (Direktbuchung ohne Portal)
 
-**Gate-Auszug.** Dieses Repo ist öffentlich. Übernommen sind nur der Kopf-Hinweis, §0, aus §6 die Kontrakte K1 und K5 mit dem Website-Teil, Segment 0 und die Website-Segmente 2, 5, 6, 10 und 8 sowie die Sammelstellen aus §8; Scope- und Kriterienblöcke sind byte-gleich zum Master. Alles andere steht nur im Master.
+**Gate-Auszug.** Dieses Repo ist öffentlich. Übernommen sind nur der Kopf-Hinweis, §0, aus §6 die Kontrakte K1 und K5 mit dem Website-Teil, Segment 0 und die Website-Segmente 2, 5, 6, 10 und 8 sowie die Sammelstellen aus §8, dazu aus dem Nachtrag §14 der Kontrakt K6, die Texte zur Freigabe, Segment 11, die ergänzten Sammelstellen und die Verdrahtung; Scope- und Kriterienblöcke sind byte-gleich zum Master. Alles andere steht nur im Master.
 
 > **Vor dem Bau stellt der Inhaber `status:` auf `aktiv`**, in diesem Master und im Gate-Auszug des Website-Repos (kommt mit Segment 0 dorthin). Solange `draft` steht, sind Edit-Gate, Commit-Gate und der PR-Check `plan-abgleich` stumm. Segment-Branches heissen `segment/mulin-sofortbuchung/<nr>-<slug>` im jeweiligen Repo und zweigen von `origin/main` ab; die Segmentnummern sind über beide Repos eindeutig. Jeder Commit dort trägt im Body:
 >
@@ -236,3 +236,89 @@ css/style.min.css
 datenschutz.html
 llms.txt
 ```
+
+## 14. Nachtrag 2026-11-25: Segment 11 «Konversion der Sofortseite» (Kurzplan, Entscheid K-1303 a)
+
+**Modus des Nachtrags: kurz.** Ein Segment, ein Branch, ein Builder; betroffen ist nur dieses Repo. `status` bleibt `aktiv`, §0 gilt unverändert. Die Segmente 5, 6 und 10 sind seit 21.11.2026 gemergt, ihr Datei-Eigentum geht auf Segment 11 über. Übernommen sind 14.2 bis 14.6 des Masters, Scope- und Kriterienblöcke byte-gleich; Produktivitätsprüfung, offene Fragen und die Liste des nicht Geprüften stehen nur im Master.
+
+**Ziel.** Die Anzeige landet beim passenden Angebot mit sichtbarem Endpreis, jede Karte nennt vorab einen Live-Preis, der Gast wählt zwischen nicht erstattbar und flexibel mit klarer Stornobedingung, sieht Bewertung und Telefon, und jeder Schritt wird ohne Einwilligung gezählt.
+
+### 14.2 Kontrakt K6 (erster Commit von Segment 11, kein eigenes Segment 0)
+
+**K6 Konversion (erweitert K5, ändert keine Signatur aus K5).** Fehlt ein neues Datenfeld, verhält sich die Seite wie am 21.11.2026; das ist zugleich der Rückweg ohne Code (Feld entfernen).
+
+- **Daten** in `js/sofort-angebote.js` (Sammelstelle), alle optional. Je Angebot: `anzeigen` (Liste von Präfixen für `utm_campaign`, klein verglichen, je `^[a-z0-9-]{1,48}$`, etwa `['mulin-januar']` für `mulin-januar-202701`), `ab_anreise` (`'JJJJ-MM-TT'`, Bezugstag für «ab»-Preis und Vorauswahl), `rate_flex` (Plancode der flexiblen Alternative, etwa `'STANDARDBB_IBE'`). Dazu `window.amSofortVertrauen = { bewertung: { wert: '8,6', von: '10', anzahl: 384, quelle: 'Booking.com', stand: 'JJJJ-MM-TT' }, telefon: { anzeige: '+41 41 562 76 62', tel: '+41415627662' } }`.
+- **Kern** `js/sofort-kern.js`, fünf neue reine Funktionen. `passendesAngebot(angebote, utmCampaign) -> id | null`: das erste Angebot, dessen `anzeigen` einen Präfix des klein geschriebenen Werts trägt. `abTag(angebot, heute) -> 'JJJJ-MM-TT' | null`: `ab_anreise`, wenn er in `anreisetage(angebot, heute)` liegt. `storno(offer, jetzt) -> { art, frist, zeit }`: `art` ist `flexibel` nur bei `category` `Refundable` und einem `cancellationFee.dueDateTime` nach `jetzt`, dann `frist` (`JJJJ-MM-TT`) und `zeit` (`HH:MM`) aus den Stellen der Zeichenkette (Ortszeit des Hauses, nie umgerechnet); sonst `{ art: 'nicht_erstattbar', frist: null, zeit: null }` (im Zweifel die strengere Aussage). `flexOffer(offers, angebot, jetzt) -> offer | null`: das Offer zu `room` und `rate_flex` (Abgleich wie `waehleOffer`), nur wenn `storno` dafür `flexibel` ergibt. `vertrauen(daten, heute) -> { bewertung, telefon }`: je null bei fehlendem oder ungültigem Feld, `bewertung` auch bei `stand` in der Zukunft oder älter als 60 Tage, `telefon` nur mit `tel` nach `^\+[0-9]{8,15}$`.
+- **Seite** `js/sofort-seite.js`: (1) die Karte von `passendesAngebot(gueltig, utm_campaign)` steht zuerst, der Wert ist `utm_campaign` aus `amDeepLink.parse(location.search).campaign`; (2) je Karte mit `abTag` ein Abruf von `/api/offers` nach dem Aufbau der Karten, die «ab»-Zeile nur aus der Live-Antwort (`waehleOffer`, `gesamt`, Zusatz zur Rate aus `storno`), sonst keine Zeile; (3) Vorauswahl nur auf der passenden Karte: `abTag`, sonst der erste Anreisetag, bei ausgebucht der nächste, höchstens drei Abrufe, und derselbe Abruf wie die «ab»-Zeile, wenn der Tag gleich ist; sie zeigt Preis und Formular wie ein Tipp, sendet aber `sofort_vorauswahl` und kein Meta-Ereignis, und ein Tipp des Gastes gewinnt gegen eine noch ladende Vorauswahl; (4) nach jedem Preis `flexOffer`: gibt es eines, zwei Knöpfe (nicht erstattbar vorgewählt) mit Betrag, Mehrpreis und Stornosatz, der Wechsel ruft `amSofortBuchen.oeffnen` neu mit dem gewählten Offer (`auswahl` behält die sechs Schlüssel aus K5); ohne `flexOffer` nur der Stornosatz der einen Rate; (5) der Block aus `vertrauen(window.amSofortVertrauen, heute)` steht vor `#sofortListe`, per Skript eingefügt.
+- **Formular** `js/sofort-buchen.js`: Stornosatz der gewählten Rate unter dem Gesamtpreis (`amSofort.storno(auswahl.offer, new Date())`), Zeile «Fragen?» mit dem Telefon aus `KONTAKT`, getippte Angaben überleben ein erneutes `oeffnen` im selben Behälter.
+- **Messung** (Plausible, je Ereignis genau die Merkmale `angebot` und `step`). Neu: `sofort_vorauswahl` (`preis`, `ausgebucht`, `fehler`), `sofort_rate`, `sofort_formular` (erster Fokus in einem Feld, einmal je Seitenaufruf), `sofort_absenden` (gültig abgeschickt), `sofort_gebucht` (Antwort 201), bei diesen vier ist `step` die Rate (`flexibel` oder `nicht_erstattbar`), und `sofort_fehler` (`pflicht`, `409`, `429`, `fehler`, `ohne_ziel`). `sofort_ansicht`, `sofort_datum` und jeder Aufruf von `amMeta.event` bleiben nach Name, Zeitpunkt und Daten wie auf `origin/main`.
+
+### 14.3 Texte zur Freigabe durch den Inhaber (Gästekommunikation)
+
+Gebaut wird mit dem Vorschlag, je Text eine Konstante. Beträge, Datum und Uhrzeit sind Beispielwerte vom 25.11.2026 und kommen auf der Seite immer aus der Live-Antwort. Alle übrigen Texte der Seite bleiben unverändert.
+
+| Nr  | Ort                                | Vorschlag                                                                                                                                          | Beleg                                            |
+| --- | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| T1  | Karte, vor dem Tippen              | «ab CHF 594.00 gesamt für 3 Nächte, zwei Personen (nicht erstattbare Rate)»                                                                        | Live-Preis des Bezugstags                        |
+| T2  | passende Karte nach der Vorauswahl | «Ein Anreisetag ist vorgewählt. Sie können jeden anderen Tag antippen.»                                                                            | Verhalten der Seite                              |
+| T3  | Titel der Ratenwahl                | «Rate wählen»                                                                                                                                      | Wortwahl der FAQ («Rate»)                        |
+| T4  | Rate nicht erstattbar              | «Nicht erstattbar, CHF 594.00» mit dem Satz «Keine kostenlose Stornierung: bei einer Stornierung wird der Aufenthalt verrechnet.»                  | Apaleo-Regel `NONREF`, FAQ der Startseite        |
+| T5  | Rate flexibel                      | «Flexibel, CHF 630.00 (CHF 36.00 mehr)» mit dem Satz «Kostenlos stornierbar bis 3. Januar 2027, 15:00 Uhr. Danach wird der Aufenthalt verrechnet.» | Apaleo-Regel `LEX7DAYS`, Frist aus `dueDateTime` |
+| T6  | Formular, unter dem Gesamtpreis    | der Satz der gewählten Rate aus T4 oder T5                                                                                                         | wie dort                                         |
+| T7  | über den Karten                    | «Gäste bewerten uns mit 8,6 von 10 auf Booking.com (384 Bewertungen, Stand 25.11.2026).»                                                           | gelesen am 25.11.2026, Datenwert mit Stand       |
+| T8  | über den Karten und im Formular    | «Fragen? Wir sind gerne für Sie da: +41 41 562 76 62»                                                                                              | Kontaktblock der Startseite                      |
+
+### 14.4 Segment 11: Konversion der Sofortseite (website)
+
+```bauplan-scope segment=11
+# repo: hotel-mulin-website
+js/sofort-kern.js
+js/sofort-seite.js
+js/sofort-buchen.js
+css/sofort.css
+tests/sofort-konversion.test.mjs
+tests/sofort-kern.test.mjs
+tests/dev-server.py
+tests/fixtures/sofort-kern-double.js
+tests/fixtures/sofort-k6-angebote.json
+tests/fixtures/sofort-k6-vertrauen.json
+tests/fixtures/offers-mubrig-k6.json
+```
+
+- **Auftrag:** K6 in fünf Aufgaben zu höchstens 30 Minuten, je ein Commit mit Plan-Abgleich: (1) Kontrakt: Kopf des Kerns, fünf Rümpfe, Double, Fixtures in der Form der Live-Route vom 25.11.2026 (`NONREF` und `LEX7DAYS` mit `dueDateTime` und Gebühr); (2) Kern mit Tests; (3) Seite: Reihenfolge, «ab»-Zeile, Vorauswahl, Vertrauen; (4) Ratenwahl in Seite und Formular; (5) Messung, Harness-Modi `angebote=k6` und `fixture=k6`, Lauf bei 390 Pixel. Texte aus 14.3 als Konstanten in einer `TEXT`-Tabelle je Datei. Branch `segment/mulin-sofortbuchung/11-konversion` von `origin/main`. Builder: Opus 5.5, xhigh, pusht, öffnet keinen PR.
+
+```bauplan-kriterien segment=11
+- [ ] Kontrakt zuerst: der erste Commit des Branches trägt nur den erweiterten Kopf von js/sofort-kern.js (K6: Datenfelder, fünf Signaturen), die fünf Rümpfe, das Double mit denselben Namen und Parameterzahlen, die eine geänderte Erwartung in tests/sofort-kern.test.mjs und die drei K6-Fixtures; node --test tests/ danach Exit 0 mit Zahl (Basis 162 auf origin/main 13c8463)
+- [ ] Rückfallbeweis: tests/sofort-seite.test.mjs und tests/sofort-buchen.test.mjs laufen ohne Diff grün (ohne die neuen Datenfelder verhält sich die Seite wie bisher); an tests/sofort-kern.test.mjs genau ein Hunk (Exportliste des Kerns, Begründung im Test); jede weitere geänderte Erwartung: anhalten und melden
+- [ ] a) Rot zuerst, Verdrahtungstest test_anzeige_fuehrt_zum_passenden_angebot (echter Kern, echte Seite, echtes Formular im Fake-DOM): mit utm_campaign=mulin-januar-202701 steht die Karte mit anzeigen ['mulin-januar'] zuerst, ihr ab_anreise ist gewählt (aria-pressed true), Endpreis aus gesamt() und Formular stehen ohne Klick; mit mulin-festtage-202612 die andere Karte; ohne utm_campaign, mit unbekanntem Wert oder ohne das Feld anzeigen bleibt die Dateireihenfolge und nichts ist vorgewählt
+- [ ] a) Vorauswahl bei ausgebuchtem Tag: der nächste Anreisetag, höchstens drei Abrufe von /api/offers für diese Karte, danach keine Vorauswahl und kein Fehlertext; die Vorauswahl ruft amMeta.event nie (Stub leer) und sendet sofort_vorauswahl statt sofort_datum; ein Tipp, während die Vorauswahl lädt, gewinnt (genau ein oeffnen() für den getippten Tag)
+- [ ] b) Rot zuerst, Guard test_ab_preis_nur_aus_der_live_antwort: die «ab»-Zeile zeigt genau gesamt() des Live-Offers zum Bezugstag (Fixture 594.00); Route nicht erreichbar, Status 503, kein Offer oder kein gültiges ab_anreise: keine «ab»-Zeile, die Karte bleibt bedienbar; kein Betrag steht in js/sofort-seite.js oder in einem Datenfeld
+- [ ] b) Nicht blockierend: die Karten stehen im DOM, bevor ein Abruf beantwortet ist (der fetch-Stub hält die Antwort zurück); je Karte beim Laden höchstens ein Abruf, auf der passenden Karte höchstens drei; ein Tipp lädt immer frisch
+- [ ] d) Rot zuerst, Guard test_flexibel_nur_mit_frist_in_der_zukunft: storno() ergibt flexibel nur bei category Refundable und dueDateTime nach jetzt; Frist vorbei, Frist fehlt, category fehlt oder Non-Refundable ergeben nicht_erstattbar, und flexOffer() ist dann null (die Seite bietet die teurere Rate nie ohne Stornorecht an)
+- [ ] d) Mit flexOffer zwei Knöpfe: nicht erstattbar vorgewählt, je Rate der Betrag aus gesamt(), der Mehrpreis als Differenz der beiden (Fixture 630.00 minus 594.00 ergibt 36.00) und der Stornosatz mit Datum und Uhrzeit aus den Stellen von dueDateTime (2027-01-03T15:00:00+01:00 ergibt 3. Januar 2027, 15:00 Uhr, auch unter TZ=America/New_York); Wechsel auf flexibel: Preiszeile 630.00, genau ein weiteres oeffnen() mit dem flexiblen Offer und denselben sechs Schlüsseln, der POST-Body trägt dessen ratePlanId und totalAmount; ohne rate_flex oder ohne flexOffer keine Ratenwahl, aber der Stornosatz der einen Rate
+- [ ] d) Formular: Stornosatz der gewählten Rate unter dem Gesamtpreis; Vorname, Nachname, E-Mail und Telefon bleiben beim Ratenwechsel stehen; begin_checkout trägt den Endpreis der gewählten Rate, sonst ist kein Aufruf von amMeta.event nach Name, Zeitpunkt oder Daten anders als auf origin/main
+- [ ] e) Rot zuerst, Guard test_alte_bewertung_verschwindet: vertrauen() liefert die Bewertung nur mit wert, von, anzahl, quelle und stand; stand in der Zukunft oder älter als 60 Tage ergibt null und der Satz fehlt auf der Seite; Telefon nur mit tel nach ^\+[0-9]{8,15}$; ohne window.amSofortVertrauen kein Block und kein Fehler; die Zeile «Fragen?» im Formular nennt das Telefon aus KONTAKT als tel:-Link
+- [ ] f) Plausible (Stub, Aufrufe zitiert): sofort_vorauswahl, sofort_rate, sofort_formular (erster Fokus, einmal je Seitenaufruf), sofort_absenden, sofort_gebucht (201) und sofort_fehler (pflicht, 409, 429, fehler, ohne_ziel), jedes mit genau den Merkmalen angebot und step; sofort_ansicht und sofort_datum unverändert; kein Merkmal trägt einen Wert aus einem Eingabefeld, und aus der Adresse höchstens die Angebots-Id
+- [ ] Harness im Chrome-Pool bei 390 Pixel Breite, /sofortbuchung?angebote=k6&fixture=k6&utm_source=meta&utm_medium=paid&utm_campaign=mulin-januar-202701: scrollWidth nicht grösser als clientWidth, Endpreis und «Jetzt buchen» ohne Tipp erreichbar, Ratenwechsel und Absenden gegen den Mock (Body zitiert, Gästefelder gast@example.com), Konsole ohne Fehler
+- [ ] ES5-Stil, kein fbq, kein U+2014 und kein scharfes s in den vier Produktivdateien; jede Datei höchstens 500 Zeilen; sofortbuchung.html, js/sofort-angebote.js, index.html, js/booking.js, js/meta.js und js/deeplink.js ohne Diff; ~/scripts/bauplan-scope.sh zeilen origin/main HEAD ergibt prod höchstens 400, sonst anhalten und melden; node --test tests/ Exit 0 mit Zahl
+```
+
+- **Out-of-Scope:** `sofortbuchung.html`, `js/sofort-angebote.js` und der Gate-Auszug (Sammelstellen), die bestehenden Tests der Seite und des Formulars, `js/meta.js`, `js/deeplink.js`, `js/booking.js`, Bilder, jede Änderung an Anzeigen, Ratenplänen oder am Backend. **Testplan:** `node --test tests/` (auch mit `TZ=America/New_York`), `python3 tests/dev-server.py` und die Kriterien-Adresse im Chrome-Pool. **Hängt ab von:** den Segmenten 5, 6, 10 auf `main` (erfüllt) und diesem Nachtrag im Gate-Auszug auf `origin/main` des Website-Repos; ohne ihn kennen die Gates Segment 11 nicht und bleiben stumm. **Blockiert durch:** nichts im Bau; der Merge wartet auf die Freigabe der Texte durch den Inhaber. Diff geschätzt: rund 340 Produktivzeilen (Kern 95, Seite 150, Formular 50, CSS 45) und rund 450 Testzeilen. Über 400 Produktivzeilen: anhalten und melden; vorgesehener Schnitt ist dann die Ratenwahl (Aufgabe 4) als zweiter, gestapelter Branch `segment/mulin-sofortbuchung/11-raten` mit demselben Scope und demselben Deploy. PII-Klausel §0: im Test nur `gast@example.com`, kein Gästefeld in Konsole, Plausible oder Meta.
+
+### 14.5 Sammelstellen (Ergänzung zu §8, nur die Verdrahtung fasst sie an)
+
+```bauplan-scope sammelstellen
+# Ergänzung aus dem Nachtrag §14, repo: hotel-mulin-website
+sofortbuchung.html
+docs/bauplan-mulin-sofortbuchung-2026-11-18.md
+```
+
+- `js/sofort-angebote.js` (steht schon in §8): je Angebot `anzeigen`, `ab_anreise`, `rate_flex` und das freigegebene `bild`, dazu `window.amSofortVertrauen`. `sofortbuchung.html`: Cache-Bust `?v=` an den fünf Sofort-Skripten und am Stylesheet (Pages liefert mit `max-age=600`, gemessen am 25.11.2026), sonst kein Eintrag. Plan und Gate-Auszug: Protokoll der Verdrahtung.
+
+### 14.6 Verdrahtung (ein Kopf, sequenziell, Fable xhigh)
+
+1. **Reihenfolge:** Plan-PR und Auszug-PR mergen (Gate im Website-Repo auf `origin/main`: `~/scripts/bauplan-scope.sh files docs/bauplan-mulin-sofortbuchung-2026-11-18.md 11` Exit 0), dann Bau von Segment 11, Nachmessung durch den Orchestrator, Segment-PR, Verdrahtungs-PR `chore/mulin-sofortbuchung-verdrahtung-l5`, ein Pages-Deploy für beide.
+2. **Kombinationslauf:** Verdrahtungs-Worktree von `origin/main`, Segment-Branch rebasen (ein Konflikt heisst anhalten und melden), `node --test tests/` als Hintergrund-Bash nach `$CLAUDE_JOB_DIR/tmp/gate-11.txt` (Exit-Code, Zahl über 162), dazu `~/scripts/bauplan-scope.sh check`, `zeilen` und `klasse` (zitiert) und der Harness bei 390 Pixel mit der echten Angebotsdatei.
+3. **Sammelstellen:** `js/sofort-angebote.js` nach 14.5: `anzeigen` `['mulin-januar']` und `['mulin-festtage']`, `ab_anreise` je Angebot aus einer frischen Lesung aller Anreisetage der öffentlichen Route (Stand 25.11.2026: 20.12., 10.01., 13.02.), `rate_flex` `'STANDARDBB_IBE'`, Bilder nach Freigabe des Inhabers (Punkt c); neuer Test `tests/sofort-daten.test.mjs` auf der echten Datei durch den echten Kern: beide laufenden `utm_campaign`-Werte treffen ihr Angebot, jedes `ab_anreise` ist ein Anreisetag, jedes `bild` existiert und steht auf der Liste der freigegebenen Bilder (Balkonzimmer oder Hotel, kein Speisesaal), das Telefon gleicht dem Kontaktblock von `index.html`, `stand` der Bewertung ist höchstens 60 Tage alt; Cache-Bust in `sofortbuchung.html`.
+4. **Gates live nach dem Deploy** (390 Pixel, beide Anzeigen-Adressen): passende Karte zuerst, «ab»-Preis und Endpreis gleich dem Gesamt der Buchungsmaske für denselben Tag und dieselbe Rate (beide Raten, Zahlen zitiert), Stornofrist gleich `dueDateTime` der Route; eine Probebuchung des Inhabers mit der flexiblen Rate bis zur Zahlungsseite, dann Storno (Betrag des Zahlungslinks gleich Seite, Plan `STANDARDBB_IBE` in Apaleo); Plausible zeigt die sechs neuen Ereignisse (die Ziele legt der Inhaber an).
+5. **Merge-Form:** FL-3 nach Plankopf (K4 misst für das Segment `gesamt=code`; die Texte sind Gästekommunikation und die Seite legt Buchungen an, es gilt die höhere Klasse), je PR Handmerge durch den Inhaber nach Lektüre der Texte, `gh pr merge <n> --rebase`, nie `--auto`. Rückweg ohne Code: die neuen Datenfelder entfernen. Danach sieben Tage keine weitere Änderung an Seite oder Angebot.
