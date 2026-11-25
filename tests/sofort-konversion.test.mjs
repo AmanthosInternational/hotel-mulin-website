@@ -455,3 +455,94 @@ test('nicht blockierend: Karten vor jeder Antwort, je Karte hoechstens ein Abruf
   assert.deepEqual(mitAnzeige.offen.map((o) => tagVon(o.url)).sort(), ['2026-12-20', '2027-01-10'],
     'die Vorauswahl nutzt den Abruf der ab-Zeile');
 });
+
+// ---- d) Ratenwahl in Seite und Formular --------------------------------------------
+
+const T4 = 'Keine kostenlose Stornierung: bei einer Stornierung wird der Aufenthalt verrechnet.';
+const T5 = 'Kostenlos stornierbar bis 3. Januar 2027, 15:00 Uhr. Danach wird der Aufenthalt verrechnet.';
+const TESTGAST = { vorname: 'Test', nachname: 'Gast', email: 'gast@example.com', telefon: '000 000 00 00' };
+const felder = (form) => Object.fromEntries(form.alle((k) => k.tagName === 'INPUT').map((k) => [k.getAttribute('name'), k]));
+const klasse = (knoten, cls) => knoten.alle((k) => k.hat(cls))[0];
+
+async function getippt(opts = {}) {
+  const s = seite(opts);
+  await ruhe();
+  s.knopf('k6-januar', '2027-01-10').click();
+  await ruhe();
+  return s;
+}
+
+test('Ratenwahl: zwei Knoepfe, nicht erstattbar vorgewaehlt, Betrag, Mehrpreis und Stornosatz', async () => {
+  const s = await getippt();
+  const [nonref, flex] = s.raten('k6-januar');
+  assert.equal(s.text('k6-januar', 'sf-wahl').startsWith('Rate wählen'), true);
+  assert.equal(nonref.getAttribute('aria-pressed'), 'true');
+  assert.equal(flex.getAttribute('aria-pressed'), 'false');
+  const g = [NONREF, FLEX].map((o) => kern.gesamt(o, 2, 0).gesamt);
+  assert.deepEqual(g, [594, 630]);
+  assert.equal(Math.round((g[1] - g[0]) * 100) / 100, 36);
+  assert.equal(klasse(nonref, 'sf-rate-name').textContent, 'Nicht erstattbar, CHF 594.00');
+  assert.equal(klasse(nonref, 'sf-rate-satz').textContent, T4);
+  assert.equal(klasse(flex, 'sf-rate-name').textContent, 'Flexibel, CHF 630.00 (CHF 36.00 mehr)');
+  assert.equal(klasse(flex, 'sf-rate-satz').textContent, T5, 'Frist aus den Stellen, auch unter TZ ' + process.env.TZ);
+  assert.equal(s.text('k6-januar', 'sf-preis'), ENDPREIS(NONREF));
+  assert.equal(nonref.type, 'button');
+});
+
+test('Ratenwechsel: Preiszeile 630.00, genau ein weiteres oeffnen, POST-Body mit dem flexiblen Plan', async () => {
+  const s = await getippt();
+  const f = felder(s.form('k6-januar'));
+  for (const [k, v] of Object.entries(TESTGAST)) f[k].value = v;
+  const [nonref, flex] = s.raten('k6-januar');
+  flex.click();
+  assert.equal(s.text('k6-januar', 'sf-preis'), ENDPREIS(FLEX));
+  assert.equal(flex.getAttribute('aria-pressed'), 'true');
+  assert.equal(nonref.getAttribute('aria-pressed'), 'false');
+  assert.equal(s.auf.oeffnen.length, 2);
+  assert.deepEqual(Object.keys(s.auf.oeffnen[1]).sort(), ['abreise', 'angebot', 'anreise', 'erwachsene', 'kinder', 'offer']);
+  assert.deepEqual(s.auf.oeffnen[1], mit(s.auf.oeffnen[0], { offer: plain(FLEX) }));
+  flex.click();
+  assert.equal(s.auf.oeffnen.length, 2, 'die gewaehlte Rate nochmals tippen oeffnet nichts');
+  const form = s.form('k6-januar');
+  const neu = felder(form);
+  assert.deepEqual(Object.fromEntries(Object.entries(neu).map(([k, v]) => [k, v.value])), TESTGAST,
+    'Angaben bleiben beim Ratenwechsel stehen');
+  assert.equal(klasse(form, 'sofort-buchen-storno').textContent, T5);
+  assert.ok(form.textContent.includes('CHF 630.00'));
+  form.ausloesen('submit');
+  await ruhe();
+  assert.equal(s.auf.posts.length, 1);
+  assert.equal(s.auf.posts[0].ratePlanId, 'MUBRIG-STANDARDBB_IBE-DBRB');
+  assert.equal(s.auf.posts[0].totalAmount, 610.8);
+  assert.equal(s.auf.posts[0].cityTax, 19.2);
+  assert.equal(s.auf.posts[0].booker.email, 'gast@example.com');
+  assert.deepEqual(s.auf.meta, [['select_offer', { total_price: 594, currency: 'CHF' }],
+    ['begin_checkout', { total_price: 630, currency: 'CHF' }], ['booking_confirmed', {}]]);
+  assert.deepEqual(s.auf.nav, [ZAHLUNGSLINK]);
+  assert.deepEqual(s.auf.konsole, []);
+});
+
+test('ohne rate_flex oder ohne flexOffer keine Ratenwahl, aber der Stornosatz der einen Rate', async () => {
+  const ohneFlex = K6.map((a) => { const b = mit(a, {}); delete b.rate_flex; return b; });
+  const vorbei = { offers: [NONREF, flexMit({ cancellationFee: gebuehr({ dueDateTime: '2026-11-01T15:00:00+01:00' }) })] };
+  for (const [fall, opts] of [['ohne rate_flex', { angebote: ohneFlex }],
+    ['Frist vorbei', { antwort: () => [200, vorbei] }], ['kein flexibles Offer', { antwort: () => [200, { offers: [NONREF] }] }]]) {
+    const s = await getippt(opts);
+    assert.equal(s.raten('k6-januar').length, 0, fall + ': keine Knoepfe');
+    assert.equal(s.text('k6-januar', 'sf-storno'), T4, fall + ': Stornosatz der einen Rate');
+    assert.equal(klasse(s.form('k6-januar'), 'sofort-buchen-storno').textContent, T4, fall + ': im Formular');
+    assert.equal(s.auf.oeffnen.length, 1, fall);
+  }
+});
+
+test('Formular: Stornosatz unter dem Gesamtpreis, Zeile Fragen mit dem Telefon aus KONTAKT als tel:-Link', async () => {
+  const s = await getippt();
+  const form = s.form('k6-januar');
+  const kinder = form.kinder.map((k) => k.className);
+  assert.equal(kinder.indexOf('sofort-buchen-storno'), kinder.indexOf('sofort-buchen-preis') + 1);
+  assert.equal(klasse(form, 'sofort-buchen-storno').textContent, T4);
+  const fragen = klasse(form, 'sofort-buchen-fragen');
+  assert.equal(fragen.textContent, T8);
+  assert.equal(fragen.alle((k) => k.tagName === 'A')[0].getAttribute('href'), 'tel:+41415627662');
+  assert.match(lies('js/sofort-buchen.js'), /KONTAKT = \{ telefon: '\+41 41 562 76 62', tel: '\+41415627662'/);
+});

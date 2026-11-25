@@ -15,7 +15,7 @@
  * K6 (Segment 11): die Karte der Anzeige (passendesAngebot zu utm_campaign) steht zuerst;
  * je Karte mit abTag eine ab-Zeile nur aus der Live-Antwort; Vorauswahl nur auf der Karte
  * der Anzeige (sofort_vorauswahl, kein Meta-Ereignis, ein Tipp gewinnt); vor #sofortListe
- * der Block aus vertrauen(). Ohne die neuen Datenfelder wie am 21.11.2026.
+ * der Block aus vertrauen(); nach jedem Preis die Ratenwahl (flexOffer). Sonst wie bisher.
  */
 (function () {
 'use strict';
@@ -29,8 +29,13 @@ var TEXT = {
   ab: 'ab ', abZusatz: ' (nicht erstattbare Rate)', inklusive: ', inklusive Frühstück, MWST und Kurtaxe',
   vorgewaehlt: 'Ein Anreisetag ist vorgewählt. Sie können jeden anderen Tag antippen.',
   bewertung: ['Gäste bewerten uns mit ', ' von ', ' auf ', ' (', ' Bewertungen, Stand ', ').'],
-  fragen: 'Fragen? Wir sind gerne für Sie da: '
+  fragen: 'Fragen? Wir sind gerne für Sie da: ',
+  raten: 'Rate wählen', nonref: 'Nicht erstattbar, ', flex: 'Flexibel, ', mehr: ' mehr)',
+  nonrefSatz: 'Keine kostenlose Stornierung: bei einer Stornierung wird der Aufenthalt verrechnet.',
+  flexSatz: 'Kostenlos stornierbar bis ', flexEnde: ' Uhr. Danach wird der Aufenthalt verrechnet.'
 };
+var MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober',
+  'November', 'Dezember'];
 var VERSUCHE = 3;   // Abrufe der Vorauswahl hoechstens
 var letzte = 0;     // Nummer der letzten Datumswahl; aeltere Antworten verfallen
 var offen = null;   // Teile der Karte mit der letzten Datumswahl
@@ -97,6 +102,7 @@ function zuruecksetzen(teile) {
   leeren(teile.daten);
   leeren(teile.hinweis);
   leeren(teile.behaelter);
+  leeren(teile.raten);
   for (var i = 0; i < teile.knoepfe.length; i++) { teile.knoepfe[i].setAttribute('aria-pressed', 'false'); }
 }
 
@@ -113,10 +119,19 @@ function storno(offer) {
   try { return window.amSofort.storno(offer, new Date()); } catch (e) { return null; }
 }
 
+// T4 oder T5 (im Zweifel T4); Datum und Uhrzeit aus den Stellen von dueDateTime.
+function stornoSatz(s) {
+  if (!s || s.art !== 'flexibel') { return TEXT.nonrefSatz; }
+  var t = s.frist.split('-');
+  return TEXT.flexSatz + Number(t[2]) + '. ' + MONATE[t[1] - 1] + ' ' + t[0] + ', ' + s.zeit + TEXT.flexEnde;
+}
+
+function chf(x) { return 'CHF ' + Number(x).toFixed(2); }
+
 // 'CHF x gesamt fuer n Naechte, zwei Personen' fuer Preiszeile und ab-Zeile (T1).
 function summeText(summe, angebot) {
   var n = angebot.naechte;
-  return 'CHF ' + Number(summe.gesamt).toFixed(2) + ' gesamt für ' + n +
+  return chf(summe.gesamt) + ' gesamt für ' + n +
     (n === 1 ? ' Nacht, ' : ' Nächte, ') + (PERSONEN[angebot.personen] || angebot.personen + ' Personen');
 }
 
@@ -154,8 +169,48 @@ function preis(teile, angebot, anreise, abreise, r, name) {
     try { window.amMeta.event('select_offer', { total_price: r.summe.gesamt, currency: 'CHF' }); }
     catch (e) { /* Werbung bricht nie die Seite */ }
   } else { melde(teile.hinweis, TEXT.vorgewaehlt, false); }
-  oeffne(teile, { angebot: angebot, offer: r.offer, anreise: anreise, abreise: abreise,
-    erwachsene: angebot.personen, kinder: 0 });
+  raten(teile, { angebot: angebot, offer: r.offer, anreise: anreise, abreise: abreise,
+    erwachsene: angebot.personen, kinder: 0 }, r);
+}
+
+// Ratenwahl (T3 bis T5): zwei Knoepfe nur, wenn die Rate des Angebots nicht erstattbar ist
+// und flexOffer eine Alternative mit Betrag liefert; sonst nur der Stornosatz (T4 oder T5).
+function raten(teile, auswahl, r) {
+  var s = storno(auswahl.offer), flex = null, fs = null, knoepfe = [];
+  try {
+    flex = window.amSofort.flexOffer(r.offers, auswahl.angebot, new Date());
+    fs = flex && window.amSofort.gesamt(flex, auswahl.erwachsene, auswahl.kinder);
+  } catch (e) { flex = null; }
+  if (!flex || !fs || !isFinite(fs.gesamt) || (s && s.art !== 'nicht_erstattbar')) {
+    teile.raten.appendChild(el('p', 'sf-storno', stornoSatz(s)));
+    return oeffne(teile, auswahl);
+  }
+  var mehr = Math.round((fs.gesamt - r.summe.gesamt) * 100) / 100;
+  var wahl = [[auswahl.offer, r.summe, TEXT.nonref + chf(r.summe.gesamt), s],
+    [flex, fs, TEXT.flex + chf(fs.gesamt) + (mehr > 0 ? ' (' + chf(mehr) + TEXT.mehr : ''), storno(flex)]];
+  var gruppe = el('div', 'sf-raten');
+  gruppe.setAttribute('role', 'group');
+  gruppe.setAttribute('aria-label', TEXT.raten);
+  teile.raten.appendChild(el('p', 'sf-frage', TEXT.raten));
+  teile.raten.appendChild(gruppe);
+  wahl.forEach(function (w, i) {
+    var b = el('button', 'sf-rate');
+    b.type = 'button';
+    b.setAttribute('aria-pressed', i ? 'false' : 'true');
+    b.appendChild(el('span', 'sf-rate-name', w[2]));
+    b.appendChild(el('span', 'sf-rate-satz', stornoSatz(w[3])));
+    b.addEventListener('click', function () {
+      if (b.getAttribute('aria-pressed') === 'true') { return; }
+      knoepfe[1 - i].setAttribute('aria-pressed', 'false');
+      b.setAttribute('aria-pressed', 'true');
+      teile.preis.textContent = summeText(w[1], auswahl.angebot) + TEXT.inklusive;
+      oeffne(teile, { angebot: auswahl.angebot, offer: w[0], anreise: auswahl.anreise, abreise: auswahl.abreise,
+        erwachsene: auswahl.erwachsene, kinder: auswahl.kinder });
+    });
+    knoepfe.push(b);
+    gruppe.appendChild(b);
+  });
+  oeffne(teile, auswahl);
 }
 
 function oeffne(teile, auswahl) {
@@ -267,7 +322,7 @@ function karte(liste, angebot) {
   var bild = el('img', 'sf-bild');
   var inhalt = el('div', 'sf-inhalt');
   var teile = { knoepfe: [], preis: el('p', 'sf-preis'), daten: el('p', 'sf-daten'), ab: el('p', 'sf-ab'),
-    hinweis: el('div', 'sf-hinweis'), behaelter: el('div', 'sf-buchen') };
+    raten: el('div', 'sf-wahl'), hinweis: el('div', 'sf-hinweis'), behaelter: el('div', 'sf-buchen') };
   var tage = [];
   try { tage = window.amSofort.anreisetage(angebot, heute()) || []; } catch (e) { tage = []; }
   k.setAttribute('data-angebot', angebot.id);
@@ -297,6 +352,7 @@ function karte(liste, angebot) {
   teile.hinweis.setAttribute('aria-live', 'polite');
   inhalt.appendChild(teile.preis);
   inhalt.appendChild(teile.daten);
+  inhalt.appendChild(teile.raten);
   inhalt.appendChild(teile.hinweis);
   inhalt.appendChild(teile.behaelter);
   k.appendChild(bild);

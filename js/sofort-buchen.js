@@ -16,8 +16,10 @@
  *     Fehler: Hinweis und Verweis auf die Buchungsmaske.
  *   Meta nur ueber amMeta.event, kein Kaufereignis vor der Zahlung.
  *   antwort fuer zahlungsZiel ist der JSON-Body der 201-Antwort (wie data in booking.js).
- *   Erneutes oeffnen im selben Behaelter ersetzt das Formular. Gaestefelder gehen nur
- *   in den Body, nie in Konsole oder Meta-Ereignis.
+ *   Erneutes oeffnen im selben Behaelter ersetzt das Formular, getippte Angaben bleiben
+ *   (K6). Gaestefelder gehen nur in den Body, nie in Konsole, Plausible oder Meta-Ereignis.
+ *   K6 (Segment 11): Stornosatz der gewaehlten Rate (amSofort.storno) unter dem Preis,
+ *   Zeile Fragen mit dem Telefon aus KONTAKT.
  * Stil: ES5 (var, keine Arrow-Functions), wie booking.js.
  */
 (function () {
@@ -44,8 +46,15 @@ var TEXT = {
   ohneZiel: 'Ihre Reservierung ist eingegangen, die Weiterleitung zur Zahlung hat aber nicht geklappt. Bitte melden Sie sich bei uns:',
   fehler: 'Die Buchung hat leider nicht geklappt. Bitte versuchen Sie es erneut oder buchen Sie über unsere Buchungsmaske.',
   maske: 'Zur Buchungsmaske',
-  oder: ' oder '
+  oder: ' oder ',
+  // T4 bis T6 und T8 aus Plan 14.3, freigegeben vom Inhaber am 25.11.2026.
+  nonrefSatz: 'Keine kostenlose Stornierung: bei einer Stornierung wird der Aufenthalt verrechnet.',
+  flexSatz: 'Kostenlos stornierbar bis ', flexEnde: ' Uhr. Danach wird der Aufenthalt verrechnet.',
+  fragen: 'Fragen? Wir sind gerne für Sie da: '
 };
+var MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober',
+  'November', 'Dezember'];
+var frueher = [];  // { b: Behaelter, f: Felder } je Behaelter, damit Angaben ein oeffnen ueberleben
 
 var FELDER = [
   { name: 'vorname', label: 'Vorname *', typ: 'text', auto: 'given-name', pflicht: true },
@@ -71,6 +80,15 @@ function verweis(href, text) { var a = el('a', '', text); a.setAttribute('href',
 function betrag(x) { return 'CHF ' + (Math.round(Number(x) * 100) / 100).toFixed(2); }
 
 function paar(k, v) { return k + '=' + encodeURIComponent(v); }
+
+// T4 oder T5 der gewaehlten Rate, im Zweifel T4; Frist aus den Stellen von dueDateTime.
+function stornoSatz(offer) {
+  var s = null;
+  try { s = window.amSofort.storno(offer, new Date()); } catch (e) { s = null; }
+  if (!s || s.art !== 'flexibel') { return TEXT.nonrefSatz; }
+  var t = s.frist.split('-');
+  return TEXT.flexSatz + Number(t[2]) + '. ' + MONATE[t[1] - 1] + ' ' + t[0] + ', ' + s.zeit + TEXT.flexEnde;
+}
 
 // Deep Link in die Buchungsmaske der Startseite mit derselben Auswahl; die UTM-Werte
 // der Lande-Adresse reisen mit, damit die Quelle der Buchung erhalten bleibt.
@@ -136,6 +154,8 @@ function oeffnen(behaelter, auswahl) {
   form.setAttribute('novalidate', '');
   form.appendChild(el('h3', 'sofort-buchen-titel', TEXT.titel));
   var felder = {};
+  var alt = null;
+  for (var i = 0; i < frueher.length; i++) { if (frueher[i].b === behaelter) { alt = frueher[i]; } }
   FELDER.forEach(function (f) {
     var label = el('label', 'sofort-buchen-feld', f.label);
     var input = document.createElement('input');
@@ -143,16 +163,22 @@ function oeffnen(behaelter, auswahl) {
     input.setAttribute('name', f.name);
     input.setAttribute('autocomplete', f.auto);
     if (f.pflicht) { input.setAttribute('required', ''); }
+    if (alt && alt.f[f.name]) { input.value = alt.f[f.name].value || ''; }
     label.appendChild(input);
     form.appendChild(label);
     felder[f.name] = input;
   });
+  if (alt) { alt.f = felder; } else { frueher.push({ b: behaelter, f: felder }); }
   form.appendChild(el('p', 'sofort-buchen-preis', TEXT.preis + betrag(preis.gesamt) + TEXT.preisZusatz));
+  form.appendChild(el('p', 'sofort-buchen-storno', stornoSatz(auswahl.offer)));
   form.appendChild(el('p', 'sofort-buchen-zahlung', TEXT.zahlung));
   var knopf = el('button', 'sofort-buchen-knopf', TEXT.knopf);
   knopf.setAttribute('type', 'submit');
   form.appendChild(knopf);
   form.appendChild(hinweis);
+  var fragen = el('p', 'sofort-buchen-fragen', TEXT.fragen);
+  fragen.appendChild(verweis('tel:' + KONTAKT.tel, KONTAKT.telefon));
+  form.appendChild(fragen);
   behaelter.appendChild(form);
 
   // laeuft bleibt nach 201, 409 und 429 gesetzt: die Antwort ist endgueltig, ein
