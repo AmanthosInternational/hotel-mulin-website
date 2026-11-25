@@ -19,7 +19,8 @@
  *   Erneutes oeffnen im selben Behaelter ersetzt das Formular, getippte Angaben bleiben
  *   (K6). Gaestefelder gehen nur in den Body, nie in Konsole, Plausible oder Meta-Ereignis.
  *   K6 (Segment 11): Stornosatz der gewaehlten Rate (amSofort.storno) unter dem Preis,
- *   Zeile Fragen mit dem Telefon aus KONTAKT.
+ *   Zeile Fragen mit dem Telefon aus KONTAKT; Plausible sofort_formular (erster Fokus je
+ *   Seitenaufruf), sofort_absenden, sofort_gebucht (step die Rate) und sofort_fehler.
  * Stil: ES5 (var, keine Arrow-Functions), wie booking.js.
  */
 (function () {
@@ -55,6 +56,7 @@ var TEXT = {
 var MONATE = ['Januar', 'Februar', 'März', 'April', 'Mai', 'Juni', 'Juli', 'August', 'September', 'Oktober',
   'November', 'Dezember'];
 var frueher = [];  // { b: Behaelter, f: Felder } je Behaelter, damit Angaben ein oeffnen ueberleben
+var fokusGezaehlt = false;
 
 var FELDER = [
   { name: 'vorname', label: 'Vorname *', typ: 'text', auto: 'given-name', pflicht: true },
@@ -81,10 +83,12 @@ function betrag(x) { return 'CHF ' + (Math.round(Number(x) * 100) / 100).toFixed
 
 function paar(k, v) { return k + '=' + encodeURIComponent(v); }
 
+function zaehle(name, angebot, step) {
+  try { window.plausible(name, { props: { angebot: angebot, step: step } }); } catch (e) { /* Messung bricht nie */ }
+}
+
 // T4 oder T5 der gewaehlten Rate, im Zweifel T4; Frist aus den Stellen von dueDateTime.
-function stornoSatz(offer) {
-  var s = null;
-  try { s = window.amSofort.storno(offer, new Date()); } catch (e) { s = null; }
+function stornoSatz(s) {
   if (!s || s.art !== 'flexibel') { return TEXT.nonrefSatz; }
   var t = s.frist.split('-');
   return TEXT.flexSatz + Number(t[2]) + '. ' + MONATE[t[1] - 1] + ' ' + t[0] + ', ' + s.zeit + TEXT.flexEnde;
@@ -154,7 +158,10 @@ function oeffnen(behaelter, auswahl) {
   form.setAttribute('novalidate', '');
   form.appendChild(el('h3', 'sofort-buchen-titel', TEXT.titel));
   var felder = {};
-  var alt = null;
+  var s = null, id = auswahl.angebot && auswahl.angebot.id, alt = null;
+  try { s = window.amSofort.storno(auswahl.offer, new Date()); } catch (e) { s = null; }
+  var rate = s && s.art === 'flexibel' ? 'flexibel' : 'nicht_erstattbar';
+  function fokus() { if (!fokusGezaehlt) { fokusGezaehlt = true; zaehle('sofort_formular', id, rate); } }
   for (var i = 0; i < frueher.length; i++) { if (frueher[i].b === behaelter) { alt = frueher[i]; } }
   FELDER.forEach(function (f) {
     var label = el('label', 'sofort-buchen-feld', f.label);
@@ -164,13 +171,14 @@ function oeffnen(behaelter, auswahl) {
     input.setAttribute('autocomplete', f.auto);
     if (f.pflicht) { input.setAttribute('required', ''); }
     if (alt && alt.f[f.name]) { input.value = alt.f[f.name].value || ''; }
+    input.addEventListener('focus', fokus);
     label.appendChild(input);
     form.appendChild(label);
     felder[f.name] = input;
   });
   if (alt) { alt.f = felder; } else { frueher.push({ b: behaelter, f: felder }); }
   form.appendChild(el('p', 'sofort-buchen-preis', TEXT.preis + betrag(preis.gesamt) + TEXT.preisZusatz));
-  form.appendChild(el('p', 'sofort-buchen-storno', stornoSatz(auswahl.offer)));
+  form.appendChild(el('p', 'sofort-buchen-storno', stornoSatz(s)));
   form.appendChild(el('p', 'sofort-buchen-zahlung', TEXT.zahlung));
   var knopf = el('button', 'sofort-buchen-knopf', TEXT.knopf);
   knopf.setAttribute('type', 'submit');
@@ -189,17 +197,20 @@ function oeffnen(behaelter, auswahl) {
     laeuft = false;
     knopf.disabled = false;
     knopf.textContent = TEXT.knopf;
+    zaehle('sofort_fehler', id, 'fehler');
     melden(hinweis, TEXT.fehler, maskenLink(auswahl));
   }
 
   function antwort(status, daten) {
     if (status === 201) {
       metaEreignis('booking_confirmed', {});
+      zaehle('sofort_gebucht', id, rate);
       var ziel = null;
       try { ziel = window.amSofort.zahlungsZiel(daten); } catch (e) { ziel = null; }
       // Guard: navigiert wird nur auf ein Ziel, das der Kern geprueft hat (https,
       // Adyen-Host), nie auf den rohen Link; sonst Kontakt statt Zahlungsschritt.
       if (!ziel) {
+        zaehle('sofort_fehler', id, 'ohne_ziel');
         knopf.textContent = TEXT.knopf;
         return melden(hinweis, TEXT.ohneZiel, null, true);
       }
@@ -208,6 +219,7 @@ function oeffnen(behaelter, auswahl) {
       return;
     }
     if (status === 409 || status === 429) {
+      zaehle('sofort_fehler', id, String(status));
       knopf.textContent = TEXT.knopf;
       return melden(hinweis, TEXT.belegt, null, true);
     }
@@ -225,7 +237,7 @@ function oeffnen(behaelter, auswahl) {
       if (fehler.indexOf(f.name) >= 0) { felder[f.name].setAttribute('aria-invalid', 'true'); }
       else { felder[f.name].removeAttribute('aria-invalid'); }
     });
-    if (!pruefung || !pruefung.gueltig) { return melden(hinweis, TEXT.pflicht); }
+    if (!pruefung || !pruefung.gueltig) { zaehle('sofort_fehler', id, 'pflicht'); return melden(hinweis, TEXT.pflicht); }
 
     var body = window.amSofort.buchungsBody(auswahl, gast, herkunft(), tracking());
     laeuft = true;
@@ -233,6 +245,7 @@ function oeffnen(behaelter, auswahl) {
     knopf.textContent = TEXT.laeuft;
     hinweis.hidden = true;
     metaEreignis('begin_checkout', { total_price: preis.gesamt, currency: 'CHF' });
+    zaehle('sofort_absenden', id, rate);
     fetch(API_BASE + '/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(body), mode: 'cors' })
       .then(function (res) {
