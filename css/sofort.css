@@ -124,3 +124,10 @@ h1 { font-family: var(--sf-titel); font-size: clamp(1.7rem, 6vw, 2.5rem); line-h
   .sf-bild { height: 100%; aspect-ratio: auto; }
   .sf-inhalt { padding: 1.5rem 1.75rem; }
 }
+
+/* K6 (Segment 11): ab-Zeile, Vertrauensblock vor den Karten. */
+.sf-ab { font-weight: 600; color: var(--sf-gruen); margin: -.5rem 0 1rem; }
+.sf-ab:empty { display: none; }
+.sf-vertrauen { margin: 0 0 1.5rem; padding: .85rem 1rem; background: var(--sf-grund-alt); border-radius: var(--sf-radius); }
+.sf-vertrauen p { margin: .15rem 0; }
+.sf-fragen a { font-weight: 600; white-space: nowrap; }
