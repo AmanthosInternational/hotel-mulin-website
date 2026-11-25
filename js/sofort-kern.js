@@ -47,6 +47,26 @@
  *   zahlungsZiel(antwort)              -> url | null: nur https und nur die Hosts
  *       eu.adyen.link, checkout.adyen.com, checkoutshopper-live.adyen.com
  *
+ * K6 (Nachtrag 2026-11-25, Segment 11) erweitert K5 und aendert keine Signatur daraus.
+ *   Angebot, optional: anzeigen ['praefix', ...] (je ^[a-z0-9-]{1,48}$, Praefix von
+ *              utm_campaign), ab_anreise 'JJJJ-MM-TT' (Bezugstag fuer ab-Preis und
+ *              Vorauswahl), rate_flex (Plancode der flexiblen Alternative).
+ *   Vertrauen  window.amSofortVertrauen = { bewertung: { wert, von, anzahl, quelle, stand },
+ *              telefon: { anzeige, tel } }, gesetzt in js/sofort-angebote.js.
+ *   passendesAngebot(angebote, utmCampaign) -> id | null: das erste Angebot, dessen
+ *       anzeigen einen Praefix des klein geschriebenen utmCampaign traegt.
+ *   abTag(angebot, heute)              -> ab_anreise, wenn er in anreisetage liegt, sonst null
+ *   storno(offer, jetzt)               -> { art, frist, zeit }: art 'flexibel' nur bei
+ *       category 'Refundable' und cancellationFee.dueDateTime nach jetzt, dann frist
+ *       'JJJJ-MM-TT' und zeit 'HH:MM' aus den Stellen von dueDateTime (Ortszeit des Hauses,
+ *       nie umgerechnet); sonst { art: 'nicht_erstattbar', frist: null, zeit: null }.
+ *   flexOffer(offers, angebot, jetzt)  -> das Offer zu room und rate_flex (Abgleich wie
+ *       waehleOffer), nur wenn storno dafuer 'flexibel' ergibt, sonst null.
+ *   vertrauen(daten, heute)            -> { bewertung, telefon }, je null bei fehlendem oder
+ *       ungueltigem Feld; bewertung auch bei stand in der Zukunft oder aelter als 60 Tage;
+ *       telefon nur mit tel nach ^\+[0-9]{8,15}$.
+ *   Fehlt ein neues Feld, verhaelt sich die Seite wie am 21.11.2026 (Rueckweg ohne Code).
+ *
  * Stil: ES5 (var, keine Arrow-Functions), wie deeplink.js und booking.js.
  */
 (function () {
@@ -255,9 +275,18 @@ function zahlungsZiel(antwort) {
   return u.protocol === 'https:' && ZAHLUNGS_HOSTS.indexOf(u.hostname) >= 0 ? link : null;
 }
 
+// K6: Ruempfe aus dem Kontrakt-Commit, die Logik folgt in Segment 11, Aufgabe 2.
+function nichtGebaut() { throw new Error('NotImplemented'); }
+function passendesAngebot(angebote, utmCampaign) { nichtGebaut(); }
+function abTag(angebot, heute) { nichtGebaut(); }
+function storno(offer, jetzt) { nichtGebaut(); }
+function flexOffer(offers, angebot, jetzt) { nichtGebaut(); }
+function vertrauen(daten, heute) { nichtGebaut(); }
+
 var api = {
   pruefeAngebote: pruefeAngebote, anreisetage: anreisetage, abreise: abreise, sucheQuery: sucheQuery,
-  waehleOffer: waehleOffer, gesamt: gesamt, buchungsBody: buchungsBody, pruefeGast: pruefeGast, zahlungsZiel: zahlungsZiel
+  waehleOffer: waehleOffer, gesamt: gesamt, buchungsBody: buchungsBody, pruefeGast: pruefeGast, zahlungsZiel: zahlungsZiel,
+  passendesAngebot: passendesAngebot, abTag: abTag, storno: storno, flexOffer: flexOffer, vertrauen: vertrauen
 };
 
 if (typeof module !== 'undefined' && module.exports) { module.exports = api; }

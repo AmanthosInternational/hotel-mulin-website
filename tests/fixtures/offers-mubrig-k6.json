@@ -1,0 +1,129 @@
+{
+  "_hinweis": "Synthetische Angebote fuer Segment 11 (Kontrakt K6) und den Test-Harness (?fixture=k6), in der Form des oeffentlichen Endpunkts /api/offers vom 25.11.2026: beide Plaene derselben Suche mit cancellationFee (NONREF ab Buchung, LEX7DAYS sieben Tage vor Anreise um 15:00 Uhr), Kurtaxe getrennt ausgewiesen (cityTax.included false). Testwerte, keine Preisliste, keine Gaestedaten. Nicht erstattbar: Zimmer 574.80 plus Kurtaxe 19.20 ergibt 594.00; flexibel: Zimmer 610.80 plus Kurtaxe 19.20 ergibt 630.00, Frist 2027-01-03T15:00:00+01:00. arrival, departure, nights und adults schreibt tests/dev-server.py aus der Anfrage um.",
+  "property": "MUBRIG",
+  "propertyName": "Hotel Mulin by Amanthos",
+  "arrival": "2027-01-10",
+  "departure": "2027-01-13",
+  "nights": 3,
+  "adults": 2,
+  "offers": [
+    {
+      "ratePlanId": "MUBRIG-NONREFBB_IBE-DBRB",
+      "ratePlanCode": "NONREFBB_IBE",
+      "ratePlanName": "NONREF BB_IBE",
+      "category": "Non-Refundable",
+      "unitGroupId": "MUBRIG-DBRB",
+      "unitGroupName": "Double Room with Balcony",
+      "unitGroupDescription": "Double Room with Balcony",
+      "availableUnits": 3,
+      "totalGrossAmount": {
+        "amount": 574.8,
+        "currency": "CHF"
+      },
+      "averagePerNight": {
+        "amount": 191.6,
+        "currency": "CHF"
+      },
+      "cancellationFee": {
+        "code": "NONREF",
+        "name": "No free cancellation",
+        "description": "No free cancellation.",
+        "dueDateTime": "2026-11-25T15:00:00+01:00",
+        "fee": {
+          "amount": 574.8,
+          "currency": "CHF"
+        }
+      },
+      "cityTax": {
+        "amount": 19.2,
+        "currency": "CHF",
+        "included": false
+      },
+      "timeSlices": [
+        {
+          "from": "2027-01-10T15:00:00+01:00",
+          "to": "2027-01-11T11:00:00+01:00",
+          "amount": {
+            "amount": 191.6,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-01-11T11:00:00+01:00",
+          "to": "2027-01-12T11:00:00+01:00",
+          "amount": {
+            "amount": 191.6,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-01-12T11:00:00+01:00",
+          "to": "2027-01-13T11:00:00+01:00",
+          "amount": {
+            "amount": 191.6,
+            "currency": "CHF"
+          }
+        }
+      ]
+    },
+    {
+      "ratePlanId": "MUBRIG-STANDARDBB_IBE-DBRB",
+      "ratePlanCode": "STANDARDBB_IBE",
+      "ratePlanName": "STANDARD BB_IBE",
+      "category": "Refundable",
+      "unitGroupId": "MUBRIG-DBRB",
+      "unitGroupName": "Double Room with Balcony",
+      "unitGroupDescription": "Double Room with Balcony",
+      "availableUnits": 3,
+      "totalGrossAmount": {
+        "amount": 610.8,
+        "currency": "CHF"
+      },
+      "averagePerNight": {
+        "amount": 203.6,
+        "currency": "CHF"
+      },
+      "cancellationFee": {
+        "code": "LEX7DAYS",
+        "name": "Flexible 7 days",
+        "description": "Free cancellation 7 days prior arrival.",
+        "dueDateTime": "2027-01-03T15:00:00+01:00",
+        "fee": {
+          "amount": 610.8,
+          "currency": "CHF"
+        }
+      },
+      "cityTax": {
+        "amount": 19.2,
+        "currency": "CHF",
+        "included": false
+      },
+      "timeSlices": [
+        {
+          "from": "2027-01-10T15:00:00+01:00",
+          "to": "2027-01-11T11:00:00+01:00",
+          "amount": {
+            "amount": 203.6,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-01-11T11:00:00+01:00",
+          "to": "2027-01-12T11:00:00+01:00",
+          "amount": {
+            "amount": 203.6,
+            "currency": "CHF"
+          }
+        },
+        {
+          "from": "2027-01-12T11:00:00+01:00",
+          "to": "2027-01-13T11:00:00+01:00",
+          "amount": {
+            "amount": 203.6,
+            "currency": "CHF"
+          }
+        }
+      ]
+    }
+  ]
+}

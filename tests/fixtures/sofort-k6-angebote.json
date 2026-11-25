@@ -1,0 +1,70 @@
+[
+  {
+    "id": "k6-festtage",
+    "titel": "Testangebot K6: Festtage",
+    "text": "Synthetisches Angebot für Tests. Drei Nächte im Doppelzimmer mit Balkon, Anreise an jedem Tag.",
+    "bild": "assets/images/rooms/dbrb/1.jpg",
+    "room": "DBRB",
+    "rate": "NONREFBB_IBE",
+    "naechte": 3,
+    "anreise_wochentage": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "von": "2026-12-20",
+    "bis": "2027-01-03",
+    "gesperrt": [],
+    "personen": 2,
+    "kampagne": null,
+    "anzeigen": [
+      "mulin-festtage"
+    ],
+    "ab_anreise": "2026-12-20",
+    "rate_flex": "STANDARDBB_IBE"
+  },
+  {
+    "id": "k6-januar",
+    "titel": "Testangebot K6: Januar unter der Woche",
+    "text": "Synthetisches Angebot für Tests. Drei Nächte im Doppelzimmer mit Balkon, Anreise Sonntag oder Montag.",
+    "bild": "assets/images/rooms/dbrb/1.jpg",
+    "room": "DBRB",
+    "rate": "NONREFBB_IBE",
+    "naechte": 3,
+    "anreise_wochentage": [
+      0,
+      1
+    ],
+    "von": "2027-01-03",
+    "bis": "2027-01-28",
+    "gesperrt": [],
+    "personen": 2,
+    "kampagne": null,
+    "anzeigen": [
+      "mulin-januar"
+    ],
+    "ab_anreise": "2027-01-10",
+    "rate_flex": "STANDARDBB_IBE"
+  },
+  {
+    "id": "k6-ohne-felder",
+    "titel": "Testangebot K6: ohne neue Felder",
+    "text": "Synthetisches Angebot für Tests. Sieben Nächte, Anreise am Samstag, ohne anzeigen, ab_anreise und rate_flex.",
+    "bild": "assets/images/mulin-winter.jpg",
+    "room": "DBRB",
+    "rate": "NONREFBB_IBE",
+    "naechte": 7,
+    "anreise_wochentage": [
+      6
+    ],
+    "von": "2027-02-06",
+    "bis": "2027-03-13",
+    "gesperrt": [],
+    "personen": 2,
+    "kampagne": null
+  }
+]
