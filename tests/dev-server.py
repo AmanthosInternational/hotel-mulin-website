@@ -27,6 +27,11 @@ Erweiterung aus Segment 0 des Bauplans mulin-sofortbuchung (K5), ebenfalls nur i
     angebote=fixture  js/sofort-angebote.js ist 'window.amSofortAngebote = <Inhalt von
                       tests/fixtures/sofort-angebote.json>;'
     angebote=leer     js/sofort-angebote.js ist 'window.amSofortAngebote = [];'
+    angebote=k6       js/sofort-angebote.js setzt window.amSofortAngebote aus
+                      tests/fixtures/sofort-k6-angebote.json und window.amSofortVertrauen
+                      aus tests/fixtures/sofort-k6-vertrauen.json (Segment 11, K6)
+    fixture=k6        GET /api/offers aus tests/fixtures/offers-mubrig-k6.json (beide Plaene
+                      mit cancellationFee; dueDateTime bleibt fest, nur arrival wird umgeschrieben)
   Fehlt ein Double, antwortet die Skript-Adresse mit 404; ohne angebote kommt die echte
   js/sofort-angebote.js (Sammelstelle der Verdrahtung) oder 404. angebote gilt auch direkt
   an der Skript-Adresse (/js/sofort-angebote.js?angebote=leer).
@@ -52,6 +57,9 @@ ROOT = Path(__file__).resolve().parent.parent
 FIXTURE = ROOT / "tests" / "fixtures" / "offers-mubrig.json"
 FIXTURE_KURTAXE = ROOT / "tests" / "fixtures" / "offers-mubrig-kurtaxe.json"
 FIXTURE_ANGEBOTE = ROOT / "tests" / "fixtures" / "sofort-angebote.json"
+FIXTURE_K6 = ROOT / "tests" / "fixtures" / "offers-mubrig-k6.json"
+FIXTURE_K6_ANGEBOTE = ROOT / "tests" / "fixtures" / "sofort-k6-angebote.json"
+FIXTURE_K6_VERTRAUEN = ROOT / "tests" / "fixtures" / "sofort-k6-vertrauen.json"
 SOFORT_HTML = ROOT / "sofortbuchung.html"
 PORT = int(sys.argv[1]) if len(sys.argv) > 1 else 8080
 STATE = {"fixture": "full", "antwort": "standard", "kern": "", "buchen": "", "angebote": ""}
@@ -155,6 +163,11 @@ def sofort_js(name, query):
     if name == "sofort-angebote" and angebote == "fixture":
         liste = FIXTURE_ANGEBOTE.read_text(encoding="utf-8").strip()
         return "window.amSofortAngebote = " + liste + ";\n", FIXTURE_ANGEBOTE
+    if name == "sofort-angebote" and angebote == "k6":
+        liste = FIXTURE_K6_ANGEBOTE.read_text(encoding="utf-8").strip()
+        vertrauen = FIXTURE_K6_VERTRAUEN.read_text(encoding="utf-8").strip()
+        return ("window.amSofortAngebote = " + liste + ";\nwindow.amSofortVertrauen = "
+                + vertrauen + ";\n"), FIXTURE_K6_ANGEBOTE
     datei = ROOT / "js" / (name + ".js")
     if name in DOUBLES and STATE[DOUBLES[name][0]] == "double":
         datei = ROOT / "tests" / "fixtures" / DOUBLES[name][1]
@@ -175,7 +188,7 @@ def seite(query, antwort):
 
 def offers(query):
     modus = query.get("fixture", [STATE["fixture"]])[0]
-    quelle = FIXTURE_KURTAXE if modus == "kurtaxe" else FIXTURE
+    quelle = {"kurtaxe": FIXTURE_KURTAXE, "k6": FIXTURE_K6}.get(modus, FIXTURE)
     data = json.loads(quelle.read_text(encoding="utf-8"))
     data["arrival"] = query.get("arrival", [data["arrival"]])[0]
     data["departure"] = query.get("departure", [data["departure"]])[0]

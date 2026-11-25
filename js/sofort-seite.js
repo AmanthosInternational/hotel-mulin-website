@@ -204,6 +204,7 @@ function raten(teile, auswahl, r) {
       knoepfe[1 - i].setAttribute('aria-pressed', 'false');
       b.setAttribute('aria-pressed', 'true');
       teile.preis.textContent = summeText(w[1], auswahl.angebot) + TEXT.inklusive;
+      zaehle('sofort_rate', auswahl.angebot.id, i ? 'flexibel' : 'nicht_erstattbar');
       oeffne(teile, { angebot: auswahl.angebot, offer: w[0], anreise: auswahl.anreise, abreise: auswahl.abreise,
         erwachsene: auswahl.erwachsene, kinder: auswahl.kinder });
     });

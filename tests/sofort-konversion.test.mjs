@@ -546,3 +546,69 @@ test('Formular: Stornosatz unter dem Gesamtpreis, Zeile Fragen mit dem Telefon a
   assert.equal(fragen.alle((k) => k.tagName === 'A')[0].getAttribute('href'), 'tel:+41415627662');
   assert.match(lies('js/sofort-buchen.js'), /KONTAKT = \{ telefon: '\+41 41 562 76 62', tel: '\+41415627662'/);
 });
+
+// ---- f) Messung: Plausible je Schritt, nur angebot und step ------------------------
+
+function merkmaleSauber(s) {
+  const verboten = Object.values(TESTGAST).concat(['mulin-januar-202701', 'meta', 'paid']);
+  for (const [name, opts] of s.auf.plausible) {
+    assert.deepEqual(Object.keys(opts), ['props'], name);
+    assert.deepEqual(Object.keys(opts.props).sort(), ['angebot', 'step'], name + ': genau angebot und step');
+    for (const v of Object.values(opts.props)) assert.equal(verboten.includes(v), false, name + ': ' + v);
+  }
+}
+
+test('Messung: sofort_formular einmal je Seitenaufruf, sofort_rate, sofort_absenden und sofort_gebucht mit der Rate', async () => {
+  const s = seite({ suche: ANZEIGE('mulin-januar-202701') });
+  await ruhe();
+  let f = felder(s.form('k6-januar'));
+  f.vorname.ausloesen('focus');
+  f.email.ausloesen('focus');
+  s.raten('k6-januar')[1].click();
+  f = felder(s.form('k6-januar'));
+  f.nachname.ausloesen('focus');
+  s.form('k6-januar').ausloesen('submit');
+  for (const [k, v] of Object.entries(TESTGAST)) f[k].value = v;
+  s.form('k6-januar').ausloesen('submit');
+  await ruhe();
+  const id = 'k6-januar';
+  assert.deepEqual(s.auf.plausible.filter((p) => p[0] !== 'sofort_ansicht').map((p) => [p[0], p[1].props.step]), [
+    ['sofort_vorauswahl', 'preis'], ['sofort_formular', 'nicht_erstattbar'], ['sofort_rate', 'flexibel'],
+    ['sofort_fehler', 'pflicht'], ['sofort_absenden', 'flexibel'], ['sofort_gebucht', 'flexibel']]);
+  assert.ok(s.auf.plausible.filter((p) => p[0] !== 'sofort_ansicht').every((p) => p[1].props.angebot === id));
+  assert.deepEqual(s.plaus('sofort_ansicht').map((p) => p.angebot), ['k6-januar', 'k6-festtage', 'k6-ohne-felder']);
+  merkmaleSauber(s);
+  assert.deepEqual(s.auf.meta.map((m) => m[0]), ['begin_checkout', 'booking_confirmed'], 'Vorauswahl ohne select_offer');
+});
+
+test('Messung: sofort_fehler mit 409, 429, fehler und ohne_ziel; sofort_datum nach dem Tipp unveraendert', async () => {
+  const faelle = [['409', [409, { error: 'x' }], ['sofort_fehler', '409']],
+    ['429', [429, { error: 'x' }], ['sofort_fehler', '429']],
+    ['500', [500, { error: 'x' }], ['sofort_fehler', 'fehler']],
+    ['http', [201, { success: true, paymentLink: 'http://eu.adyen.link/PLTESTMOCK' }], ['sofort_gebucht', 'nicht_erstattbar'],
+      ['sofort_fehler', 'ohne_ziel']]];
+  for (const [fall, antwort, ...erwartet] of faelle) {
+    const s = await getippt({ post: () => antwort });
+    const f = felder(s.form('k6-januar'));
+    for (const [k, v] of Object.entries(TESTGAST)) f[k].value = v;
+    s.form('k6-januar').ausloesen('submit');
+    await ruhe();
+    const nach = s.auf.plausible.filter((p) => !['sofort_ansicht', 'sofort_datum'].includes(p[0]));
+    assert.deepEqual(nach.map((p) => [p[0], p[1].props.step]), [['sofort_absenden', 'nicht_erstattbar'], ...erwartet], fall);
+    assert.deepEqual(s.plaus('sofort_datum'), [{ angebot: 'k6-januar', step: 'preis' }], fall);
+    assert.deepEqual(s.auf.nav, [], fall + ': keine Navigation');
+    merkmaleSauber(s);
+  }
+});
+
+test('statisch: ES5, kein fbq, kein Gedankenstrich und kein scharfes s, hoechstens 500 Zeilen je Produktivdatei', () => {
+  for (const p of ['js/sofort-kern.js', 'js/sofort-seite.js', 'js/sofort-buchen.js', 'css/sofort.css']) {
+    const roh = lies(p);
+    assert.doesNotMatch(roh, /[\u2014\u00df]/, p);
+    assert.ok(roh.split('\n').length <= 500, p + ': ' + roh.split('\n').length + ' Zeilen');
+    if (!p.endsWith('.js')) continue;
+    const code = roh.replace(/\/\*[\s\S]*?\*\//g, '').replace(/\/\/[^\n]*/g, '');
+    assert.doesNotMatch(code, /\blet\s|\bconst\s|=>|`|\bclass\s/, p + ': ES5');
+    assert.doesNotMatch(code, /fbq/, p + ': kein fbq');
+  }
+});
