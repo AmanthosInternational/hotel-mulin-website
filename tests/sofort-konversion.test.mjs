@@ -617,3 +617,74 @@ test('statisch: ES5, kein fbq, kein Gedankenstrich und kein scharfes s, hoechste
     assert.doesNotMatch(code, /fbq/, p + ': kein fbq');
   }
 });
+
+// ---- Befund E1 der Verdrahtung: ein Buchungsversuch je Seitenaufruf -----------------
+
+const OHNE_ZIEL = [201, { success: true, paymentLink: 'http://eu.adyen.link/PLTESTMOCK' }];
+const EINGEGANGEN = 'Ihre Reservierung ist eingegangen';
+
+function absenden(s) {
+  const form = s.form('k6-januar');
+  const f = felder(form);
+  for (const [k, v] of Object.entries(TESTGAST)) f[k].value = v;
+  form.ausloesen('submit');
+  return form;
+}
+
+test('test_ein_buchungsversuch_je_seite', async (t) => {
+  await t.test('a) Ratenwechsel nach 201 ohne nutzbares Zahlungsziel', async () => {
+    const a = await getippt({ post: () => OHNE_ZIEL });
+    absenden(a);
+    await ruhe();
+    a.raten('k6-januar')[1].click();
+    const neu = absenden(a);
+    await ruhe();
+    assert.equal(a.auf.posts.length, 1, 'genau ein POST');
+    assert.equal(neu.alle((k) => k.tagName === 'BUTTON')[0].disabled, true, 'Knopf gesperrt');
+    assert.ok(klasse(neu, 'sofort-buchen-hinweis').textContent.includes(EINGEGANGEN), 'Hinweis zur Reservierung');
+  });
+  await t.test('b) Ratenwechsel, waehrend der POST laeuft; die Antwort gilt dem neuen Formular', async () => {
+    let los;
+    const b = await getippt({ post: () => new Promise((ok) => { los = () => ok([201, { success: true, paymentLink: ZAHLUNGSLINK }]); }) });
+    absenden(b);
+    b.raten('k6-januar')[1].click();
+    const neu = absenden(b);
+    const knopf = neu.alle((k) => k.tagName === 'BUTTON')[0];
+    assert.equal(b.auf.posts.length, 1, 'genau ein POST');
+    assert.equal(knopf.disabled, true);
+    assert.equal(knopf.textContent, 'Wird gebucht ...');
+    los();
+    await ruhe();
+    assert.equal(b.auf.posts.length, 1);
+    assert.deepEqual(b.auf.nav, [ZAHLUNGSLINK]);
+    assert.equal(knopf.textContent, 'Weiter zur Zahlung ...');
+  });
+  await t.test('c) Tagestipp nach 201 ohne nutzbares Zahlungsziel', async () => {
+    const c = await getippt({ post: () => OHNE_ZIEL });
+    absenden(c);
+    await ruhe();
+    c.knopf('k6-januar', '2027-01-11').click();
+    await ruhe();
+    const neu = absenden(c);
+    await ruhe();
+    assert.equal(c.auf.posts.length, 1, 'genau ein POST');
+    assert.ok(klasse(neu, 'sofort-buchen-hinweis').textContent.includes(EINGEGANGEN), 'Hinweis zur Reservierung');
+  });
+});
+
+test('nach 409, 429 oder Fehler darf ein neu geoeffnetes Formular wieder buchen (wie bisher)', async () => {
+  for (const antwort of [[409, { error: 'x' }], [429, { error: 'x' }], [500, { error: 'x' }]]) {
+    let nr = 0;
+    const s = await getippt({ post: () => (++nr === 1 ? antwort : [201, { success: true, paymentLink: ZAHLUNGSLINK }]) });
+    absenden(s);
+    await ruhe();
+    s.knopf('k6-januar', '2027-01-11').click();
+    await ruhe();
+    const neu = absenden(s);
+    await ruhe();
+    assert.equal(s.auf.posts.length, 2, antwort[0] + ': neuer Tag, neuer Versuch');
+    assert.equal(s.auf.posts[1].arrival, '2027-01-11', antwort[0]);
+    assert.deepEqual(s.auf.nav, [ZAHLUNGSLINK], antwort[0]);
+    assert.equal(neu.alle((k) => k.tagName === 'BUTTON')[0].textContent, 'Weiter zur Zahlung ...', antwort[0]);
+  }
+});

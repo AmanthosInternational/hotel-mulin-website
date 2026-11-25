@@ -125,25 +125,17 @@ h1 { font-family: var(--sf-titel); font-size: clamp(1.7rem, 6vw, 2.5rem); line-h
   .sf-inhalt { padding: 1.5rem 1.75rem; }
 }
 
-/* K6 (Segment 11): ab-Zeile, Vertrauensblock vor den Karten. */
+/* K6 (Segment 11): ab-Zeile, Vertrauensblock vor den Karten, Ratenwahl und Stornosatz. */
 .sf-ab { font-weight: 600; color: var(--sf-gruen); margin: -.5rem 0 1rem; }
-.sf-ab:empty { display: none; }
+.sf-ab:empty, .sf-wahl:empty { display: none; }
 .sf-vertrauen { margin: 0 0 1.5rem; padding: .85rem 1rem; background: var(--sf-grund-alt); border-radius: var(--sf-radius); }
 .sf-vertrauen p { margin: .15rem 0; }
 .sf-fragen a { font-weight: 600; white-space: nowrap; }
-/* Ratenwahl und Stornosatz (Seite und Formular). */
 .sf-wahl { margin: .9rem 0 0; }
-.sf-wahl:empty { display: none; }
 .sf-raten { display: grid; gap: .5rem; }
-.sf-rate {
-  font: inherit; text-align: left; min-height: 44px; padding: .65rem .9rem; border: 1px solid var(--sf-gruen);
-  border-radius: 8px; background: #fff; color: var(--sf-text); cursor: pointer;
-}
+.sf-rate { font: inherit; text-align: left; min-height: 44px; padding: .65rem .9rem; border: 1px solid var(--sf-gruen); border-radius: 8px; background: #fff; color: var(--sf-text); cursor: pointer; }
 .sf-rate[aria-pressed="true"] { background: var(--sf-grund-alt); box-shadow: inset 0 0 0 2px var(--sf-gruen); }
 .sf-rate:focus-visible { outline: 3px solid var(--sf-dunkel); outline-offset: 2px; }
 .sf-rate-name { display: block; font-weight: 700; color: var(--sf-gruen); }
 .sf-rate-satz, .sf-storno, .sofort-buchen-storno, .sofort-buchen-fragen { display: block; font-size: .9rem; color: var(--sf-leise); margin: 0; }
-@media (min-width: 560px) {
-  .sf-raten { grid-template-columns: 1fr 1fr; }
-  .sofort-buchen-storno, .sofort-buchen-fragen { grid-column: 1 / -1; }
-}
+@media (min-width: 560px) { .sf-raten { grid-template-columns: 1fr 1fr; } .sofort-buchen-storno, .sofort-buchen-fragen { grid-column: 1 / -1; } }
